@@ -1,0 +1,1766 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+<title type="text">Steven Levine</title>
+<generator uri="https://github.com/jekyll/jekyll">Jekyll</generator>
+<link rel="self" type="application/atom+xml" href="https://blue64.net/feed.xml" />
+<link rel="alternate" type="text/html" href="https://blue64.net" />
+<updated>2019-01-19T15:52:25-05:00</updated>
+<id>https://blue64.net/</id>
+<author>
+  <name>Steven Levine</name>
+  <uri>https://blue64.net/</uri>
+  <email>steve@blue64.net</email>
+</author>
+
+
+<entry>
+  <title type="html"><![CDATA[The Power of Big Query with Public Data]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2018/02/the-power-of-bq/" />
+  <id>https://blue64.net/2018/02/the-power-of-bq</id>
+  <published>2018-02-04T17:03:00-05:00</published>
+  <updated>2018-02-04T17:03:00-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64.net</email>
+  </author>
+  <content type="html">
+    &lt;blockquote&gt;
+  &lt;p&gt;TLDR — If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;background&quot;&gt;Background&lt;/h3&gt;
+
+&lt;p&gt;Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Cleary, won’t be able to click my way through enough repos to get a clear respresentation, so I had to figure out a way to find some hard numbers to answer my question.&lt;/p&gt;
+
+&lt;h3 id=&quot;first-attempt&quot;&gt;First Attempt&lt;/h3&gt;
+
+&lt;p&gt;The first place where I tried to answer this simple question was to use the &lt;a href=&quot;https://github.com/search?q=pom.xml&amp;amp;type=Code&amp;amp;utf8=%E2%9C%93&quot;&gt;Github search box&lt;/a&gt;.  After trying different combinations and even within the advanced search, found it really difficult to get the results because of too much noise.  The main problem was that when searching for &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; the place it showed up most often was in &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; which was not really relevant to my question.  This itself seemed a bit strange to me, as why would projects not want to version control their build artifacts?  Is the  &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; being generated as part of the build itself?  Will leave these interesting questions for another afternoon.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
+
+&lt;p&gt;Soon after this, I remembered that &lt;a href=&quot;https://cloud.google.com/bigquery/&quot;&gt;Big Query&lt;/a&gt; has &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/&quot;&gt;public datasets&lt;/a&gt; available for all to use &lt;em&gt;(for free)&lt;/em&gt;, and decdied to take a quick peek to see if the &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/github&quot;&gt;GitHub dataset&lt;/a&gt; was there, and sure enough, it was. Great.  After some exploring around the &lt;code class=&quot;highlighter-rouge&quot;&gt;github_repos&lt;/code&gt; dataset, was able to find a table called &lt;code class=&quot;highlighter-rouge&quot;&gt;files&lt;/code&gt; which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located wihin a project and then do a simple count.  After a quick browse around the tables, was able to find the &lt;em&gt;files&lt;/em&gt; table and it had the following shape:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;repo_name&lt;/td&gt;
+      &lt;td&gt;STRING&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ref&lt;/td&gt;
+      &lt;td&gt;STRING&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;path&lt;/td&gt;
+      &lt;td&gt;STRING&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;mode&lt;/td&gt;
+      &lt;td&gt;INTEGER&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;id&lt;/td&gt;
+      &lt;td&gt;STRING&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;symlink_target&lt;/td&gt;
+      &lt;td&gt;STRING&lt;/td&gt;
+      &lt;td&gt;NULLABLE&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;After some simple data exploration was able to get a good idea of the meaning of the data with the following query:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bigquery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;github_repos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'build.sbt'&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;LIMIT&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;yielding:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Row&lt;/th&gt;
+      &lt;th&gt;repo_name&lt;/th&gt;
+      &lt;th&gt;ref&lt;/th&gt;
+      &lt;th&gt;path&lt;/th&gt;
+      &lt;th&gt;mode&lt;/th&gt;
+      &lt;th&gt;id&lt;/th&gt;
+      &lt;th&gt;symlink_target&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1&lt;/td&gt;
+      &lt;td&gt;Knewton/kafka-manager&lt;/td&gt;
+      &lt;td&gt;refs/heads/master&lt;/td&gt;
+      &lt;td&gt;build.sbt&lt;/td&gt;
+      &lt;td&gt;33188&lt;/td&gt;
+      &lt;td&gt;934503…&lt;/td&gt;
+      &lt;td&gt;null&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2&lt;/td&gt;
+      &lt;td&gt;Radsaggi/zipkin&lt;/td&gt;
+      &lt;td&gt;refs/heads/master&lt;/td&gt;
+      &lt;td&gt;build.sbt&lt;/td&gt;
+      &lt;td&gt;33188&lt;/td&gt;
+      &lt;td&gt;634bab3…&lt;/td&gt;
+      &lt;td&gt;null&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Clearly this looks like the right table to use to answer my question about counting the different build tool usages.&lt;/p&gt;
+
+&lt;p&gt;The next step was to come up with a query that can count the instances of each build artifact, meaning, count the number of  &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;build.sbt&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; across the Github dataset.  The results should give a good indication of how many projects use each build tool.&lt;/p&gt;
+
+&lt;p&gt;Here is that query:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sbt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gradle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maven&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bigquery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;github_repos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'build.sbt'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sbt&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CROSS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bigquery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;github_repos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'pom.xml'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;maven&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;CROSS&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;JOIN&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cnt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bigquery&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;github_repos&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;where&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'build.gradle'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;gradle&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;which yielded the following results:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;Row&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;sbt_cnt&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;gradle_cnt&lt;/th&gt;
+      &lt;th style=&quot;text-align: left&quot;&gt;maven_cnt&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;1&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;15,628&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;91,528&lt;/td&gt;
+      &lt;td style=&quot;text-align: left&quot;&gt;116,535&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. &lt;sup&gt;&lt;a href=&quot;#dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;  If I was going to take this experiemnt to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;The great thing about using Big Query with public datasets is the fact that there is no ETL required.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for.  The great thing about using Big Query with public datasets is the fact that there is no ETL required. The only&lt;sup&gt;&lt;a href=&quot;#dataFootnote2&quot;&gt;2&lt;/a&gt;&lt;/sup&gt; thing required to run a query against a public dataset is to head to the &lt;a href=&quot;https://bigquery.cloud.google.com&quot;&gt;Big Query Console&lt;/a&gt;, pick a dataset, type in the query, and within seconds you will have results to review.&lt;/p&gt;
+
+&lt;p&gt;What are you waiting for?&lt;/p&gt;
+
+&lt;h5 id=&quot;notes&quot;&gt;Notes&lt;/h5&gt;
+
+&lt;p&gt;&lt;a name=&quot;dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;em&gt;: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiement.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a name=&quot;dataFootnote2&quot;&gt;2&lt;/a&gt;&lt;em&gt;: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.&lt;/em&gt;&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2018/02/the-power-of-bq/&quot;&gt;The Power of Big Query with Public Data&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on February 04, 2018.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Notes from a Talk on Evolving Java]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/" />
+  <id>https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java</id>
+  <published>2013-12-02T22:03:00-05:00</published>
+  <updated>2013-12-02T22:03:00-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64.net</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Recently I attended a talk given by &lt;a href=&quot;https://twitter.com/@briangoetz&quot;&gt;Brian Goetz&lt;/a&gt;, about evolving Java.  It was refreshing to hear that Java is moving forward again from the Java Language architect himself.  Like others, I have mixed feeling about how some of the features were added to the language, but overall, after hearing Brian’s talk, Java is getting the attention it needs to “keep up”.&lt;/p&gt;
+
+&lt;p&gt;Below you can read some of the main points from the talk.  Brian’s deck can be found &lt;a href=&quot;https://dl.dropboxusercontent.com/u/1550608/evolving-java.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Full disclaimer, this post is me taking notes while trying to follow along with what Brian was saying.  There might be a few errors.  Please let me know if you find one.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This really doesn’t do Brian’s presentation justice, but hope you find it informative about what’s coming in Java 8.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: I am working on a follow up post with actual running Java 8 code to demonstrate most
+of the features mentioned here.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;a-night-with-brian-goetz---ny-java-meetup-dec-3-2013&quot;&gt;A night with Brian Goetz - NY JAVA Meetup, Dec 3, 2013&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;Java 8 - A new beginning&lt;/li&gt;
+  &lt;li&gt;Trying to get Java moving again&lt;/li&gt;
+  &lt;li&gt;Get things moving forward without breaking backwards compatibility&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Modernizing Java&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Language
+    &lt;ul&gt;
+      &lt;li&gt;Lambda Expressions (closures)&lt;/li&gt;
+      &lt;li&gt;Interfaces (default methods)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Libraries
+    &lt;ul&gt;
+      &lt;li&gt;Bulk data on collections&lt;/li&gt;
+      &lt;li&gt;Parallelism&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Lambda Expressions&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Argument list, a return type, and a body
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;(Object o) -&amp;gt; o.toString&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Can refer to enclosing values
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;(Person p) -&amp;gt; p.getName().equals(name)&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Method references to an existing method
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object::toString()&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Allows you to treat code as data&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;History&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;In 1995 most main stream languages did not support closures&lt;/li&gt;
+  &lt;li&gt;Today, Java is the last holdout
+    &lt;ul&gt;
+      &lt;li&gt;C++ added them recently&lt;/li&gt;
+      &lt;li&gt;C# added them in 3.0&lt;/li&gt;
+      &lt;li&gt;All new languages have them&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Long road&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;1997 Ordersky - Pizza&lt;/li&gt;
+  &lt;li&gt;2006 - 2008 a vigorous debate, BGGA, and CICE&lt;/li&gt;
+  &lt;li&gt;Little language evolution from Java SE 5 (2004)&lt;/li&gt;
+  &lt;li&gt;Project coin (small language changes) in Java SE 7&lt;/li&gt;
+  &lt;li&gt;Dec 2009 OpenJDK Lambda formed&lt;/li&gt;
+  &lt;li&gt;Nov 2010 - JSR-335&lt;/li&gt;
+  &lt;li&gt;Current Status
+    &lt;ul&gt;
+      &lt;li&gt;Lambda’s, Interface, Bulk Ops&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Evolving a mature language&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Those encouraging change
+    &lt;ul&gt;
+      &lt;li&gt;Adapting to changing
+        &lt;ul&gt;
+          &lt;li&gt;hardware, attitudes, fashions, problems&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Those discouraging change
+    &lt;ul&gt;
+      &lt;li&gt;Maintain compatibility
+        &lt;ul&gt;
+          &lt;li&gt;Low tolerance for change that will break anything&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+      &lt;li&gt;Preserving the core
+        &lt;ul&gt;
+          &lt;li&gt;Cant alienate user base&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Adapting to change
+    &lt;ul&gt;
+      &lt;li&gt;In 1995 everything was sequential, with imposed order&lt;/li&gt;
+      &lt;li&gt;Very deterministic&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;We want to introduce things that are more parallel&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;We had the wrong defaults at the start, namely mutability&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;Hard to undo this default behavior technically as well as in people’s mindsets&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Typical Iteration Example (External Iteration)&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Shape&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Foreach loop hides complex interactions&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;External iteration&lt;/strong&gt; - client has to drive thus &lt;strong&gt;the what and how are intermingled&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Inversion of Control&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Allows libraries to be much more expressive&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Lambda Example (Internal Iteration)&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Internal iteration&lt;/strong&gt; - client in charge of the what, library in charge of how&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Functional Interfaces&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Predicate&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Supplier&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Predicate&amp;lt;String&amp;gt; isEmpty = s -&amp;gt; s.isEmpty()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable r = () -&amp;gt; {println(&quot;hello&quot;);&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;We could have added function types, but it was obvious and WRONG&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Would have interacted badly with erasure, introducing complexity and corner cases, would have a notion of old, and new libraries&lt;/li&gt;
+  &lt;li&gt;Better to preserve the Core&lt;/li&gt;
+  &lt;li&gt;Bonus - existing library are now forward compatible to lambdas&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Lambdas enable better APis&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Enable more powerful API’s&lt;/li&gt;
+  &lt;li&gt;Client-Library boundary is more permeable&lt;/li&gt;
+  &lt;li&gt;Safer, exposes, more opportunities for optimizations&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Example Higher Order Function&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;iterface&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Comparartor&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;U&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Comparable&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;super&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;U&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Comparator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;U&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;compareTo&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Problem: Interface evolution&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If you add a method to Interface, it will break all implementing libraries (obviously)&lt;/li&gt;
+  &lt;li&gt;Source incompatible change, but binary will continue to work&lt;/li&gt;
+  &lt;li&gt;Libraries will start looking old&lt;/li&gt;
+  &lt;li&gt;Need a way to evolve them or replace them&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Collections.sort()&lt;/code&gt; &lt;em&gt;“bags nailed to side, don’t want to continue this”&lt;/em&gt; –BG&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Interface with Default Method&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Collection&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Consumer&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt; &lt;span class=&quot;nl&quot;&gt;t:&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;action&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;Can override it, like a virtual method&lt;/li&gt;
+  &lt;li&gt;Consumer doesn’t know if they are using default or another implementation found in superclass chain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;A question was posed asking why is the &lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt; keyword necessary?  Can’t the
+compiler infer if there is an implementation in the IF, it is the default?
+“Of course it can figure it out… but we wanted extra clarity, deal with it. :) “ –BG&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Some might say: “We now have multiple inheritance in Java???”&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Java always had multiple inheritance of &lt;strong&gt;Types&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;This adds multiple inheritance of &lt;strong&gt;Behavior&lt;/strong&gt;
+    &lt;ul&gt;
+      &lt;li&gt;But not of state&lt;/li&gt;
+      &lt;li&gt;Java interface are stateless (like Fortress’s Traits)&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Resolution Rule 1&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If class can inherit a method from superclass and a superInterface, prefer the superclass
+    &lt;ul&gt;
+      &lt;li&gt;Defaults only considered if no method declared in superclass chain&lt;/li&gt;
+      &lt;li&gt;True for both concrete and abstract superclass&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Ensure compatibility with previous versions of Java&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Resolution Rule 2&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If class can inherit a method from two interfaces, and one more specific than (a subtype of) the other, prefer the more specific
+    &lt;ul&gt;
+      &lt;li&gt;An implementation in List would take precedence over once in Collection&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The shape of the inheritance tree doesn’t matter&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Resolution Rule 3&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;There is no rule 3!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Class inheriting behavior from two SuperInterfaces&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;A&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If you inherit two superInterface implementations, you (as developer) need to disambiguate which implementation to call&lt;/li&gt;
+  &lt;li&gt;The onus is on the developer to decide, not the compiler&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Another SuperInterface Example&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;default&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;A&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+
+&lt;span class=&quot;kd&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// gets impl from A&lt;/span&gt;
+&lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;D&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;B&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;How Lambda’s can help&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Typical Compartor Example&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Comparator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Person&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byLastName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;Comparartor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;byLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;We want code to look exactly at the problem statement&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Comparing with Lambda’s&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Option 1, use simple Lambda&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;p&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;p&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()));&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Option 2, use Class method&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Person:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// We can also &quot;reverse&quot; the Collection&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Person:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;reversed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Or add an additional compare to the pipeline&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;people&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sort&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;comparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Person:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getLastName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;reversed&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;thenComparing&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Person:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getFirstName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;));&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Important thing to be able to look at code and KNOW what it does!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Example from Above&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;})&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Lets say we want to massage the results of the above collection&lt;/li&gt;
+  &lt;li&gt;Another new feature added to Collections is &lt;code class=&quot;highlighter-rouge&quot;&gt;Streams&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Manipulate all elements of a Collection after applying a Filter&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RED&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;forEach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;});&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Filter and Collect&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Shape&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blueBlcoks&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Filter, Transform, and then Collect&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Shape&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;blueBlcoks&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Shape:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getContainingBox&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;collect&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Collections&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;toList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Filter, Map, and then Aggregate&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumOfWeights&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mapToInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Shape:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getWeight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;ul&gt;
+  &lt;li&gt;Believe it (or not), these examples are not any more expensive (perhaps cheaper) than a typical &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop&lt;/li&gt;
+  &lt;li&gt;This is possible because it does a single pass on data
+    &lt;ul&gt;
+      &lt;li&gt;Creates a pipeline with Filter, then Map, and then Sum invokes them&lt;/li&gt;
+      &lt;li&gt;In other words, Filter and Map are lazy operations&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Imperative vs Streams&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Individual data vs Sets&lt;/li&gt;
+  &lt;li&gt;Focused on How, vs What&lt;/li&gt;
+  &lt;li&gt;Doesn’t read like problem statement vs Code reads like problem statement&lt;/li&gt;
+  &lt;li&gt;Steps mashed together vs Well factored&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Parallelism&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Goal: Easy to use parallel libraries for Java&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Parallelizing the getWeight operation is easy&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sumOfWeights&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shapes&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;parallelStream&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;filter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getColor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;BLUE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;mapToInt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;Shape:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getWeight&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Conclusion: So why Lambda’s?&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Its about time! &lt;em&gt;“All the cool kids are doing it”&lt;/em&gt; – BG&lt;/li&gt;
+  &lt;li&gt;Provide libraries a path to multi-core (needed internal iteration)&lt;/li&gt;
+  &lt;li&gt;Empower library developers&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;Q/A&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Features left out, whats coming next?
+    &lt;ul&gt;
+      &lt;li&gt;&lt;strong&gt;Value Types&lt;/strong&gt; - A long or a decimal (or other Type), that won’t need to be accessed via a pointer, instead directly from a register&lt;/li&gt;
+      &lt;li&gt;Useful for static data&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/&quot;&gt;Notes from a Talk on Evolving Java&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on December 02, 2013.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[On Deciding Between PUT and POST When Creating a RESTful Resource]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" />
+  <id>https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource</id>
+  <published>2013-10-29T21:15:00-04:00</published>
+  <updated>2013-10-29T21:15:00-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64.net</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;The goal of this post is to try to help you figure out which HTTP verb: &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; is more appropriate to use when adding and updating resources.&lt;/p&gt;
+
+&lt;p&gt;Before we can get in to the details of which HTTP verb to use when, we first need to understand the type of “back end” or “server” or “service” we are trying to add the RESTful API to.  For the purposes of this post, we will refer to the service providing the API as the &lt;em&gt;“Resource Archetype”&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;To start, we need to distinguish the differences between the two basic types of resource archetypes, namely, a &lt;em&gt;collection&lt;/em&gt; and a &lt;em&gt;datastore&lt;/em&gt; or “store” for short.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A &lt;strong&gt;collection&lt;/strong&gt; is a &lt;strong&gt;server-managed&lt;/strong&gt; directory of resources.  This means that clients may &lt;strong&gt;propose&lt;/strong&gt; the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; that is associated with the newly created resource.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;For the purposes of this conversation, we are not going to get in to the details of how the server provides the ID to the client, it is out of the scope of this post.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A &lt;strong&gt;store&lt;/strong&gt; is a &lt;strong&gt;client-managed&lt;/strong&gt; resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the &lt;strong&gt;client&lt;/strong&gt;  is responsible for assigning an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the resource and managing the workflow around that task.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These terms feel too abstract, lets walk through two concrete examples to fully illustrate the two concepts.&lt;/p&gt;
+
+&lt;p&gt;Firstly, lets discuss a collection.  The simplest form of a collection is a middleware stack on top of a physical datastore.  For our example, the physical datastore is a NoSQL database, lets say &lt;a href=&quot;http://basho.com/riak/&quot;&gt;Riak&lt;/a&gt;.  Sitting on top of Riak is &lt;a href=&quot;http://spray.io/&quot;&gt;Spray&lt;/a&gt; and &lt;a href=&quot;http://akka.io/&quot;&gt;Akka&lt;/a&gt;, which provide a RESTful middleware stack.  For the purposes of this example, all you need to know about Spray and Akka is that Spray provides an API to accept RESTful requests and reply to them, and Akka provides an abstraction around the physical transport between Spray and the actual socket.  &lt;strong&gt;The main point of all this is that Spray is acting as the middleware/business logic, and it will be handling the request and determining if Riak will be updated&lt;/strong&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Try not to get bogged down understanding these technologies if you are not familiar with them, try instead to substitute a framework/database that you are familiar with, as it doesn’t change the context of this example.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Now lets set up our example store, which ends up being a lot simpler than the collection, mainly because there is no middleware between the physical datastore and the client.  So following the example of the collection, the store would simply be a &lt;a href=&quot;http://basho.com/riak/&quot;&gt;Riak&lt;/a&gt; instance.&lt;/p&gt;
+
+&lt;p&gt;Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; vs a &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; when creating or updating a resource.&lt;/p&gt;
+
+&lt;p&gt;When interacting with a &lt;strong&gt;store&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to add a new resource, with the ID specified by the &lt;strong&gt;client&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must also be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The reason you &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. &lt;em&gt;This is another way of saying the request is idempotent.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;When interacting with a &lt;strong&gt;collection&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; must be used to create a new resource, and the collection provides the ID to the client.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; (request) the creation of the new resource, and not get back an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt;, meaning the request failed.  Another thing to take notice of is the fact that no &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; gets passed from the client, because it is assumed that the server is handling this logic.&lt;/p&gt;
+
+&lt;p&gt;If you take a step back to think about our above collection example, it is possible that Spray has many different clients, besides the RESTful one.  That is why it needs to manage the notion of identity.  Whereas, in the store example, if Riak is exposed to the client directly without a middleware, chances are, that Riak database is meant only for the RESTful client.&lt;/p&gt;
+
+&lt;p&gt;Here is a additional example taken directly from the &lt;a href=&quot;http://docs.basho.com/riak/latest/dev/references/http/store-object/&quot;&gt;Riak documentation&lt;/a&gt; that also illustrates the point that when a client is providing an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt;, the request should be a &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt;, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the client, and of course this request is a &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PUT /buckets/bucket/keys/key    # User-defined key
+POST /buckets/bucket/keys       # Riak-defined key
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;As always, please feel free to comment on this post or email me with any comments, questions, or concerns.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/&quot;&gt;On Deciding Between PUT and POST When Creating a RESTful Resource&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on October 29, 2013.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[WebView(Javascript) -> Native Android API]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2012/03/webview-javascript-native-android/" />
+  <id>https://blue64.net/2012/03/webview-javascript-native-android</id>
+  <published>2012-03-03T15:35:00-05:00</published>
+  <updated>2012-03-03T15:35:00-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64.net</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;For a few weeks towards the end of last year I was developing an Android application.  During that time I discovered a few new (to me) things about the Android platform. One in particular that caught my attention was having Javascript code running locally on the device call a native Android function.&lt;/p&gt;
+
+&lt;p&gt;Before getting into the technical details, let me first talk about a situation where this piece of functionality would be useful.  Lets say (for arguments sake), that you have to write an Android application that requires advanced and very polished charts.  What are you options?  You can try to find a native Android implementation that meets the requirement, but I must admit, I have been there and done that, and couldn’t find any particularly good libraries.  Yes there are some out there, but they didn’t have the polish I was looking for (please comment if you know of good ones).&lt;/p&gt;
+
+&lt;p&gt;If there aren’t any good Android libraries available what can you do?  From personal experience I know there are a lot of good Javascript charting libraries out there.  How can this help when developing an Android application not a web application?  You can host the charting library on a server somewhere and reference them from an Android WebView?  From my experience, this solution is not optimal because of slow performance.  Even thought it was too slow, it still looked much better than any of the native libraries available.&lt;/p&gt;
+
+&lt;p&gt;Is there way to get the Javascript code to run faster perhaps by taking advantage of the beefy hardware most Android devices run on?  Turns out it is quite easy to run the Javascript libraries directly on the device.  After moving the Javascript code from the server to the device the performance was greatly improved.  The charts rendered fast and were very responsive to the touch.&lt;/p&gt;
+
+&lt;p&gt;Running Javascript on the device instead of the Server is fast, but it creates a different sort of problem, namely, now you have a view (Javascript Chart) running inside another view (WebView), how does the Javascript library get its data?  The obvious answer is to have the Javascript code call some (REST) service via HTTP.  For arguments sake, lets say, this would not work due to the fact that the data is only available via a proprietary Java wrapped protocol.  Is there a way for the Javascript code to make a Java call? There is and that is what the rest of this post is going to be about.&lt;/p&gt;
+
+&lt;p&gt;For simplicity, I am going to abstract away the charts and data and replace them with a simple requirement, namely, have a WebView render the underlyingAndroid SDK version.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: For the purposes of this post, and because I like it, I am going to use Scala as the programming language.  As always, you can find all the code on &lt;a href=&quot;https://github.com/slevine/android-javascript-demo&quot;&gt;Github&lt;/a&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;The goal of this demo is to show how you can call Java from Javascript running in an Android WebView, thus we need to create a WebView, populate it with a simple html file and then enable Javascript.&lt;/p&gt;
+
+&lt;p&gt;MainActivity.scala - setting up basic view&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Step 1: Create WebView
+&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WebView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Step 2: Load page from assets
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loadUrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:///android_asset/index.html&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Step 3: Enable Javascript
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getSettings&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;So far, so easy.  Next, we need to create a simple Scala function in our &lt;code class=&quot;highlighter-rouge&quot;&gt;MainActivity&lt;/code&gt; to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called &lt;code class=&quot;highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;MainActivity.scala - function to expose SDK version&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;k&quot;&gt;object&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;jsFun&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sdkVersion&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;android&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;Build&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;SDK&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next we need to make this function available to Javascript by adding it to the DOM.&lt;/p&gt;
+
+&lt;p&gt;MainActivity.scala - Adding a function to the DOM&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Add the above function to the DOM as &quot;Android&quot;
+&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// The function can now be invoked from Javascript with the following: Android.sdkVersion()
+&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;addJavascriptInterface&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsFun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Android&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Optional step:&lt;/em&gt; When developing Javascript applications it is sometimes helpfull to be able to debug something to the browser console.  Believe it or not, it is quite easy to implement the browser’s console implementation with an Android one, and instead of logging the message to the browser console, it will send them to the Android Logcat system.&lt;/p&gt;
+
+&lt;p&gt;MainActivity.scala - Implement Javascript console.log&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;c1&quot;&gt;// provide the WebView with a console.log implementation
+&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setWebChromeClient&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebChromeClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+      &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;onConsoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ConsoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;messageLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'\t'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'\t'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sourceId&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; (&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lineNumber&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;)\n&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;messageLevel&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ConsoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;MessageLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;ERROR&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+          &lt;span class=&quot;nc&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;JavascriptExmple&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;
+          &lt;span class=&quot;nc&quot;&gt;Log&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;d&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;JavascriptExmple&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;msg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+        &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;
+      &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally we need to create our html/javascript view.&lt;/p&gt;
+
+&lt;p&gt;Lets create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt; and place it under &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/assets&lt;/code&gt; and add at least the following code to it:&lt;/p&gt;
+
+&lt;p&gt;index.html - default page that calls our Android.sdkVersion() function via Javascript&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;Click &lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;#&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;here&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt; to invoke an Android function to
+   find out the Android SDK version used to build this App.
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sdk&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;SDK:&lt;span class=&quot;nt&quot;&gt;&amp;lt;/div&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/body&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;log&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;This message should appear as a debug message in Logcat.&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;click&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'.sdk'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Android&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sdkVersion&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;As you can see here, we are invoking the Android (Scala) method called &lt;code class=&quot;highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt; and appending the results of the call to a div using JQuery.&lt;/p&gt;
+
+&lt;p&gt;Thats all there is to it, now you know how to invoke an Android function from Javascript running in an Android WebView.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2012/03/webview-javascript-native-android/&quot;&gt;WebView(Javascript) -&gt; Native Android API&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on March 03, 2012.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Mission Accomplished, Migration From Wordpress to Octopress Complete!]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2011/09/migration-from-wordpress-to-octopress-complete/" />
+  <id>https://blue64.net/2011/09/migration-from-wordpress-to-octopress-complete</id>
+  <published>2011-09-28T14:26:00-04:00</published>
+  <updated>2011-09-28T14:26:00-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64.net</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Someone told me about the &lt;a href=&quot;http://octopress.org/&quot;&gt;Octopress&lt;/a&gt; blog engine last week, which is a blog engine based on &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki&quot;&gt;Jekyll&lt;/a&gt;, the engine that powers sites such as &lt;a href=&quot;http://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;.  The main difference between Octopress and plain vanilla Jekyll is with Jekyll, you have to write your own Templates, Styles, and Javacscript code, but with Octopress, it has been abstracted away.  All you need to do is clone the Octopress repository and start writing posts (or migrating posts in my case).  With that being said, I have spend the past week migrating my blog from Wordpress to Octopress.&lt;/p&gt;
+
+&lt;p&gt;Here are some of my initial thoughts, first on Wordpress:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;Compared to when it first came out, Wordpress is now too heavy for a simple blog.  It has the functionality of a content management system, and that is why sites like TechCrunch use to manage their content.  They also have an army of authors creating content, vs one for my blog.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Every time the admin site opens, it says that an Wordpress upgrade is available.  At first this was neat, a one click upgrade, but now, it is becoming a bit of a risk.  A lot of effort has gone in to the site, and if for some reason the upgrade process is not clean, it can break a lot of things.  Clearly, you should be backing up as you go along, but then it is no longer a one click upgrade.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The process of writing a post is very heavy.  First you need to log in to the Admin site, start writing the post in html markup.  If you want to include code in your post, there is not really a clean way to do this.  To preview your post you hit preview, but most of the time the code plugins do not behave correctly thus the only real way to preview is to publish the post.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;An internet connection is required to do anything.  This is not 100% true, as you can always use a tool such as Mars Edit to write the post offline, but the preview never looks the same as it does when published on the real site.  It also doesn’t understand how to preview or author code samples.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now my thoughts on Octopress:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;It is based on Ruby which is Cool!&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;No database required!  Again, since Octopress is nothing more than a Template Engine, the end product is static html that you can copy to any host and it will be live.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Since Octopress is a template engine, not a blog engine, you have your entire blog including all your posts in a single project.  This works out great because you can open the project in RubyMine and see your posts as Markdown, your design as Sass and CSS, and your site layout as Liquid Templates.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;The writing process is very Agile, as you can preview the site as many times as you want without having to copy/push/deploy code anywhere.  All that you need to do is &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; in to your blog’s project directory and type &lt;code class=&quot;highlighter-rouge&quot;&gt;rake preview&lt;/code&gt; and browse to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;You can write posts in Markdown, which happens to be my favorite way of generating web content (thanks to GitHub and Stackoverflow).&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;There are a variety of great ways to embed code within a post.  The first great option is to use the neat GitHub notation by surrounding your code with three tick marks.  The second is to use the Liquid Template notation, which is equally nice.  Lets not forget that you can include a GitHub gist VERY easily, just &lt;code class=&quot;highlighter-rouge&quot;&gt;{ gist gistIdNumber }&lt;/code&gt;. Can’t get much easier than that!  Last but defiantly, not least is you can include a source file from the filesystem.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Code samples look fantastic when they are rendered in the Solarized themed code viewer! Hers’s a sample:&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fib&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fib_tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fib_tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;match&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fib_tr&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It has been about a week and my blog is completely migrated over to Octopress now.  It has been a rather enlightening experience for me because Octopress and Wordpress are so different.  Bottom line is Octopress was written by and targeted at hackers, and that fact inspires me at a level that Wordpress never was able to do.  I am hoping to leverage that hacker inspiration to get my self writing posts on a more regular basis starting today.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2011/09/migration-from-wordpress-to-octopress-complete/&quot;&gt;Mission Accomplished, Migration From Wordpress to Octopress Complete!&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on September 28, 2011.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[In case you haven't heard - Apple is not showing Java any more love...]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/" />
+  <id>https://blue64.net/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love</id>
+  <published>2010-10-21T16:29:24-04:00</published>
+  <updated>2010-10-21T16:29:24-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;&lt;a href=&quot;http://goo.gl/mDkf&quot;&gt;Official release notes&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;If you think about it it makes perfect sense for them. To them Java is no different than Flash, just a GUI platform. How many killer Java applications are there out there (besides Java IDE’s) ? Add to the fact that SunOracle is probably twisting their arm for more licensing money.&lt;/p&gt;
+
+&lt;p&gt;Thus, it makes perfect sense for them, why would they want to waste their resources implementing a JVM that is required by only a few applications especially when they are trying to boot strap their “App Store”? Supporting Java developers working on server software is not part of their business model.&lt;/p&gt;
+
+&lt;p&gt;But… This is &lt;strong&gt;not&lt;/strong&gt; bad for Java developers (although lots of Java developers are showing the Apple hate right now), because the Apple JVM was never up to date, and always behind the “real” JDK implementation. Remember the Eclipse 64 bit fiasco?&lt;/p&gt;
+
+&lt;p&gt;My hopes moving forward is that the community comes together to come up with a completely open source version of the JVM for BSD/Mac. There are already two really good starting points, &lt;a href=&quot;http://goo.gl/JMNB&quot;&gt;SoyLatte&lt;/a&gt; and &lt;a href=&quot;http://goo.gl/8wkg&quot;&gt;OpenJDK&lt;/a&gt;. It would be great if Apple were to open source their JVM code base (although this is not likely due to SunOracle Licensing), can still hope.&lt;/p&gt;
+
+&lt;p&gt;Bottom line, if you are a Java developer you do not have to start migrating away from OS X, everything will be fine – just give it a bit of time.&lt;/p&gt;
+
+&lt;p&gt;Just my thoughts.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/&quot;&gt;In case you haven't heard - Apple is not showing Java any more love...&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on October 21, 2010.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[First Thoughts On My New Eee Pc (1005PE)]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2010/03/first-thoughts-on-my-new-eee-pc-1005pe/" />
+  <id>https://blue64.net/2010/03/first-thoughts-on-my-new-eee-pc-1005pe</id>
+  <published>2010-03-23T18:30:30-04:00</published>
+  <updated>2010-03-23T18:30:30-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;So far, so good with my new Eee PC (1005PE) Netbook. The machine came pre-installed with Win 7 Starter edition, so the first task for me to do was to get rid of Windows 7 and install &lt;a href=&quot;http://www.ubuntu.com/GetUbuntu/download-netbook&quot;&gt;Ubuntu Netbook&lt;/a&gt; on it. So I downloaded the Ubuntu Netbook 10.04 &lt;a href=&quot;http://cdimage.ubuntu.com/ubuntu-netbook/daily-live/current/&quot;&gt;daily build&lt;/a&gt; image (yes, I am daring), and was on my way.&lt;/p&gt;
+
+&lt;p&gt;At first, this task seemed easier said than done because I was running in to the most fundamental problem possible, namely, I could not get the Eee PC to boot from the ‘bootable’ usb stick I created on my Mac Pro desktop. I checked every single bios settings, made sure that USB was chosen as priority boot drive, Still nothing. Kept getting the Windows 7 startup sound which was starting to get a bit tedious.&lt;/p&gt;
+
+&lt;p&gt;The next thing I thought was maybe the Cruser U3 software was causing the trouble so I went out and found a U3 uninstaller, and ran it. Still didn’t boot from the USB Stick. I then found out that in order to get the boot menu on the Eee PC, you need to hold down the Escape key while its booting. I tried that, it had the USB as a target bootable device, I selected it, but still went in to Windows 7.&lt;/p&gt;
+
+&lt;p&gt;At this point I was quickly running out of ideas, the only other thing I can think of was perhaps the USB stick was some how not bootable? Maybe the USB stick was not created correctly even though I followed the Ubuntu Mac instructions step by step. I downloaded the Ubuntu 10.04 &lt;a href=&quot;http://cdimage.ubuntu.com/ubuntu-netbook/daily-live/current/&quot;&gt;daily build&lt;/a&gt; on to my Eee PC while booted in to Windows 7, and then downloaded this program called &lt;a href=&quot;http://unetbootin.sourceforge.net/&quot;&gt;UNetbootin&lt;/a&gt;. This time I used that program to create my bootable USB stick, and then I tried to reboot again.&lt;/p&gt;
+
+&lt;p&gt;This time it booted in to the Live CD version of Ubuntu, yes, I was saved! I couldn’t believe that it was a bad image on my USB Stick. Why can’t a Mac create a bootable USB Stick? The strange thing is that the Eee couldn’t even read the files on the USB Stick when connected in Windows 7, but when the Stick was plugged in to my Mac Pro, I was able to see the files fine. And vise versa, once I created the USB Stick in Windows, I coulsn’t see the files on Mac. What is the deal here? I thought ISO images were platform independent?&lt;/p&gt;
+
+&lt;p&gt;With that being said the USB Stick problem is well in the past for me. Look for my next post where I will give my impressions of Ubuntu Netbook 10.04.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2010/03/first-thoughts-on-my-new-eee-pc-1005pe/&quot;&gt;First Thoughts On My New Eee Pc (1005PE)&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on March 23, 2010.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[RubyMine 2 Debugging Issue Resolved]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2010/01/rubymine-2-debugging-issue-resolved/" />
+  <id>https://blue64.net/2010/01/rubymine-2-debugging-issue-resolved</id>
+  <published>2010-01-23T15:27:19-05:00</published>
+  <updated>2010-01-23T15:27:19-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby-debug-ide19&lt;/code&gt; gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Open the following file with your favorite text editor (part of &lt;code class=&quot;highlighter-rouge&quot;&gt;ruby ruby-debug-ide19&lt;/code&gt; gem)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$GEM_HOME/ruby-debug-ide19-0.4.12/lib/ruby-debug/command.rb
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Add the following code at line ~120 (look below for full code location):&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$FILENAME&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;After the modifications, the code should look like:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-ruby highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;debug_eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;get_binding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;begin&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;to_s&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;str&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;$FILENAME&quot;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;max_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Thats it, you should be able to debug your Rails/Ruby code in RubyMine without issues.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2010/01/rubymine-2-debugging-issue-resolved/&quot;&gt;RubyMine 2 Debugging Issue Resolved&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on January 23, 2010.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[With Grape, Groovy Is On Par with Native Scripting Languages]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/" />
+  <id>https://blue64.net/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages</id>
+  <published>2009-12-24T14:31:36-05:00</published>
+  <updated>2009-12-24T14:31:36-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;If you haven’t heard, the latest version of Groovy was &lt;a href=&quot;http://docs.codehaus.org/display/GROOVY/Groovy+1.7+release+notes&quot;&gt;released&lt;/a&gt; this week and included with it, among many other great features, was &lt;a href=&quot;http://groovy.codehaus.org/Grape&quot;&gt;Grape&lt;/a&gt; (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.&lt;/p&gt;
+
+&lt;p&gt;If Grape doesn’t use a build file, how does it know what dependencies are necessary to run the code? Does it figure it out for you on the fly? Unfortunately, it is not that smart (yet), perhaps the next release. If it doesn’t figure it out for you, then how do you specify your dependencies? You configure your dependencies by using the&lt;code class=&quot;highlighter-rouge&quot;&gt;@Grapes&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;@Grab&lt;/code&gt; annotations.&lt;/p&gt;
+
+&lt;p&gt;What is so good about being able to configure your dependencies via annotations?&lt;/p&gt;
+
+&lt;p&gt;If you are working with Groovy scripts, it frees you up from having to worry about dependency management and allows you to focus more on what the script needs to do much like when working with other scripting languages like Ruby or Perl. In order to clearly demonstrate the advantages of Grape, lets walk through an example.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The problem&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Trying to keep up with my ever changing IP address after switching ISP’s earlier this year. There are several services running at my home that I need access to on a daily basis. If my IP changes over night, after a brown out, or for some other reason, I need to know about it asap.&lt;/p&gt;
+
+&lt;p&gt;In order to keep up with my IP address, I wrote a set of scripts that perform the following:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Obtains the current IP address of the server where it is running&lt;/li&gt;
+  &lt;li&gt;Looks up the most recent IP address of the server in a log file&lt;/li&gt;
+  &lt;li&gt;If the current IP address is different that the most recent IP address:
+    &lt;ul&gt;
+      &lt;li&gt;Updates the log file with the current IP address&lt;/li&gt;
+      &lt;li&gt;Send the new IP address in a customizable email to a configurable address&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;If the IP address’s are the same, it does nothing.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;The Solution&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;It took a total of three Groovy classes/scripts to solve this problem. We are not going to get in to the details of the solution because I want to stay focused on Grape.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;You can find all of the code discussed in this post &lt;a href=&quot;http://github.com/slevine/my-ip&quot;&gt;on github&lt;/a&gt;.
+Please feel free to download and use it. Feedback is welcome as well.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;This simple Groovy class first connects to a mail server, and then sends the change of address message.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/263323.js?file=Mailer.groovy&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The most interesting things to pay attention to are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;@Grapes&lt;/code&gt; block after all of the imports, you can see this groovy class depends on javax.activation and javax.mail jars.&lt;/li&gt;
+  &lt;li&gt;Thanks to Grapes, you can compile this class simply by invoking &lt;code class=&quot;highlighter-rouge&quot;&gt;groovyc Mailer.groovy&lt;/code&gt; as opposed to having to configure either Maven, Gant, Ant, or some other build tool to manage the dependencies and classpath for you.&lt;/li&gt;
+  &lt;li&gt;What’s the big deal? Read more to find out!&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This next code snipped represents the “main” entry point of my solution. It simply obtains the current IP address of the machine it is running on, checks the current address against the most recent known address stored in a log file, and then uses the previous class to send an email if the IP address has changed.&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/263323.js?file=whatsMyIp.groovy&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;The most interesting thing to pay attention to in this script is:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/usr/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groovy&lt;/span&gt;&lt;/code&gt; on the first line on the script.&lt;/li&gt;
+  &lt;li&gt;This line enables the script to be called directly from the command line like: &lt;code class=&quot;highlighter-rouge&quot;&gt;./whatsMyIp.groovy&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;groovy whatsMyIp.groovy&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;strong&gt;The Big Deal!&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If Grape didn’t exist the only way to invoke this script would be to invoke it with a build tool such as Maven, GAnt, or some other. If a build tool didn’t suit you then you would have to invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;groovy -classpath=/path/activation.jar...&lt;/code&gt; and manage the dependencies there. Both of these solutions work fine, but are clunky.&lt;/p&gt;
+
+&lt;p&gt;If you were to solve this problem using a language such as Ruby, you would not have to worry about dependency management since Ruby is so closely integrated with the OS. You would simply run &lt;code class=&quot;highlighter-rouge&quot;&gt;gem install some gem&lt;/code&gt;, and this would install the dependencies at the OS level. Thus allowing you to focus on your script and letting the Ruby runtime focus on the dependencies. Invoking &lt;code class=&quot;highlighter-rouge&quot;&gt;./someScript.rb&lt;/code&gt; is common in Ruby.&lt;/p&gt;
+
+&lt;p&gt;Grape gives Groovy scripts the same clean dependency abstraction. It is possible to invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;./whatsMyIp.groovy&lt;/code&gt; without having to worry about any dependency management. Once the groovy runtime comes across the Grape annotations, it loads the dependencies on demand freeing the Groovy script from having to be wrapped with a dependency management layer.&lt;/p&gt;
+
+&lt;p&gt;This is a huge deal because now simple Groovy scripts can leverage the entire Java ecosystem from the command line without having to wrap the invocation with a build tool. Groovy Scripts are now clean, simple, and easy. I hope this inspires you to go out and convert some Ruby or Perl script to Groovy.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/&quot;&gt;With Grape, Groovy Is On Par with Native Scripting Languages&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on December 24, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Time Machine over a Network Drive]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/12/time-machine-over-a-network-drive/" />
+  <id>https://blue64.net/2009/12/time-machine-over-a-network-drive</id>
+  <published>2009-12-13T14:04:45-05:00</published>
+  <updated>2009-12-13T14:04:45-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;This post describes the steps involved when setting up Time Machine to backup to a Network Drive.  These steps are only required if you want to back up to a device other than a Time Capsule.  It is pretty quick and easy, so without further due, lets get started.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 1: Enable network backups in Time Machine&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In a terminal window cut/paste the following command:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Update: Steps 2 &amp;amp; 3 are only required if you are not running Snow Leopard.  If you are, then all you need to do is mount the network drive you wish to use as a Time Machine destination, and then proceed to Step 4.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 2: Create Timemachine backup volume&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;In a terminal window cut/paste the following command:&lt;/p&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hdiutil create -fs HFS+J -volname &quot;Backup of computer-name&quot; computer-name_[mac address without':'].sparsebundle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;The simplest way to obtain your mac address is to open a terminal window and type the command: &lt;code class=&quot;highlighter-rouge&quot;&gt;ifconfig -a&lt;/code&gt;, and look for the section of the output where it says: &lt;code class=&quot;highlighter-rouge&quot;&gt;ether 00:33:44:55:66:77&lt;/code&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;The simplest way to obtain your computer name is to open a terminal window and type the command: &lt;code class=&quot;highlighter-rouge&quot;&gt;hostname&lt;/code&gt;, it will return the name of your computer, example, &lt;code class=&quot;highlighter-rouge&quot;&gt;my-hostname&lt;/code&gt;.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Putting it all together, based on the above examples, you would run the following command:&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hdiutil create -fs HFS+J -volname &quot;Backup of my-hostname&quot; my-hostname_003344556677.sparsebundle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 3: Copy file created in step 2 to network Time Machine backup destination&lt;/strong&gt;*&lt;/p&gt;
+
+&lt;p&gt;Using finder or terminal, copy the newly created .sparsebundle file to the place you want your Time Machine backup to reside.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 4: Open Timemachine preferences, and the network drive should show up as a backup target&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;If for some reason it doesn’t, try opening and closing the Time Machine preferences, as it may take a moment for it to detect the newly available network drive.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Step 5: Rest easy knowing your mac is now backed up to a network storage volume.&lt;/strong&gt;&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/12/time-machine-over-a-network-drive/&quot;&gt;Time Machine over a Network Drive&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on December 13, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Scala Sugar - Iteration]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/11/scala-sugar-iteration/" />
+  <id>https://blue64.net/2009/11/scala-sugar-iteration</id>
+  <published>2009-11-22T14:58:11-05:00</published>
+  <updated>2009-11-22T14:58:11-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;In this second installment of Scala Sugar, lets put the lists that we created in the &lt;a href=&quot;/2009/11/scala-sugar-lists/&quot;&gt;previous post&lt;/a&gt; to use.&lt;/p&gt;
+
+&lt;p&gt;How do we typically interact with lists when writing non-trivial programs? We iterate over them! With that being said, lets explore how iteration in Scala compares with iteration in Java.&lt;/p&gt;
+
+&lt;p&gt;Taking the lists in the previous post in to account, lets assign ourselves a task of iterating over each element in the list and converting them to uppercase.&lt;/p&gt;
+
+&lt;p&gt;First, we all know how to do this in Java using a standard for each loop:&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nc&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toUpperCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There are so many different ways to iterate in Scala, thus we are only going to talk about the most trivial ways.&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;\&amp;lt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;print&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toUpperCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-or-&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;toUpperCase&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;()).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;printf&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;%s&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Download Source: &lt;a href=&quot;http://github.com/slevine/scala-training/blob/master/src/main/scripts/collections/simpleLists.scala&quot;&gt;simpleLists.scala&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, you can loop in Scala the same way that you do in Java, namely, with a for each loop. There is nothing special about that.&lt;/p&gt;
+
+&lt;p&gt;The second loop is written in more a functional paradigm, as it uses the Scala map function. It allows you to iterate over the list without having to know anything about the details of the iteration itself. With Scala you are working at a much higher level. If we look at the Scala map function, it takes in a function as an argument, in this case the function is “toUpperCase()”. The map function then applies this function to all of the elements in the List, thus you don’t have to worry about the actual iteration logic. In this scenario, all the caller needs to worry about is that they have a List of elements, and they want some function f applied to all of them.&lt;/p&gt;
+
+&lt;p&gt;You can chain functions together on a List. In this case, we changed a foreach to the end of the map. If we were to describe the what is going on in plain english, it would sound something like, take all the elements of l, apply “toUpperCase” to all of them, then for each of them, print them.&lt;/p&gt;
+
+&lt;p&gt;The final interesting thing to notice in the above line of code is the “_” placeholder syntax. It looks strange to have a “_” there as part of the code, but all it is doing is acting as a placeholder for the function. It simply represents the current element of the List being operated on. Even though there are two “_“‘s in this example, they are completely independent of each other. The placeholder is a very powerful advanced concept in Scala and this example barely touches the surface of its usage. We will talk more about it in a dedicated post.&lt;/p&gt;
+
+&lt;p&gt;As you can see, Scala supports both the “Java” way of iterating and a pure functional way. Again, this example is just one of the many different techniques for iterating in Scala. In a future post we will look at other ways of iterating in Scala.&lt;/p&gt;
+
+&lt;p&gt;References&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The code found in this post is hosted at
+  &lt;a href=&quot;http://github.com/slevine/scala-training&quot;&gt;github.com&lt;/a&gt; along with other sample Scala code.&lt;/li&gt;
+&lt;/ul&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/11/scala-sugar-iteration/&quot;&gt;Scala Sugar - Iteration&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on November 22, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Scala Sugar - Lists]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/11/scala-sugar-lists/" />
+  <id>https://blue64.net/2009/11/scala-sugar-lists</id>
+  <published>2009-11-21T16:01:58-05:00</published>
+  <updated>2009-11-21T16:01:58-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm.&lt;/p&gt;
+
+&lt;p&gt;Of course, learning a new programming paradigm is not going to happen over night, it is going to take a bit of time. Over the course of the next few months, I am going to be posting a series of posts documenting my progress learning Scala. They will be written from the perspective of a “hardcore” Java programmer being enlightened by a sweet new language. I will write about all of the “sugar” Scala has to offer a Java programmer, and that is how I came up with title “Scala Sugar”.&lt;/p&gt;
+
+&lt;p&gt;In this first installment of Scala Sugar lets discuss one of the most fundamental concepts required to write any non-trivial program, namely Lists. For the longest time, Lists in Java didn’t bother me at all, as they seemed “normal” to me. That was until I was introduced to dynamic languages a few years back. Now, Lists in Java seem extremely verbose to me as I wonder why in Java you can’t just create and populate a list with a single line of code. Lets look at our first Java vs Scala comparison.&lt;/p&gt;
+
+&lt;p&gt;Lets create a trivial list of three lowercase strings.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;java.util.List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ArrayList&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;();&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;l&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;add&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;In Java it takes a minimum of 6 lines of code to declare a list of 3 strings!
+Now lets declare the same list in Scala.&lt;/p&gt;
+
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;l&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;a&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;b&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;c&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Thats it, one line of code! The most important things to pay attention to are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;No need to import List in Scala, as most fundamental classes are imported by default in Scala&lt;/li&gt;
+  &lt;li&gt;You do not have to give ‘l’ a type in Scala. Scala uses Type inference which means that it can infer its type from the object it is pointing to. It is important to realize that Scala is statically typed, it just doesn’t require you to type your variables when you define them. The compiler is smart enough to figure it out.&lt;/li&gt;
+  &lt;li&gt;You can construct a list with elements in Scala, no need to “add” each element separately.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Even in this trivial example, you can start to see how clean and concise Scala is.&lt;/p&gt;
+
+&lt;p&gt;In my next post we will explore different ways to iterate over the lists.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;References&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The code found in this post is hosted at &lt;a href=&quot;http://github.com/slevine/scala-training&quot;&gt;github.com&lt;/a&gt; along with other sample Scala code.&lt;/li&gt;
+&lt;/ul&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/11/scala-sugar-lists/&quot;&gt;Scala Sugar - Lists&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on November 21, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Scala reduceLeft]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/11/scala-reduceleft/" />
+  <id>https://blue64.net/2009/11/scala-reduceleft</id>
+  <published>2009-11-19T17:52:02-05:00</published>
+  <updated>2009-11-19T17:52:02-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;&lt;em&gt;This post was updated on November 19, 2009&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;As you know, during the past few weeks (time permitting), I have been spending time studying the Scala programming language. After reading the first few chapters of &lt;a href=&quot;http://www.artima.com/shop/programming_in_scala&quot;&gt;Programming In Scala&lt;/a&gt;, I have come across the first feature of Scala that would have been totally useful for me on one of my Java programming tasks a few months ago.&lt;/p&gt;
+
+&lt;p&gt;The actual programming task was quite complex, but for the purposes of this post, we will work with a dramatically simplified example. The simplified task is: given a list of Stocks figure out which one has the highest earnings per share.&lt;/p&gt;
+
+&lt;p&gt;Here is one way the problem can be solved in Scala:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scala&quot; data-lang=&quot;scala&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ticker&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;earnings&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Double&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;toString&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ticker&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; has eps of: &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot; with a price of &quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;price&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;earnings&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;shares&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;that&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Stock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;that&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;List&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;aapl&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;203&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.73E9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;878876000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ibm&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;66&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;1.23E10&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1384331000&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;),&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Stock&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;goog&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;465&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;4.19E9&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;314754113&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;portfolio&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;reduceLeft&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;
+        &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s1&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;s2&lt;/span&gt;
+    &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;goog&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;has&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;eps&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;of&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;13&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;31&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;em&gt;Download Source: &lt;a href=&quot;http://github.com/slevine/scala-training/blob/master/src/main/scala/net/slevine/scalatraining/stocks/model/stocks.scala&quot;&gt;Stock.scala&lt;/a&gt;, &lt;a href=&quot;http://github.com/slevine/scala-training/blob/master/src/main/scripts/stocks/reduceLeft.scala&quot;&gt;reduceLeft.scala&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have never seen Scala code before, this code will look quite foreign to you because there are a lot of concepts in Scala that are not present in Java. In a few weeks (again time permitting), will begin writing a series on Scala for Java programmers, but for right now, please bear with me, and try to follow along.&lt;/p&gt;
+
+&lt;p&gt;The most interesting things to me about this code are:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;del&gt;Line 04: You are reading it correct, that is operator overloading!&lt;/del&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;em&gt;Correction: Scala doesn’t actually support “operator overloading”, in fact, “operators are not special language syntax”. In Scala any method can be an operator. What makes an operator an operator is how you use it. Example:&lt;/em&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-scala&quot; data-lang=&quot;scala&quot;&gt;&lt;table class=&quot;rouge-table&quot;&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&quot;gutter gl&quot;&gt;&lt;pre class=&quot;lineno&quot;&gt;1
+2
+3
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//operator
+&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;1.&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//not operator (but returns wrong type)
+&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).+(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Correct&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;type&lt;/span&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Line 07: It is great to be able to populate a list so easily without having to mess around with add methods.&lt;/li&gt;
+  &lt;li&gt;Line 14: This is the coolest feature of them all so far, the ability to reduce a list of elements down to one based on a binary operator.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is just a &lt;strong&gt;small&lt;/strong&gt; demonstration of the very basics of the Scala language. If you find this at all interesting, you can find out much more at &lt;a href=&quot;http://www.scala-lang.org/&quot;&gt;scala-lang.org&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Note: obviously, this is not the most optimal Scala solution so if your a Scala guru, criticisms are welcome. I hope to come back to this example every few weeks, continually improving it as my knowledge of Scala grows.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;References The code found in this post is hosted at &lt;a href=&quot;http://github.com/slevine/scala-training&quot;&gt;github.com&lt;/a&gt; along with other sample Scala code.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/11/scala-reduceleft/&quot;&gt;Scala reduceLeft&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on November 19, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Simple Applescript For The Traveling Mac]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/11/simple-applescript-for-the-traveling-mac/" />
+  <id>https://blue64.net/2009/11/simple-applescript-for-the-traveling-mac</id>
+  <published>2009-11-12T22:46:45-05:00</published>
+  <updated>2009-11-12T22:46:45-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;&lt;strong&gt;The Problem&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You have a MacBook and a nice Apple Cinema display
+(this doesn’t sound like a problem so far), and you travel with the
+MacBook every day. When you open the lid of your MacBook you like
+to have the Dock on the left side of the screen giving you the most
+top to bottom space, but when you come home and connect the MacBook
+to your Cinema display and set up dual monitors, you want the dock
+on the bottom of the Cinema, not on the left side of the MacBook.&lt;/p&gt;
+
+&lt;p&gt;You don’t want to have to go in to preferences every time to switch
+the location. (or maybe you do?) For me it was becoming a very
+tedious task, so I began researching ways to automate it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;The Solution&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Leverage Apple’s “Language of Automation”,
+Applescript to handle the task. Applescript has lots of useful
+hooks in to OS X.&lt;/p&gt;
+
+&lt;p&gt;The requirements for the script are quite simple:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Obtain the current resolution of the primary monitor&lt;/li&gt;
+  &lt;li&gt;if the resolution is &amp;gt; 1900 (Cinema Display) configure the Dock for large display&lt;/li&gt;
+  &lt;li&gt;else configure the Dock for laptop display&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For the moment, that is my goal, simple, yet time saving.&lt;/p&gt;
+
+&lt;p&gt;Step 1: Open AppleScript Editor
+Step 2: Paste the following code in&lt;/p&gt;
+
+&lt;noscript&gt;&lt;pre&gt;400: Invalid request
+&lt;/pre&gt;&lt;/noscript&gt;
+&lt;script src=&quot;https://gist.github.com/232524.js?file=switch-displays.applescript&quot;&gt; &lt;/script&gt;
+
+&lt;p&gt;Step 3: Run it to make sure it works as expected, if so, save the
+script as application, so you don’t need to open AppleScript Editor
+each time you want to run it.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Future requirements&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Figure out how to hook the script in to sleep/wake events in Snow Leopard.&lt;/li&gt;
+  &lt;li&gt;Customize more than just the Dock.&lt;/li&gt;
+  &lt;li&gt;Migrate it in to a startup script that brings up all necessary
+  applications based upon current mood (reading/blogging/coding).&lt;/li&gt;
+  &lt;li&gt;Others???&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Overall, I find Applescript a very easy way to automate things in
+Snow Leopard.&lt;/p&gt;
+
+&lt;p&gt;All of the source for this post can be found on
+&lt;a href=&quot;http://gist.github.com/232524&quot;&gt;github.com&lt;/a&gt;. Please feel free to
+fork and improve. Enjoy.&lt;/p&gt;
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/11/simple-applescript-for-the-traveling-mac/&quot;&gt;Simple Applescript For The Traveling Mac&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on November 12, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[iPhone 3.0 upgrade from beta 5 to final]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/06/iphone-3-0-upgrade-from-beta-5-to-final/" />
+  <id>https://blue64.net/2009/06/iphone-3-0-upgrade-from-beta-5-to-final</id>
+  <published>2009-06-18T12:40:50-04:00</published>
+  <updated>2009-06-18T12:40:50-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;For the past few months, I have been running the iPhone OS 3.0
+betas on my iPhone without too many issues. Thus I assumed that
+when the final version of OS 3 was released, it would be easy to
+upgrade to it. This has not been the case. The current beta on my
+iPhone was beta 5, and then yesterday when the final version was
+announced, I assumed after a simple plug in to iTunes, I would be
+upgraded to the released version. Nope, iTunes kept telling me that
+I have the latest version of iPhone OS 3. It seems as though it is
+not checking the build number, only the OS level. The next thing I
+tried was doing a restore, this didn’t work either because it gave
+me an error saying it could not connect to the site to download the
+file.&lt;/p&gt;
+
+&lt;p&gt;Finally, after some Googling around, I found that others with the
+same problem circumvented it by
+&lt;a href=&quot;http://support.apple.com/kb/HT1808&quot;&gt;putting their iPhone in recovery mode&lt;/a&gt;
+and then upgrading from there.&lt;/p&gt;
+
+&lt;p&gt;If you are currently running beta 5, you were supposed to upgrade
+to the GM version posted last week. I skipped it thinking their
+would be another release in the next few days with the final
+version. I have now learned that the GM version is the same as the
+final version. Unfortunately, now it is too late to download the GM
+from the developer website, as Apple has taken it down, and
+according to their documentation, you should obtain the final
+version through iTunes. Thus if you are in the same boat as me, on
+beta 5, you will have to install the latest version via recovery
+mode.&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/06/iphone-3-0-upgrade-from-beta-5-to-final/&quot;&gt;iPhone 3.0 upgrade from beta 5 to final&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on June 18, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Easy Upgrades]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/06/easy-upgrades/" />
+  <id>https://blue64.net/2009/06/easy-upgrades</id>
+  <published>2009-06-15T17:49:31-04:00</published>
+  <updated>2009-06-15T17:49:31-04:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Who doesn’t like easy upgrades? Easy upgrades are great when
+implemented correctly. There are two speciifiic easy upgrades I
+have been (enjoying) using recently, namely, Wordpress and Ubuntu
+Server.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;a href=&quot;http://wordpress.org&quot;&gt;Wordpress&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;This blog has been powered by &lt;a href=&quot;wordpress.org&quot;&gt;Wordpress&lt;/a&gt; for a long
+time, and has been upgraded many times along the way. Download the
+latest tgz file, unzip it, save your wp-content directory, upgrade
+your database, and then you are good to go. Keep in mind this was a
+very simple procedure, as they call it their “famous 5-minute
+installation”, which it typically was.&lt;/p&gt;
+
+&lt;p&gt;Once upgrading to 1.7, the procedure became
+&lt;a href=&quot;http://codex.wordpress.org/Tools_Upgrade_SubPanel&quot;&gt;as easy as clicking a link on the admin page&lt;/a&gt;,
+and stepping through a wizzard This blog is now running 1.8, so it
+has been through several automatic upgrades already, and each one
+of them has been completely boring, which when talking about
+upgrading an environment, is a very good thing. This magic does not
+only apply to upgrading the entire platform, as you can
+&lt;a href=&quot;http://codex.wordpress.org/Plugins_Installed_SubPanel#Upgrading_Plugins&quot;&gt;automatically upgrade your plugins as well&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;&lt;a href=&quot;http://ubuntu.com&quot;&gt;Ubuntu&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Many years ago I set up several Ubuntu Gutsy Gibbon (7.10)
+Servers in my basement to serve different purposes on my internal
+network. These servers have been running without issue for the past
+2 years. They would probably run seamlessly for another 2 years,
+but unfortunately, I needed to install a new package that didn’t
+have a deb available for the current version of Ubuntu. At first I
+was trying to find ways around this, installing the sources
+instead, but that didn’t work well for me, as it needed a newer
+version of a dependent library. Even considered trying a different
+software package, but it seemed like all of the software packages I
+was trying to install, required a newer version of Ubuntu.&lt;/p&gt;
+
+&lt;p&gt;What was I left to do? Either upgrade or rebuild from scratch.
+Based on past experiences with other distros, upgrades have been
+nothing but headaches for me. Since, I really didn’t want to invest
+the time to rebuild the server from scratch, decided to try my
+first Ubuntu upgrade. Again, based on my past experiences, I
+assumed I needed to download the media, and then hook up a monitor
+to the server, and finally go through a set of upgrade screens.&lt;/p&gt;
+
+&lt;p&gt;To my delight, after a little bit of research I found that you can
+do the
+&lt;a href=&quot;https://help.ubuntu.com/community/HardyUpgrades#Network%20Upgrade%20from%207.10%20for%20Ubuntu%20Servers%20(Recommended)&quot;&gt;entire upgrade from the command line&lt;/a&gt;,
+no user interface required, no media download required, no monitor
+required! This was too good to be true right? Well, no. I ran the
+&lt;em&gt;do-release-upgrade&lt;/em&gt;command, and now my server is running Hardy
+Heron (8.04). Couldn’t be any easier. Ubuntu’s upgrade
+infrastructure is very impressive.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;What is the moral of the story? If you want to build a loyal user
+community, treat the members of the community well by providing
+them with an easy upgrade path.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/06/easy-upgrades/&quot;&gt;Easy Upgrades&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on June 15, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Quicksilver is a timesaver]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/01/quicksilver-is-a-timesaver/" />
+  <id>https://blue64.net/2009/01/quicksilver-is-a-timesaver</id>
+  <published>2009-01-26T14:57:25-05:00</published>
+  <updated>2009-01-26T14:57:25-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;It has been a while since a single program changed my workflow as
+much as &lt;a href=&quot;http://docs.blacktree.com/quicksilver/what_is_quicksilver&quot;&gt;Quicksilver&lt;/a&gt; has.&lt;/p&gt;
+
+&lt;p&gt;Over the years, it has been covered a lot on the Mac sites,
+but it never really seemed like something that would help me. Guess
+it was the stubborn side of me refusing to try something new. So
+the question is what changed my mind now? Two things:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://oreilly.com/catalog/9780596519780/&quot;&gt;The Productive Programer&lt;/a&gt;: In his book Neil Ford describes several work flows involving
+  Quicksilver that actually made sense to me, especially the
+  Subversion plugin.&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.pragprog.com/titles/ahptl/pragmatic-thinking-and-learninghttp://www.pragprog.com/titles/ahptl/pragmatic-thinking-and-learning&quot;&gt;Pragmatic Thinking And Learning&lt;/a&gt;:
+ Again, the virtues of Quicksilver described in such a way, that
+  made a lot of sense to me.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After reading these two excellent books, it was time for me to give
+it a try, and see what it has to offer. It has been about a week
+now, and it is hard to imagine using my Mac without it. It has
+increased the efficiency of my workflow tremendously. The mouse has
+become optional for most tasks. It has sped up common tasks for me
+such as checking in/out files from Subversion, opening documents to
+edit, quickly composing emails and attaching files, and my favorite
+time saver is
+&lt;a href=&quot;http://pragmactic-osxer.blogspot.com/2007/07/quickly-locking-your-computer-using.html&quot;&gt;this neat trick&lt;/a&gt;
+that allows you to lock your computer with a simple keystroke.
+Previously, it required clicking on the “lock screen” option in
+keychain.&lt;/p&gt;
+
+&lt;p&gt;If you are a Mac developer like me, and you are in to
+efficiency, you need to at least give
+&lt;a href=&quot;http://docs.blacktree.com/quicksilver/what_is_quicksilver&quot;&gt;Quicksilver&lt;/a&gt;
+a try. You won’t be disappointed.&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/01/quicksilver-is-a-timesaver/&quot;&gt;Quicksilver is a timesaver&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on January 26, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Going Functional with Scala]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/01/going-functional-with-scala/" />
+  <id>https://blue64.net/2009/01/going-functional-with-scala</id>
+  <published>2009-01-15T16:59:32-05:00</published>
+  <updated>2009-01-15T16:59:32-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Lately it seems like functional programming has been the talk of
+the town, the new (old) paradigm that is making a comeback in a
+major way. For a while, I resisted the urge to follow the paradigm
+de jour, being the hard core OO guy that I am, but now it is clear
+to me that it is more than just hype. There are many reasons
+functional programming makes sense as a paradigm for developing
+software today, but the one that I am most interested in is the
+fact that it handles concurrency so well, thus providing us the
+building blocks to develop extremely scalable applications.&lt;/p&gt;
+
+&lt;p&gt;FP(Functional Programming) has been on my mind for a while. The seed
+was placed there in late 2007 by the Java Posse listening to their
+&lt;a href=&quot;http://javaposse.com/index.php?post_id=289334&quot;&gt;interview with Martin Odersky&lt;/a&gt;.
+They were not talking about FP per se, but more about a specific
+JVM language called &lt;a href=&quot;http://www.scala-lang.org/&quot;&gt;Scala&lt;/a&gt; (pronounced
+skah-lah not scale-la). Scala is not a pure functional language, it
+is actually a fusion between functional and object oriented
+programming. It brings together the best of both worlds. My
+exposure to Scala did not end there, as I got another huge dose at
+Java One 2008. Two of my favorite sessions there were either on
+Scala, or Scala was a major discussion point.&lt;/p&gt;
+
+&lt;p&gt;The first session was the Script Bowl. This session was not specifically about Scala, it
+was more of a JVM scripting language battle, and in the end JRuby
+was crowned king by the audience. In my mind, Scala was the clear
+winner, because of the simple, yet elegant and powerfull
+concurrency demonstrated. The presenter wrote what looked like a
+relatively simple program, and it was capable of indexing tons of
+RSS feed dumps in real time on a typical multi-core laptop
+computer. I remember thinking to my self, wow, it would take me a
+lot more time and effort to write a similar program in Java, and it
+probably wouldn’t have the same level of scalability as the one
+demonstrated. The Scala code was able to fully utilize the
+multi-core processors it was running on.&lt;/p&gt;
+
+&lt;p&gt;The second session was on Scala presented by the father of Scala
+him self Martin Odersky. During that session I was wowed again with
+some of Scala’s features like it:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;is scalable because it works for very small and very large systems.&lt;/li&gt;
+  &lt;li&gt;“is the Java programming language of the future.”&lt;/li&gt;
+  &lt;li&gt;is object oriented, functional, and a scripting language.&lt;/li&gt;
+  &lt;li&gt;leverages &lt;a href=&quot;http://www.scala-lang.org/node/242&quot;&gt;Actor’s&lt;/a&gt; as the primary concurrency construct.&lt;/li&gt;
+  &lt;li&gt;fits seamlessly in to a Java environment.&lt;/li&gt;
+  &lt;li&gt;is a composition language, as it adds the notion of Traits.&lt;/li&gt;
+  &lt;li&gt;has an updated type system supporting type inference.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;After those two sessions, I headed over to the Java One bookstore
+to check out the Beta version of
+&lt;a href=&quot;http://www.artima.com/shop/programming_in_scala&quot;&gt;Programming in Scala&lt;/a&gt;.
+I was impressed, but couldn’t help thinking, is Scala for me? Can I
+use it at work? Is it viable in the enterprise?&lt;/p&gt;
+
+&lt;p&gt;Fast forward 7 months to today, and let me answer my own questions with one word:
+yes!&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Is it for me? Yes, because Scala is not only something new, it
+  is something advanced, because it was written in a no compromise
+  academic environment. If nothing else it is a great way to broaden
+  my horizons as a programmer.&lt;/li&gt;
+  &lt;li&gt;Can I use this at work? Yes, Scala code compiles down to Java
+  byte code, so theoretically, if I was very evil, I could write all
+  my code at work in Scala, run Scalac on it, and add the class files
+  to the application, and no one would be any the wiser. Will I do
+  that? No way, I am simply trying to illustrate a point that Scala
+  is totally compatible with any existing Java environment.&lt;/li&gt;
+  &lt;li&gt;Is it viable in the enterprise? Yes, with its advanced
+  concurrency model, I can only imagine the type of throughput you
+  can achieve. (Looking forward to finding out)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Now you know where my interest in Scala comes from. Hopefully after
+reading this post, you will be a bit curious about it as well.&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/01/going-functional-with-scala/&quot;&gt;Going Functional with Scala&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on January 15, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[New Webkit Feature]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2009/01/new-webkit-feature/" />
+  <id>https://blue64.net/2009/01/new-webkit-feature</id>
+  <published>2009-01-14T11:20:23-05:00</published>
+  <updated>2009-01-14T11:20:23-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Just noticed a new and important feature released with the latest
+nighty build of Webkit, namely, an option to check for updates
+automatically. Mozilla has had this feature in their browsers for a
+long time, and it was hard not having it available in
+&lt;a href=&quot;http://nightly.webkit.org&quot;&gt;Webkit&lt;/a&gt;. Just got used to downloading a
+new version every so often.&lt;/p&gt;
+
+&lt;p&gt;The days of remembering to update
+&lt;a href=&quot;http://nightly.webkit.org&quot;&gt;Webkit&lt;/a&gt; are now over, the latest
+nightly knows how to keep it self in sync with the current nightly
+build.&lt;/p&gt;
+
+&lt;p&gt;Here is the option you are presented with the first time you open
+the latest Webkit.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/uploads/2009/01/auto.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;If you choose to say no to the above dialog, or if you are like me
+and you leave your browser open all the time, and you want to check
+for updates manually there is that option too.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/uploads/2009/01/autoupdate.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once the process is complete, you will see the following dialog
+letting you know you are up to date.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/uploads/2009/01/uptodate.png&quot; alt=&quot;image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;It is great to see this much needed feature has finally arrived in
+&lt;a href=&quot;http://nightly.webkit.org&quot;&gt;Webkit&lt;/a&gt;. Hopefully this will entice
+more people to jump on the &lt;a href=&quot;http://nightly.webkit.org&quot;&gt;Webkit&lt;/a&gt;
+nightly bandwagon.&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2009/01/new-webkit-feature/&quot;&gt;New Webkit Feature&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on January 14, 2009.&lt;/p&gt;
+  </content>
+</entry>
+
+
+<entry>
+  <title type="html"><![CDATA[Keyboard Shortcuts]]></title>
+  <link rel="alternate" type="text/html" href="https://blue64.net/2008/12/keyboard-shortcuts/" />
+  <id>https://blue64.net/2008/12/keyboard-shortcuts</id>
+  <published>2008-12-18T10:45:28-05:00</published>
+  <updated>2008-12-18T10:45:28-05:00</updated>
+  <author>
+    <name>Steven Levine</name>
+    <uri>https://blue64.net</uri>
+    <email>steve@blue64</email>
+  </author>
+  <content type="html">
+    &lt;p&gt;Do you want to learn all of the keyboard shortcuts to your favorite
+Java IDE, but just don’t have time to study a cheat sheet? Are you
+envious of your team lead because when you peer program with them,
+they are able to get things done without using the mouse?&lt;/p&gt;
+
+&lt;p&gt;You ask your self how did they do it? Do they memorize a cheat sheet while
+on the Subway? Do they go home and practice coding every night? Are
+they gifted with great memories? Well, they may be all of these
+things, but you don’t have to be!&lt;/p&gt;
+
+&lt;p&gt;All you need to do is install a plugin called Key Promoter that is available for both Intellij and
+Eclipse. The way it works is every time you use your mouse to
+accomplish a task that can be accomplished via a keyboard shortcut,
+it pops up a window and lets you know. In the Intellij version, it
+actually keeps track of how many times you used your mouse for each
+action. It becomes insulting after a while if you see you used your
+mouse 20 times for the same action, knowing it has shown you the
+corresponding keyboard shortcut each time.&lt;/p&gt;
+
+&lt;p&gt;For more details you can find the Intellij plugin
+&lt;a href=&quot;http://plugins.intellij.net/plugin/?id=1003&quot;&gt;here&lt;/a&gt;, and the
+Eclipse plugin &lt;a href=&quot;http://www.mousefeed.com/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+
+    &lt;p&gt;&lt;a href=&quot;https://blue64.net/2008/12/keyboard-shortcuts/&quot;&gt;Keyboard Shortcuts&lt;/a&gt; was originally published by Steven Levine at &lt;a href=&quot;https://blue64.net&quot;&gt;Steven Levine&lt;/a&gt; on December 18, 2008.&lt;/p&gt;
+  </content>
+</entry>
+
+</feed>

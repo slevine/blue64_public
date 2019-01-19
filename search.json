@@ -1,0 +1,401 @@
+[
+
+  
+    {
+      "title"			: "The Power of Big Query with Public Data",
+      "link"			: "https://blue64.net/2018/02/the-power-of-bq/",
+      "excerpt"		: "If you are looking for an easy way to query a public dataset you should definitely check out Big Query's publicly available datasets."
+    }
+  
+
+  
+    ,{
+      "title"			: "Notes from a Talk on Evolving Java",
+      "link"			: "https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/",
+      "excerpt"		: "Notes from Brian Goetz's talk on Evolving Java."
+    }
+  
+
+  
+    ,{
+      "title"			: "On Deciding Between PUT and POST When Creating a RESTful Resource",
+      "link"			: "https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/",
+      "excerpt"		: "On Deciding Between PUT and POST When Creating a RESTful Resource"
+    }
+  
+
+  
+    ,{
+      "title"			: "WebView(Javascript) -> Native Android API",
+      "link"			: "https://blue64.net/2012/03/webview-javascript-native-android/",
+      "excerpt"		: "Calling Javascript from an Android Webview"
+    }
+  
+
+  
+    ,{
+      "title"			: "Mission Accomplished, Migration From Wordpress to Octopress Complete!",
+      "link"			: "https://blue64.net/2011/09/migration-from-wordpress-to-octopress-complete/",
+      "excerpt"		: "My thoughts and experiences with migrating my blog from Wordpress to Octopress"
+    }
+  
+
+  
+    ,{
+      "title"			: "In case you haven't heard - Apple is not showing Java any more love...",
+      "link"			: "https://blue64.net/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "First Thoughts On My New Eee Pc (1005PE)",
+      "link"			: "https://blue64.net/2010/03/first-thoughts-on-my-new-eee-pc-1005pe/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "RubyMine 2 Debugging Issue Resolved",
+      "link"			: "https://blue64.net/2010/01/rubymine-2-debugging-issue-resolved/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "With Grape, Groovy Is On Par with Native Scripting Languages",
+      "link"			: "https://blue64.net/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Time Machine over a Network Drive",
+      "link"			: "https://blue64.net/2009/12/time-machine-over-a-network-drive/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Scala Sugar - Iteration",
+      "link"			: "https://blue64.net/2009/11/scala-sugar-iteration/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Scala Sugar - Lists",
+      "link"			: "https://blue64.net/2009/11/scala-sugar-lists/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Scala reduceLeft",
+      "link"			: "https://blue64.net/2009/11/scala-reduceleft/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Simple Applescript For The Traveling Mac",
+      "link"			: "https://blue64.net/2009/11/simple-applescript-for-the-traveling-mac/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "iPhone 3.0 upgrade from beta 5 to final",
+      "link"			: "https://blue64.net/2009/06/iphone-3-0-upgrade-from-beta-5-to-final/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Easy Upgrades",
+      "link"			: "https://blue64.net/2009/06/easy-upgrades/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Quicksilver is a timesaver",
+      "link"			: "https://blue64.net/2009/01/quicksilver-is-a-timesaver/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Going Functional with Scala",
+      "link"			: "https://blue64.net/2009/01/going-functional-with-scala/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "New Webkit Feature",
+      "link"			: "https://blue64.net/2009/01/new-webkit-feature/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Keyboard Shortcuts",
+      "link"			: "https://blue64.net/2008/12/keyboard-shortcuts/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Simple Security for HTTP Based RESTful Services (Part 2)",
+      "link"			: "https://blue64.net/2008/12/simple-security-for-http-based-restful-services-part-2/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Simple Security for HTTP Based RESTful Services (Part 1)",
+      "link"			: "https://blue64.net/2008/11/simple-security-for-http-based-restful-services-part-1/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "A little Salt with that Hash?",
+      "link"			: "https://blue64.net/2008/10/a-little-salt-with-that-hash/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "WebKit Day 2.5 Benchmarks",
+      "link"			: "https://blue64.net/2008/09/webkit-day-25-benchmarks/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Upgraded Site To WordPress 2.6",
+      "link"			: "https://blue64.net/2008/08/upgraded-site-to-wordpress-26/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "WebKit Day 2 - Benchmarks",
+      "link"			: "https://blue64.net/2008/06/webkit-day-2-benchmarksas/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Giving WebKit A Try",
+      "link"			: "https://blue64.net/2008/06/giving-webkit-a-try/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Proposed Java 7 Feature: Safe Rethrow",
+      "link"			: "https://blue64.net/2008/06/proposed-java-7-feature-safe-rethrow/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Proposed Java 7 Feature: Multi-Catch Statements",
+      "link"			: "https://blue64.net/2008/06/java-78-cool-feature/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Amazon's EC2 and You",
+      "link"			: "https://blue64.net/2008/06/amazons-ec2-and-you/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Java One Wrap Up",
+      "link"			: "https://blue64.net/2008/05/java-one-wrap-up/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "A Few Site Improvement",
+      "link"			: "https://blue64.net/2008/05/a-few-site-improvement/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Initial Thoughts After Java One",
+      "link"			: "https://blue64.net/2008/05/initial-thoughts-after-java-one/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Java One Keynote",
+      "link"			: "https://blue64.net/2008/05/java-one-keynote/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Groovy 1.6 Beta",
+      "link"			: "https://blue64.net/2008/05/groovy-16-beta/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Using Firefox 2.x Extentions with Firefox 3 Beta",
+      "link"			: "https://blue64.net/2008/05/using-firefox-2x-extentions-with-firefox-3-beta/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Moving From Eclipse to Intellij on the Mac",
+      "link"			: "https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Connecting to a corporate network with a Mac",
+      "link"			: "https://blue64.net/2006/02/connecting-to-a-corporate-network-with-a-mac/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Directory size from the cmd line",
+      "link"			: "https://blue64.net/2006/02/directory-size-from-the-cmd-line/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Configuring a Java Development Environment on OS X Tiger",
+      "link"			: "https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Handy OS X Application for Blogging",
+      "link"			: "https://blue64.net/2006/02/handy-os-x-application-for-blogging/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Static Method Synchronization",
+      "link"			: "https://blue64.net/2005/07/static-method-synchronization/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Hashcodes in Java",
+      "link"			: "https://blue64.net/2005/07/hashcodes-in-java/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "Method Synchronization",
+      "link"			: "https://blue64.net/2005/06/method-synchronization/",
+      "excerpt"		: ""
+    }
+  
+
+  
+    ,{
+      "title"			: "How to SSH without using a Password",
+      "link"			: "https://blue64.net/2004/12/how-to-ssh-without-using-a-password/",
+      "excerpt"		: ""
+    }
+  
+
+
+
+  
+
+  
+    ,{
+      "title"			: "The history of Steve",
+      "link"			: "https://blue64.net/about/background/",
+      "excerpt"		: "The History of Steve"
+    }
+  
+
+  
+
+  
+
+  
+
+  
+    ,{
+      "title"			: "About Steve",
+      "link"			: "https://blue64.net/about/",
+      "excerpt"		: "About Steven Levine"
+    }
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+]

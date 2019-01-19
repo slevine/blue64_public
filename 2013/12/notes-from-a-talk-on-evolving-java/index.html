@@ -1,0 +1,658 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Notes from a Talk on Evolving Java &#8211; Steven Levine</title>
+<meta name="description" content="Notes from Brian Goetz's talk on Evolving Java.">
+<meta name="keywords" content="Development, Functional, Java, Scala">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Notes from a Talk on Evolving Java">
+<meta name="twitter:description" content="Notes from Brian Goetz's talk on Evolving Java.">
+<meta name="twitter:site" content="@blue64">
+<meta name="twitter:creator" content="@blue64">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blue64.net/images/running.jpg">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Notes from a Talk on Evolving Java">
+<meta property="og:description" content="Notes from Brian Goetz's talk on Evolving Java.">
+<meta property="og:url" content="https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/">
+<meta property="og:site_name" content="Steven Levine">
+
+
+
+
+
+<link rel="canonical" href="https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/">
+<link href="https://blue64.net/feed.xml" type="application/atom+xml" rel="alternate" title="Steven Levine Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://blue64.net/assets/css/main.css">
+<!-- Webfonts -->
+<script src="https://use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://blue64.net/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://blue64.net/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="https://blue64.net/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" >
+<!-- 32x32 -->
+<link rel="shortcut icon" type="image/png" href="https://blue64.net/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://blue64.net/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://blue64.net/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://blue64.net/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blue64.net/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav" class="animated drop">
+	    <ul>
+      
+		    
+		    <li><a href="https://blue64.net/about/" >About</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/posts/" >Archives</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/search/" >Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	
+		<div class="wrap">
+			<a href="https://blue64.net/" class="site-logo" rel="home" title="Steven Levine"><img src="https://blue64.net/images/site-logo.png" width="200" height="200" alt="Steven Levine logo" class="animated fadeInDown"></a>
+		</div>
+	
+</header><!-- /.masthead -->
+
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <img src="https://blue64.net/images/running.jpg" class="entry-feature-image" alt="Notes from a Talk on Evolving Java" ><p class="image-credit">Image credit: <a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+        Tags: &nbsp;&nbsp; <li><a href="https://blue64.net/tags/#Development" title="Pages tagged Development">Development</a></li><li><a href="https://blue64.net/tags/#Functional" title="Pages tagged Functional">Functional</a></li><li><a href="https://blue64.net/tags/#Java" title="Pages tagged Java">Java</a></li><li><a href="https://blue64.net/tags/#Scala" title="Pages tagged Scala">Scala</a></li>
+        </ul>
+        
+          <h1 class="entry-title">Notes from a Talk on Evolving Java</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <a href="https://blue64.net/about"><img src="https://blue64.net/images/author.jpg" class="bio-photo" alt="Steven Levine bio photo"></a>
+        
+      <!-- <span class="author vcard">By <span class="fn">Steven Levine</span></span> -->
+      <div class="social-icons">
+      	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+      	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+      	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+      </div>
+        <span class="entry-date date published"><time datetime="2013-12-02T22:03:00-05:00"><i class="fa fa-calendar-o"></i> December 02, 2013</time></span>
+        
+        <span class="entry-comments"><i class="fa fa-comment-o"></i> <a href="#disqus_thread">Comment</a></span>
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Development,Functional,Java,Scala&amp;text=Notes%20from%20a%20Talk%20on%20Evolving%20Java&amp;url=https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/&amp;via=blue64" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+
+        
+      </footer>
+      <div class="entry-content">
+        <p>Recently I attended a talk given by <a href="https://twitter.com/@briangoetz">Brian Goetz</a>, about evolving Java.  It was refreshing to hear that Java is moving forward again from the Java Language architect himself.  Like others, I have mixed feeling about how some of the features were added to the language, but overall, after hearing Brian’s talk, Java is getting the attention it needs to “keep up”.</p>
+
+<p>Below you can read some of the main points from the talk.  Brian’s deck can be found <a href="https://dl.dropboxusercontent.com/u/1550608/evolving-java.pdf">here</a>.</p>
+
+<blockquote>
+  <p>Full disclaimer, this post is me taking notes while trying to follow along with what Brian was saying.  There might be a few errors.  Please let me know if you find one.</p>
+</blockquote>
+
+<p>This really doesn’t do Brian’s presentation justice, but hope you find it informative about what’s coming in Java 8.</p>
+
+<blockquote>
+  <p>Note: I am working on a follow up post with actual running Java 8 code to demonstrate most
+of the features mentioned here.</p>
+</blockquote>
+
+<h3 id="a-night-with-brian-goetz---ny-java-meetup-dec-3-2013">A night with Brian Goetz - NY JAVA Meetup, Dec 3, 2013</h3>
+<ul>
+  <li>Java 8 - A new beginning</li>
+  <li>Trying to get Java moving again</li>
+  <li>Get things moving forward without breaking backwards compatibility</li>
+</ul>
+
+<p><strong>Modernizing Java</strong></p>
+
+<ul>
+  <li>Language
+    <ul>
+      <li>Lambda Expressions (closures)</li>
+      <li>Interfaces (default methods)</li>
+    </ul>
+  </li>
+  <li>Libraries
+    <ul>
+      <li>Bulk data on collections</li>
+      <li>Parallelism</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Lambda Expressions</strong></p>
+
+<ul>
+  <li>Argument list, a return type, and a body
+    <ul>
+      <li><code class="highlighter-rouge">(Object o) -&gt; o.toString</code></li>
+    </ul>
+  </li>
+  <li>Can refer to enclosing values
+    <ul>
+      <li><code class="highlighter-rouge">(Person p) -&gt; p.getName().equals(name)</code></li>
+    </ul>
+  </li>
+  <li>Method references to an existing method
+    <ul>
+      <li><code class="highlighter-rouge">Object::toString()</code></li>
+    </ul>
+  </li>
+  <li>Allows you to treat code as data</li>
+</ul>
+
+<p><strong>History</strong></p>
+
+<ul>
+  <li>In 1995 most main stream languages did not support closures</li>
+  <li>Today, Java is the last holdout
+    <ul>
+      <li>C++ added them recently</li>
+      <li>C# added them in 3.0</li>
+      <li>All new languages have them</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Long road</strong></p>
+
+<ul>
+  <li>1997 Ordersky - Pizza</li>
+  <li>2006 - 2008 a vigorous debate, BGGA, and CICE</li>
+  <li>Little language evolution from Java SE 5 (2004)</li>
+  <li>Project coin (small language changes) in Java SE 7</li>
+  <li>Dec 2009 OpenJDK Lambda formed</li>
+  <li>Nov 2010 - JSR-335</li>
+  <li>Current Status
+    <ul>
+      <li>Lambda’s, Interface, Bulk Ops</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Evolving a mature language</strong></p>
+
+<ul>
+  <li>Those encouraging change
+    <ul>
+      <li>Adapting to changing
+        <ul>
+          <li>hardware, attitudes, fashions, problems</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Those discouraging change
+    <ul>
+      <li>Maintain compatibility
+        <ul>
+          <li>Low tolerance for change that will break anything</li>
+        </ul>
+      </li>
+      <li>Preserving the core
+        <ul>
+          <li>Cant alienate user base</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Adapting to change
+    <ul>
+      <li>In 1995 everything was sequential, with imposed order</li>
+      <li>Very deterministic</li>
+    </ul>
+  </li>
+  <li>We want to introduce things that are more parallel</li>
+  <li><strong>We had the wrong defaults at the start, namely mutability</strong></li>
+  <li>Hard to undo this default behavior technically as well as in people’s mindsets</li>
+</ul>
+
+<p>Typical Iteration Example (External Iteration)</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="n">Shape</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">RED</span><span class="o">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">BLUE</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Foreach loop hides complex interactions</li>
+  <li><strong>External iteration</strong> - client has to drive thus <strong>the what and how are intermingled</strong></li>
+</ul>
+
+<p><strong>Inversion of Control</strong></p>
+
+<ul>
+  <li>Allows libraries to be much more expressive</li>
+</ul>
+
+<p>Lambda Example (Internal Iteration)</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shapes</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">RED</span><span class="o">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">BLUE</span><span class="o">);</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li><strong>Internal iteration</strong> - client in charge of the what, library in charge of how</li>
+</ul>
+
+<p><strong>Functional Interfaces</strong></p>
+
+<ul>
+  <li><code class="highlighter-rouge">Predicate&lt;T&gt;</code>, <code class="highlighter-rouge">Consumer&lt;T&gt;</code>, <code class="highlighter-rouge">Supplier&lt;T&gt;</code></li>
+  <li><code class="highlighter-rouge">Predicate&lt;String&gt; isEmpty = s -&gt; s.isEmpty()</code></li>
+  <li><code class="highlighter-rouge">Runnable r = () -&gt; {println("hello");</code></li>
+</ul>
+
+<p><strong>We could have added function types, but it was obvious and WRONG</strong></p>
+
+<ul>
+  <li>Would have interacted badly with erasure, introducing complexity and corner cases, would have a notion of old, and new libraries</li>
+  <li>Better to preserve the Core</li>
+  <li>Bonus - existing library are now forward compatible to lambdas</li>
+</ul>
+
+<p><strong>Lambdas enable better APis</strong></p>
+
+<ul>
+  <li>Enable more powerful API’s</li>
+  <li>Client-Library boundary is more permeable</li>
+  <li>Safer, exposes, more opportunities for optimizations</li>
+</ul>
+
+<p>Example Higher Order Function</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">iterface</span> <span class="n">Comparartor</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">U</span> <span class="kd">extends</span> <span class="n">Comparable</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">U</span><span class="o">&gt;&gt;</span>
+    <span class="n">Comparator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">comparing</span><span class="o">(</span><span class="n">Function</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">U</span><span class="o">&gt;</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">f</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">x</span><span class="o">).</span><span class="na">compareTo</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">y</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Problem: Interface evolution</strong></p>
+
+<ul>
+  <li>If you add a method to Interface, it will break all implementing libraries (obviously)</li>
+  <li>Source incompatible change, but binary will continue to work</li>
+  <li>Libraries will start looking old</li>
+  <li>Need a way to evolve them or replace them</li>
+  <li><code class="highlighter-rouge">Collections.sort()</code> <em>“bags nailed to side, don’t want to continue this”</em> –BG</li>
+</ul>
+
+<p>Interface with Default Method</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">Collection</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">forEach</span><span class="o">(</span><span class="n">Consumer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">action</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">T</span> <span class="nl">t:</span> <span class="k">this</span><span class="o">)</span>
+            <span class="n">action</span><span class="o">.</span><span class="na">apply</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+<ul>
+  <li>Can override it, like a virtual method</li>
+  <li>Consumer doesn’t know if they are using default or another implementation found in superclass chain</li>
+</ul>
+
+<blockquote>
+  <p>A question was posed asking why is the <code class="highlighter-rouge">default</code> keyword necessary?  Can’t the
+compiler infer if there is an implementation in the IF, it is the default?
+“Of course it can figure it out… but we wanted extra clarity, deal with it. :) “ –BG</p>
+</blockquote>
+
+<p><strong>Some might say: “We now have multiple inheritance in Java???”</strong></p>
+
+<ul>
+  <li>Java always had multiple inheritance of <strong>Types</strong></li>
+  <li>This adds multiple inheritance of <strong>Behavior</strong>
+    <ul>
+      <li>But not of state</li>
+      <li>Java interface are stateless (like Fortress’s Traits)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Resolution Rule 1</strong></p>
+
+<ul>
+  <li>If class can inherit a method from superclass and a superInterface, prefer the superclass
+    <ul>
+      <li>Defaults only considered if no method declared in superclass chain</li>
+      <li>True for both concrete and abstract superclass</li>
+    </ul>
+  </li>
+  <li>Ensure compatibility with previous versions of Java</li>
+</ul>
+
+<p><strong>Resolution Rule 2</strong></p>
+
+<ul>
+  <li>If class can inherit a method from two interfaces, and one more specific than (a subtype of) the other, prefer the more specific
+    <ul>
+      <li>An implementation in List would take precedence over once in Collection</li>
+    </ul>
+  </li>
+  <li>The shape of the inheritance tree doesn’t matter</li>
+</ul>
+
+<p><strong>Resolution Rule 3</strong></p>
+
+<ul>
+  <li>There is no rule 3!</li>
+</ul>
+
+<p>Class inheriting behavior from two SuperInterfaces</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">A</span> <span class="o">{</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">m</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="kd">interface</span> <span class="nc">B</span> <span class="o">{</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">m</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">C</span> <span class="kd">implements</span> <span class="n">A</span><span class="o">,</span> <span class="n">B</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">m</span><span class="o">()</span> <span class="o">{</span><span class="n">A</span><span class="o">.</span><span class="na">super</span><span class="o">.</span><span class="na">m</span><span class="o">();}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<ul>
+  <li>If you inherit two superInterface implementations, you (as developer) need to disambiguate which implementation to call</li>
+  <li>The onus is on the developer to decide, not the compiler</li>
+</ul>
+
+<p>Another SuperInterface Example</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">A</span> <span class="o">{</span>
+    <span class="k">default</span> <span class="kt">void</span> <span class="nf">m</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+<span class="kd">interface</span> <span class="nc">B</span> <span class="kd">extends</span> <span class="n">A</span> <span class="o">{}</span>
+
+<span class="kd">interface</span> <span class="nc">C</span> <span class="kd">extends</span> <span class="n">B</span> <span class="o">{}</span>
+<span class="c1">// gets impl from A</span>
+<span class="kd">class</span> <span class="nc">D</span> <span class="kd">implements</span> <span class="n">B</span><span class="o">,</span> <span class="n">C</span> <span class="o">{}</span>
+</code></pre></div></div>
+
+<p><strong>How Lambda’s can help</strong></p>
+
+<p>Typical Compartor Example</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Comparator</span><span class="o">&lt;</span><span class="n">Person</span><span class="o">&gt;</span> <span class="n">byLastName</span> <span class="o">=</span>
+    <span class="n">Comparartor</span><span class="o">.</span><span class="na">comparing</span><span class="o">(</span><span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getLastName</span><span class="o">());</span>
+<span class="n">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="n">byLastName</span><span class="o">);</span>
+</code></pre></div></div>
+
+<ul>
+  <li>We want code to look exactly at the problem statement</li>
+</ul>
+
+<p>Comparing with Lambda’s</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Collections</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">people</span><span class="o">,</span> <span class="n">comparing</span><span class="o">(</span><span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getLastName</span><span class="o">()));</span>
+
+<span class="c1">// Option 1, use simple Lambda</span>
+<span class="n">people</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">comparing</span><span class="o">(</span><span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getLastName</span><span class="o">()));</span>
+
+<span class="c1">// Option 2, use Class method</span>
+<span class="n">people</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">comparing</span><span class="o">(</span><span class="nl">Person:</span><span class="o">:</span><span class="n">getLastName</span><span class="o">));</span>
+
+<span class="c1">// We can also "reverse" the Collection</span>
+<span class="n">people</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">comparing</span><span class="o">(</span><span class="nl">Person:</span><span class="o">:</span><span class="n">getLastName</span><span class="o">).</span><span class="na">reversed</span><span class="o">());</span>
+
+<span class="c1">// Or add an additional compare to the pipeline</span>
+<span class="n">people</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">comparing</span><span class="o">(</span><span class="nl">Person:</span><span class="o">:</span><span class="n">getLastName</span><span class="o">).</span><span class="na">reversed</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">thenComparing</span><span class="o">(</span><span class="nl">Person:</span><span class="o">:</span><span class="n">getFirstName</span><span class="o">));</span>
+</code></pre></div></div>
+
+<p><strong>Important thing to be able to look at code and KNOW what it does!</strong></p>
+
+<p>Example from Above</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shapes</span><span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">RED</span><span class="o">)</span>
+        <span class="n">s</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">BLUE</span><span class="o">);</span>
+<span class="o">})</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Lets say we want to massage the results of the above collection</li>
+  <li>Another new feature added to Collections is <code class="highlighter-rouge">Streams</code></li>
+</ul>
+
+<p>Manipulate all elements of a Collection after applying a Filter</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">shapes</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+    <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">RED</span><span class="o">)</span>
+    <span class="o">.</span><span class="na">forEach</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="o">{</span> <span class="n">s</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="n">BLUE</span><span class="o">);</span> <span class="o">});</span>
+</code></pre></div></div>
+
+<p>Filter and Collect</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Shape</span><span class="o">&gt;</span> <span class="n">blueBlcoks</span>
+    <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">BLUE</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">Collections</span><span class="o">.</span><span class="na">toList</span><span class="o">())</span>
+</code></pre></div></div>
+
+<p>Filter, Transform, and then Collect</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Shape</span><span class="o">&gt;</span> <span class="n">blueBlcoks</span>
+    <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">BLUE</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="nl">Shape:</span><span class="o">:</span><span class="n">getContainingBox</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">Collections</span><span class="o">.</span><span class="na">toList</span><span class="o">())</span>
+</code></pre></div></div>
+
+<p>Filter, Map, and then Aggregate</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sumOfWeights</span> <span class="o">=</span>
+    <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="na">stream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">BLUE</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">mapToInt</span><span class="o">(</span><span class="nl">Shape:</span><span class="o">:</span><span class="n">getWeight</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">sum</span><span class="o">();</span>
+</code></pre></div></div>
+<ul>
+  <li>Believe it (or not), these examples are not any more expensive (perhaps cheaper) than a typical <code class="highlighter-rouge">for</code> loop</li>
+  <li>This is possible because it does a single pass on data
+    <ul>
+      <li>Creates a pipeline with Filter, then Map, and then Sum invokes them</li>
+      <li>In other words, Filter and Map are lazy operations</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Imperative vs Streams</strong></p>
+
+<ul>
+  <li>Individual data vs Sets</li>
+  <li>Focused on How, vs What</li>
+  <li>Doesn’t read like problem statement vs Code reads like problem statement</li>
+  <li>Steps mashed together vs Well factored</li>
+</ul>
+
+<p><strong>Parallelism</strong></p>
+
+<ul>
+  <li>Goal: Easy to use parallel libraries for Java</li>
+</ul>
+
+<p>Parallelizing the getWeight operation is easy</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">sumOfWeights</span> <span class="o">=</span>
+    <span class="o">=</span> <span class="n">shapes</span><span class="o">.</span><span class="na">parallelStream</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">filter</span><span class="o">(</span><span class="n">s</span> <span class="o">-&gt;</span> <span class="n">s</span><span class="o">.</span><span class="na">getColor</span><span class="o">()</span> <span class="o">==</span> <span class="n">BLUE</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">mapToInt</span><span class="o">(</span><span class="nl">Shape:</span><span class="o">:</span><span class="n">getWeight</span><span class="o">)</span>
+        <span class="o">.</span><span class="na">sum</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p><strong>Conclusion: So why Lambda’s?</strong></p>
+<ul>
+  <li>Its about time! <em>“All the cool kids are doing it”</em> – BG</li>
+  <li>Provide libraries a path to multi-core (needed internal iteration)</li>
+  <li>Empower library developers</li>
+</ul>
+
+<p><strong>Q/A</strong></p>
+
+<ul>
+  <li>Features left out, whats coming next?
+    <ul>
+      <li><strong>Value Types</strong> - A long or a decimal (or other Type), that won’t need to be accessed via a pointer, instead directly from a register</li>
+      <li>Useful for static data</li>
+    </ul>
+  </li>
+</ul>
+
+        
+          <div id="disqus_thread"></div><!-- /#disqus_thread -->
+          
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'levine'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" class="btn" title="On Deciding Between PUT and POST When Creating a RESTful Resource">Previous</a>
+      
+      
+        <a href="https://blue64.net/2018/02/the-power-of-bq/" class="btn" title="The Power of Big Query with Public Data">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2019 Steven Levine. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+	
+	
+	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+	
+  
+	
+  <a href="https://blue64.net/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://blue64.net';
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://blue64.net/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://blue64.net/assets/js/scripts.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113658491-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

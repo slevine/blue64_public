@@ -1,0 +1,324 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>WebView(Javascript) -> Native Android API &#8211; Steven Levine</title>
+<meta name="description" content="Calling Javascript from an Android Webview">
+<meta name="keywords" content="Android, Scala, Javascript, Development">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="WebView(Javascript) -> Native Android API">
+<meta name="twitter:description" content="Calling Javascript from an Android Webview">
+<meta name="twitter:site" content="@blue64">
+<meta name="twitter:creator" content="@blue64">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blue64.net/images/running.jpg">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebView(Javascript) -> Native Android API">
+<meta property="og:description" content="Calling Javascript from an Android Webview">
+<meta property="og:url" content="https://blue64.net/2012/03/webview-javascript-native-android/">
+<meta property="og:site_name" content="Steven Levine">
+
+
+
+
+
+<link rel="canonical" href="https://blue64.net/2012/03/webview-javascript-native-android/">
+<link href="https://blue64.net/feed.xml" type="application/atom+xml" rel="alternate" title="Steven Levine Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://blue64.net/assets/css/main.css">
+<!-- Webfonts -->
+<script src="https://use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://blue64.net/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://blue64.net/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="https://blue64.net/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" >
+<!-- 32x32 -->
+<link rel="shortcut icon" type="image/png" href="https://blue64.net/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://blue64.net/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://blue64.net/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://blue64.net/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blue64.net/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav" class="animated drop">
+	    <ul>
+      
+		    
+		    <li><a href="https://blue64.net/about/" >About</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/posts/" >Archives</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/search/" >Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	
+		<div class="wrap">
+			<a href="https://blue64.net/" class="site-logo" rel="home" title="Steven Levine"><img src="https://blue64.net/images/site-logo.png" width="200" height="200" alt="Steven Levine logo" class="animated fadeInDown"></a>
+		</div>
+	
+</header><!-- /.masthead -->
+
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <img src="https://blue64.net/images/running.jpg" class="entry-feature-image" alt="WebView(Javascript) -> Native Android API" ><p class="image-credit">Image credit: <a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+        Tags: &nbsp;&nbsp; <li><a href="https://blue64.net/tags/#Android" title="Pages tagged Android">Android</a></li><li><a href="https://blue64.net/tags/#Scala" title="Pages tagged Scala">Scala</a></li><li><a href="https://blue64.net/tags/#Javascript" title="Pages tagged Javascript">Javascript</a></li><li><a href="https://blue64.net/tags/#Development" title="Pages tagged Development">Development</a></li>
+        </ul>
+        
+          <h1 class="entry-title">WebView(Javascript) -> Native Android API</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <a href="https://blue64.net/about"><img src="https://blue64.net/images/author.jpg" class="bio-photo" alt="Steven Levine bio photo"></a>
+        
+      <!-- <span class="author vcard">By <span class="fn">Steven Levine</span></span> -->
+      <div class="social-icons">
+      	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+      	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+      	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+      </div>
+        <span class="entry-date date published"><time datetime="2012-03-03T15:35:00-05:00"><i class="fa fa-calendar-o"></i> March 03, 2012</time></span>
+        
+        <span class="entry-comments"><i class="fa fa-comment-o"></i> <a href="#disqus_thread">Comment</a></span>
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Android,Scala,Javascript,Development&amp;text=WebView(Javascript)%20-&gt;%20Native%20Android%20API&amp;url=https://blue64.net/2012/03/webview-javascript-native-android/&amp;via=blue64" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://blue64.net/2012/03/webview-javascript-native-android/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=https://blue64.net/2012/03/webview-javascript-native-android/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+
+        
+      </footer>
+      <div class="entry-content">
+        <p>For a few weeks towards the end of last year I was developing an Android application.  During that time I discovered a few new (to me) things about the Android platform. One in particular that caught my attention was having Javascript code running locally on the device call a native Android function.</p>
+
+<p>Before getting into the technical details, let me first talk about a situation where this piece of functionality would be useful.  Lets say (for arguments sake), that you have to write an Android application that requires advanced and very polished charts.  What are you options?  You can try to find a native Android implementation that meets the requirement, but I must admit, I have been there and done that, and couldn’t find any particularly good libraries.  Yes there are some out there, but they didn’t have the polish I was looking for (please comment if you know of good ones).</p>
+
+<p>If there aren’t any good Android libraries available what can you do?  From personal experience I know there are a lot of good Javascript charting libraries out there.  How can this help when developing an Android application not a web application?  You can host the charting library on a server somewhere and reference them from an Android WebView?  From my experience, this solution is not optimal because of slow performance.  Even thought it was too slow, it still looked much better than any of the native libraries available.</p>
+
+<p>Is there way to get the Javascript code to run faster perhaps by taking advantage of the beefy hardware most Android devices run on?  Turns out it is quite easy to run the Javascript libraries directly on the device.  After moving the Javascript code from the server to the device the performance was greatly improved.  The charts rendered fast and were very responsive to the touch.</p>
+
+<p>Running Javascript on the device instead of the Server is fast, but it creates a different sort of problem, namely, now you have a view (Javascript Chart) running inside another view (WebView), how does the Javascript library get its data?  The obvious answer is to have the Javascript code call some (REST) service via HTTP.  For arguments sake, lets say, this would not work due to the fact that the data is only available via a proprietary Java wrapped protocol.  Is there a way for the Javascript code to make a Java call? There is and that is what the rest of this post is going to be about.</p>
+
+<p>For simplicity, I am going to abstract away the charts and data and replace them with a simple requirement, namely, have a WebView render the underlyingAndroid SDK version.</p>
+
+<p><em>Note: For the purposes of this post, and because I like it, I am going to use Scala as the programming language.  As always, you can find all the code on <a href="https://github.com/slevine/android-javascript-demo">Github</a>.</em></p>
+
+<p>The goal of this demo is to show how you can call Java from Javascript running in an Android WebView, thus we need to create a WebView, populate it with a simple html file and then enable Javascript.</p>
+
+<p>MainActivity.scala - setting up basic view</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Step 1: Create WebView
+</span>  <span class="k">val</span> <span class="n">webView</span><span class="k">:</span> <span class="kt">WebView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WebView</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+
+  <span class="c1">// Step 2: Load page from assets
+</span>  <span class="n">webView</span> <span class="n">loadUrl</span> <span class="o">(</span><span class="s">"file:///android_asset/index.html"</span><span class="o">)</span>
+
+  <span class="c1">// Step 3: Enable Javascript
+</span>  <span class="n">webView</span><span class="o">.</span><span class="n">getSettings</span> <span class="n">setJavaScriptEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>So far, so easy.  Next, we need to create a simple Scala function in our <code class="highlighter-rouge">MainActivity</code> to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called <code class="highlighter-rouge">sdkVersion()</code></p>
+
+<p>MainActivity.scala - function to expose SDK version</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">object</span> <span class="nc">jsFun</span> <span class="o">{</span>
+      <span class="k">def</span> <span class="n">sdkVersion</span><span class="o">()</span> <span class="k">=</span> <span class="n">android</span><span class="o">.</span><span class="n">os</span><span class="o">.</span><span class="nc">Build</span><span class="o">.</span><span class="nc">VERSION</span><span class="o">.</span><span class="nc">SDK</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Next we need to make this function available to Javascript by adding it to the DOM.</p>
+
+<p>MainActivity.scala - Adding a function to the DOM</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Add the above function to the DOM as "Android"
+</span>  <span class="c1">// The function can now be invoked from Javascript with the following: Android.sdkVersion()
+</span>  <span class="n">webView</span> <span class="n">addJavascriptInterface</span><span class="o">(</span><span class="n">jsFun</span><span class="o">,</span> <span class="s">"Android"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p><em>Optional step:</em> When developing Javascript applications it is sometimes helpfull to be able to debug something to the browser console.  Believe it or not, it is quite easy to implement the browser’s console implementation with an Android one, and instead of logging the message to the browser console, it will send them to the Android Logcat system.</p>
+
+<p>MainActivity.scala - Implement Javascript console.log</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// provide the WebView with a console.log implementation
+</span>   <span class="n">webView</span> <span class="n">setWebChromeClient</span> <span class="k">new</span> <span class="nc">WebChromeClient</span> <span class="o">{</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="n">onConsoleMessage</span><span class="o">(</span><span class="n">consoleMessage</span><span class="k">:</span> <span class="kt">ConsoleMessage</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="n">msg</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(</span><span class="n">consoleMessage</span>
+          <span class="o">.</span><span class="n">messageLevel</span><span class="o">.</span><span class="n">name</span><span class="o">).</span><span class="n">append</span><span class="o">(</span><span class="sc">'\t'</span><span class="o">)</span>
+          <span class="o">.</span><span class="n">append</span><span class="o">(</span><span class="n">consoleMessage</span><span class="o">.</span><span class="n">message</span><span class="o">).</span><span class="n">append</span><span class="o">(</span><span class="sc">'\t'</span><span class="o">)</span>
+          <span class="o">.</span><span class="n">append</span><span class="o">(</span><span class="n">consoleMessage</span><span class="o">.</span><span class="n">sourceId</span><span class="o">).</span><span class="n">append</span><span class="o">(</span><span class="s">" ("</span><span class="o">)</span>
+          <span class="o">.</span><span class="n">append</span><span class="o">(</span><span class="n">consoleMessage</span><span class="o">.</span><span class="n">lineNumber</span><span class="o">).</span><span class="n">append</span><span class="o">(</span><span class="s">")\n"</span><span class="o">)</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">consoleMessage</span><span class="o">.</span><span class="n">messageLevel</span> <span class="o">==</span> <span class="nc">ConsoleMessage</span><span class="o">.</span><span class="nc">MessageLevel</span><span class="o">.</span><span class="nc">ERROR</span><span class="o">)</span>
+          <span class="nc">Log</span><span class="o">.</span><span class="n">e</span><span class="o">(</span><span class="s">"JavascriptExmple"</span><span class="o">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">toString</span><span class="o">())</span>
+        <span class="k">else</span>
+          <span class="nc">Log</span><span class="o">.</span><span class="n">d</span><span class="o">(</span><span class="s">"JavascriptExmple"</span><span class="o">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">toString</span><span class="o">())</span>
+        <span class="kc">true</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Finally we need to create our html/javascript view.</p>
+
+<p>Lets create a file called <code class="highlighter-rouge">index.html</code> and place it under <code class="highlighter-rouge">src/main/assets</code> and add at least the following code to it:</p>
+
+<p>index.html - default page that calls our Android.sdkVersion() function via Javascript</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div&gt;</span>Click <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span>here<span class="nt">&lt;/a&gt;</span> to invoke an Android function to
+   find out the Android SDK version used to build this App.
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sdk"</span><span class="nt">&gt;</span>SDK:<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"This message should appear as a debug message in Logcat."</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="s2">"a"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">'.sdk'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">Android</span><span class="p">.</span><span class="nx">sdkVersion</span><span class="p">());</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+<p>As you can see here, we are invoking the Android (Scala) method called <code class="highlighter-rouge">sdkVersion()</code> and appending the results of the call to a div using JQuery.</p>
+
+<p>Thats all there is to it, now you know how to invoke an Android function from Javascript running in an Android WebView.</p>
+
+        
+          <div id="disqus_thread"></div><!-- /#disqus_thread -->
+          
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'levine'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="https://blue64.net/2011/09/migration-from-wordpress-to-octopress-complete/" class="btn" title="Mission Accomplished, Migration From Wordpress to Octopress Complete!">Previous</a>
+      
+      
+        <a href="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" class="btn" title="On Deciding Between PUT and POST When Creating a RESTful Resource">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2019 Steven Levine. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+	
+	
+	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+	
+  
+	
+  <a href="https://blue64.net/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://blue64.net';
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://blue64.net/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://blue64.net/assets/js/scripts.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113658491-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

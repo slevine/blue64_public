@@ -1,0 +1,295 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>On Deciding Between PUT and POST When Creating a RESTful Resource &#8211; Steven Levine</title>
+<meta name="description" content="On Deciding Between PUT and POST When Creating a RESTful Resource">
+<meta name="keywords" content="Development, REST">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="On Deciding Between PUT and POST When Creating a RESTful Resource">
+<meta name="twitter:description" content="On Deciding Between PUT and POST When Creating a RESTful Resource">
+<meta name="twitter:site" content="@blue64">
+<meta name="twitter:creator" content="@blue64">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://blue64.net/images/running.jpg">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="On Deciding Between PUT and POST When Creating a RESTful Resource">
+<meta property="og:description" content="On Deciding Between PUT and POST When Creating a RESTful Resource">
+<meta property="og:url" content="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/">
+<meta property="og:site_name" content="Steven Levine">
+
+
+
+
+
+<link rel="canonical" href="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/">
+<link href="https://blue64.net/feed.xml" type="application/atom+xml" rel="alternate" title="Steven Levine Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://blue64.net/assets/css/main.css">
+<!-- Webfonts -->
+<script src="https://use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://blue64.net/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://blue64.net/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="https://blue64.net/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" >
+<!-- 32x32 -->
+<link rel="shortcut icon" type="image/png" href="https://blue64.net/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://blue64.net/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://blue64.net/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://blue64.net/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blue64.net/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav" class="animated drop">
+	    <ul>
+      
+		    
+		    <li><a href="https://blue64.net/about/" >About</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/posts/" >Archives</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/search/" >Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	
+		<div class="wrap">
+			<a href="https://blue64.net/" class="site-logo" rel="home" title="Steven Levine"><img src="https://blue64.net/images/site-logo.png" width="200" height="200" alt="Steven Levine logo" class="animated fadeInDown"></a>
+		</div>
+	
+</header><!-- /.masthead -->
+
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <img src="https://blue64.net/images/running.jpg" class="entry-feature-image" alt="On Deciding Between PUT and POST When Creating a RESTful Resource" ><p class="image-credit">Image credit: <a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+        Tags: &nbsp;&nbsp; <li><a href="https://blue64.net/tags/#Development" title="Pages tagged Development">Development</a></li><li><a href="https://blue64.net/tags/#REST" title="Pages tagged REST">REST</a></li>
+        </ul>
+        
+          <h1 class="entry-title">On Deciding Between PUT and POST When Creating a RESTful Resource</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <a href="https://blue64.net/about"><img src="https://blue64.net/images/author.jpg" class="bio-photo" alt="Steven Levine bio photo"></a>
+        
+      <!-- <span class="author vcard">By <span class="fn">Steven Levine</span></span> -->
+      <div class="social-icons">
+      	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+      	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+      	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+      </div>
+        <span class="entry-date date published"><time datetime="2013-10-29T21:15:00-04:00"><i class="fa fa-calendar-o"></i> October 29, 2013</time></span>
+        
+        <span class="entry-comments"><i class="fa fa-comment-o"></i> <a href="#disqus_thread">Comment</a></span>
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Development,REST&amp;text=On%20Deciding%20Between%20PUT%20and%20POST%20When%20Creating%20a%20RESTful%20Resource&amp;url=https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/&amp;via=blue64" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+
+        
+      </footer>
+      <div class="entry-content">
+        <p>The goal of this post is to try to help you figure out which HTTP verb: <code class="highlighter-rouge">PUT</code> or <code class="highlighter-rouge">POST</code> is more appropriate to use when adding and updating resources.</p>
+
+<p>Before we can get in to the details of which HTTP verb to use when, we first need to understand the type of “back end” or “server” or “service” we are trying to add the RESTful API to.  For the purposes of this post, we will refer to the service providing the API as the <em>“Resource Archetype”</em>.</p>
+
+<p>To start, we need to distinguish the differences between the two basic types of resource archetypes, namely, a <em>collection</em> and a <em>datastore</em> or “store” for short.</p>
+
+<ul>
+  <li>A <strong>collection</strong> is a <strong>server-managed</strong> directory of resources.  This means that clients may <strong>propose</strong> the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an <code class="highlighter-rouge">ID</code> that is associated with the newly created resource.</li>
+</ul>
+
+<blockquote>
+  <p>For the purposes of this conversation, we are not going to get in to the details of how the server provides the ID to the client, it is out of the scope of this post.</p>
+</blockquote>
+
+<ul>
+  <li>A <strong>store</strong> is a <strong>client-managed</strong> resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the <strong>client</strong>  is responsible for assigning an <code class="highlighter-rouge">ID</code> to the resource and managing the workflow around that task.</li>
+</ul>
+
+<p>These terms feel too abstract, lets walk through two concrete examples to fully illustrate the two concepts.</p>
+
+<p>Firstly, lets discuss a collection.  The simplest form of a collection is a middleware stack on top of a physical datastore.  For our example, the physical datastore is a NoSQL database, lets say <a href="http://basho.com/riak/">Riak</a>.  Sitting on top of Riak is <a href="http://spray.io/">Spray</a> and <a href="http://akka.io/">Akka</a>, which provide a RESTful middleware stack.  For the purposes of this example, all you need to know about Spray and Akka is that Spray provides an API to accept RESTful requests and reply to them, and Akka provides an abstraction around the physical transport between Spray and the actual socket.  <strong>The main point of all this is that Spray is acting as the middleware/business logic, and it will be handling the request and determining if Riak will be updated</strong>.</p>
+
+<blockquote>
+  <p>Try not to get bogged down understanding these technologies if you are not familiar with them, try instead to substitute a framework/database that you are familiar with, as it doesn’t change the context of this example.</p>
+</blockquote>
+
+<p>Now lets set up our example store, which ends up being a lot simpler than the collection, mainly because there is no middleware between the physical datastore and the client.  So following the example of the collection, the store would simply be a <a href="http://basho.com/riak/">Riak</a> instance.</p>
+
+<p>Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a <code class="highlighter-rouge">PUT</code> vs a <code class="highlighter-rouge">POST</code> when creating or updating a resource.</p>
+
+<p>When interacting with a <strong>store</strong>:</p>
+
+<ul>
+  <li>A <code class="highlighter-rouge">PUT</code> must be used to add a new resource, with the ID specified by the <strong>client</strong>.</li>
+  <li>A <code class="highlighter-rouge">PUT</code> must also be used to <strong>update</strong> or replace an already stored resource.</li>
+</ul>
+
+<p>The reason you <code class="highlighter-rouge">PUT</code> to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. <em>This is another way of saying the request is idempotent.</em></p>
+
+<p>When interacting with a <strong>collection</strong>:</p>
+
+<ul>
+  <li>A <code class="highlighter-rouge">POST</code> must be used to create a new resource, and the collection provides the ID to the client.</li>
+  <li>A <code class="highlighter-rouge">PUT</code> must be used to <strong>update</strong> or replace an already stored resource.</li>
+</ul>
+
+<p>The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can <code class="highlighter-rouge">POST</code> (request) the creation of the new resource, and not get back an <code class="highlighter-rouge">ID</code>, meaning the request failed.  Another thing to take notice of is the fact that no <code class="highlighter-rouge">ID</code> gets passed from the client, because it is assumed that the server is handling this logic.</p>
+
+<p>If you take a step back to think about our above collection example, it is possible that Spray has many different clients, besides the RESTful one.  That is why it needs to manage the notion of identity.  Whereas, in the store example, if Riak is exposed to the client directly without a middleware, chances are, that Riak database is meant only for the RESTful client.</p>
+
+<p>Here is a additional example taken directly from the <a href="http://docs.basho.com/riak/latest/dev/references/http/store-object/">Riak documentation</a> that also illustrates the point that when a client is providing an <code class="highlighter-rouge">ID</code>, the request should be a <code class="highlighter-rouge">PUT</code>, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the <code class="highlighter-rouge">ID</code> to the client, and of course this request is a <code class="highlighter-rouge">POST</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT /buckets/bucket/keys/key    # User-defined key
+POST /buckets/bucket/keys       # Riak-defined key
+</code></pre></div></div>
+
+<p>As always, please feel free to comment on this post or email me with any comments, questions, or concerns.</p>
+
+<p>Thanks for reading.</p>
+
+        
+          <div id="disqus_thread"></div><!-- /#disqus_thread -->
+          
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'levine'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="https://blue64.net/2012/03/webview-javascript-native-android/" class="btn" title="WebView(Javascript) -> Native Android API">Previous</a>
+      
+      
+        <a href="https://blue64.net/2013/12/notes-from-a-talk-on-evolving-java/" class="btn" title="Notes from a Talk on Evolving Java">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2019 Steven Levine. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+	
+	
+	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+	
+  
+	
+  <a href="https://blue64.net/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://blue64.net';
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://blue64.net/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://blue64.net/assets/js/scripts.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113658491-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

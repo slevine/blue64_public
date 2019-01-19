@@ -1,0 +1,283 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>Moving From Eclipse to Intellij on the Mac &#8211; Steven Levine</title>
+<meta name="description" content="">
+<meta name="keywords" content="Development, Howto, Java">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="Moving From Eclipse to Intellij on the Mac">
+<meta name="twitter:description" content="">
+<meta name="twitter:site" content="@blue64">
+<meta name="twitter:creator" content="@blue64">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blue64.net/images/site-logo.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Moving From Eclipse to Intellij on the Mac">
+<meta property="og:description" content="">
+<meta property="og:url" content="https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/">
+<meta property="og:site_name" content="Steven Levine">
+
+
+
+
+
+<link rel="canonical" href="https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/">
+<link href="https://blue64.net/feed.xml" type="application/atom+xml" rel="alternate" title="Steven Levine Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://blue64.net/assets/css/main.css">
+<!-- Webfonts -->
+<script src="https://use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://blue64.net/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://blue64.net/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="https://blue64.net/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" >
+<!-- 32x32 -->
+<link rel="shortcut icon" type="image/png" href="https://blue64.net/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://blue64.net/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://blue64.net/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://blue64.net/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blue64.net/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav" class="animated drop">
+	    <ul>
+      
+		    
+		    <li><a href="https://blue64.net/about/" >About</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/posts/" >Archives</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/search/" >Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	<div class="wrap">
+      
+  		<a href="https://blue64.net/" class="site-logo" rel="home" title="Steven Levine"><img src="https://blue64.net/images/site-logo.png" width="200" height="200" alt="Steven Levine logo" class="animated fadeInDown"></a>
+      
+      <h1 class="site-title animated fadeIn"><a href="https://blue64.net/about">Steven Levine</a></h1>
+		<h2 class="site-description animated fadeIn" itemprop="description">Hacker, Programmer, Cycling Geek, Scala Enthusiast, who is fascinated with Fast Data, Docker, Linux, and Information Security.</h2>
+	</div>
+</header><!-- /.masthead -->
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+        Tags: &nbsp;&nbsp; <li><a href="https://blue64.net/tags/#Development" title="Pages tagged Development">Development</a></li><li><a href="https://blue64.net/tags/#Howto" title="Pages tagged Howto">Howto</a></li><li><a href="https://blue64.net/tags/#Java" title="Pages tagged Java">Java</a></li>
+        </ul>
+        
+          <h1 class="entry-title">Moving From Eclipse to Intellij on the Mac</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <a href="https://blue64.net/about"><img src="https://blue64.net/images/author.jpg" class="bio-photo" alt="Steven Levine bio photo"></a>
+        
+      <!-- <span class="author vcard">By <span class="fn">Steven Levine</span></span> -->
+      <div class="social-icons">
+      	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+      	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+      	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+      </div>
+        <span class="entry-date date published"><time datetime="2007-11-27T21:31:51-05:00"><i class="fa fa-calendar-o"></i> November 27, 2007</time></span>
+        
+        <span class="entry-comments"><i class="fa fa-comment-o"></i> <a href="#disqus_thread">Comment</a></span>
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=Development,Howto,Java&amp;text=Moving%20From%20Eclipse%20to%20Intellij%20on%20the%20Mac&amp;url=https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/&amp;via=blue64" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=https://blue64.net/2007/11/moving-from-eclipse-to-intellij-on-the-mac/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+
+        
+      </footer>
+      <div class="entry-content">
+        <p>I have been using Eclipse for the past 5 years. During that
+time, there have been projects where I have been exposed to
+Intellij. Recently, after a conversation with a colleague,
+they convinced me to give the latest and greatest Intellij a
+try. They bragged about the wonderful Spring integration and
+code inspection. So I decided to give it a try. After
+using it for about a month now, I must admit, I have seen the
+light. It took a while to get used to the different keyboard
+shortcuts even though Intellij has the default Eclipse key bindings
+available as a selection. I decided to do a clean break from
+Eclipse, and learn the new keys.</p>
+
+<p>Since I develop on the Mac, there was one HUGE problem for me with
+Intellij, but I am not sure if it is an Intellij or a OS X
+problem. I want to be able to map cmd-space to content
+assist. For some reason, every time I hit cmd-space in
+Intellij, I just get a system level beep. On my Mac Pro at
+home, it is not really an issue, since I have a full keyboard, and
+I have a ctrl key on the right side of the keyboard. On my
+Macbook Pro I do not, and it is very awkward for me to have to move
+my left hand to try to find the ctrl key. I am SO used to
+using my right hand for ctrl, it was starting to become
+painful.</p>
+
+<p>I looked around to try to figure out a way to create the key
+binding with no luck. I tried to remap ctrl-j to it, but then
+it looses the live template content assist. If I can use
+ctrl-j for both of them, that would not be so bad. I also
+tried to find a system level solution, that would allow me to
+override the cmd-space limitation in Intellij with no luck.</p>
+
+<p>Finally… One morning I was looking at my keyboard, and I noticed
+this somewhat useless key on the right hand side of my keyboard
+called the “enter” key. What is that? Why do I need two
+enter keys? Oh, I see, if I want to use the “numeric” keypad
+on the keyboard, it would be useful to have an enter key
+there. What am I an accountant?</p>
+
+<p>I started thinking, if I can remap the useless enter key to be a
+ctrl key, my problems would be solved. Low and behold I found
+<a href="http://doublecommand.sourceforge.net/index.html" title="Double Command">Double Command</a>.
+What an totally useful program. It allowed me to remap the
+enter key to be a ctrl key.</p>
+
+<p>Problem Solved.</p>
+
+
+        
+          <div id="disqus_thread"></div><!-- /#disqus_thread -->
+          
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'levine'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="https://blue64.net/2006/02/connecting-to-a-corporate-network-with-a-mac/" class="btn" title="Connecting to a corporate network with a Mac">Previous</a>
+      
+      
+        <a href="https://blue64.net/2008/05/using-firefox-2x-extentions-with-firefox-3-beta/" class="btn" title="Using Firefox 2.x Extentions with Firefox 3 Beta">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2019 Steven Levine. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+	
+	
+	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+	
+  
+	
+  <a href="https://blue64.net/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://blue64.net';
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://blue64.net/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://blue64.net/assets/js/scripts.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113658491-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

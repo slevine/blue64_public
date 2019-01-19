@@ -1,0 +1,329 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>WebKit Day 2 - Benchmarks &#8211; Steven Levine</title>
+<meta name="description" content="">
+<meta name="keywords" content="WebKit, Mac">
+
+
+<!-- Twitter Cards -->
+<meta name="twitter:title" content="WebKit Day 2 - Benchmarks">
+<meta name="twitter:description" content="">
+<meta name="twitter:site" content="@blue64">
+<meta name="twitter:creator" content="@blue64">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blue64.net/images/site-logo.png">
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WebKit Day 2 - Benchmarks">
+<meta property="og:description" content="">
+<meta property="og:url" content="https://blue64.net/2008/06/webkit-day-2-benchmarksas/">
+<meta property="og:site_name" content="Steven Levine">
+
+
+
+
+
+<link rel="canonical" href="https://blue64.net/2008/06/webkit-day-2-benchmarksas/">
+<link href="https://blue64.net/feed.xml" type="application/atom+xml" rel="alternate" title="Steven Levine Feed">
+
+<!-- https://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://blue64.net/assets/css/main.css">
+<!-- Webfonts -->
+<script src="https://use.edgefonts.net/source-sans-pro:n2,i2,n3,i3,n4,i4,n6,i6,n7,i7,n9,i9;source-code-pro:n4,n7;volkhov.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- HTML5 Shiv and Media Query Support -->
+<!--[if lt IE 9]>
+  <script src="https://blue64.net/assets/js/vendor/html5shiv.min.js"></script>
+  <script src="https://blue64.net/assets/js/vendor/respond.min.js"></script>
+<![endif]-->
+
+<!-- Modernizr -->
+<script src="https://blue64.net/assets/js/vendor/modernizr-2.7.1.custom.min.js"></script>
+
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" >
+<!-- 32x32 -->
+<link rel="shortcut icon" type="image/png" href="https://blue64.net/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://blue64.net/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://blue64.net/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://blue64.net/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://blue64.net/images/apple-touch-icon-144x144-precomposed.png">
+
+</head>
+
+<body id="post">
+
+<div class="navigation-wrapper">
+	<nav role="navigation" id="site-nav" class="animated drop">
+	    <ul>
+      
+		    
+		    <li><a href="https://blue64.net/about/" >About</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/posts/" >Archives</a></li>
+		  
+		    
+		    <li><a href="https://blue64.net/search/" >Search</a></li>
+		  
+	    </ul>
+	</nav>
+</div><!-- /.navigation-wrapper -->
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+
+<header class="masthead">
+	<div class="wrap">
+      
+  		<a href="https://blue64.net/" class="site-logo" rel="home" title="Steven Levine"><img src="https://blue64.net/images/site-logo.png" width="200" height="200" alt="Steven Levine logo" class="animated fadeInDown"></a>
+      
+      <h1 class="site-title animated fadeIn"><a href="https://blue64.net/about">Steven Levine</a></h1>
+		<h2 class="site-description animated fadeIn" itemprop="description">Hacker, Programmer, Cycling Geek, Scala Enthusiast, who is fascinated with Fast Data, Docker, Linux, and Information Security.</h2>
+	</div>
+</header><!-- /.masthead -->
+
+<div class="js-menu-screen menu-screen"></div>
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    
+    <div class="entry-wrapper">
+      <header class="entry-header">
+        <ul class="entry-tags">
+        Tags: &nbsp;&nbsp; <li><a href="https://blue64.net/tags/#WebKit" title="Pages tagged WebKit">WebKit</a></li><li><a href="https://blue64.net/tags/#Mac" title="Pages tagged Mac">Mac</a></li>
+        </ul>
+        
+          <h1 class="entry-title">WebKit Day 2 - Benchmarks</h1>
+        
+      </header>
+      <footer class="entry-meta">
+        
+        
+          <a href="https://blue64.net/about"><img src="https://blue64.net/images/author.jpg" class="bio-photo" alt="Steven Levine bio photo"></a>
+        
+      <!-- <span class="author vcard">By <span class="fn">Steven Levine</span></span> -->
+      <div class="social-icons">
+      	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+      	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+      	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+      	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+      </div>
+        <span class="entry-date date published"><time datetime="2008-06-30T09:49:24-04:00"><i class="fa fa-calendar-o"></i> June 30, 2008</time></span>
+        
+        <span class="entry-comments"><i class="fa fa-comment-o"></i> <a href="#disqus_thread">Comment</a></span>
+        <span class="social-share-twitter">
+  <a href="https://twitter.com/intent/tweet?hashtags=WebKit,Mac&amp;text=WebKit%20Day%202%20-%20Benchmarks&amp;url=https://blue64.net/2008/06/webkit-day-2-benchmarksas/&amp;via=blue64" title="Share on Twitter" itemprop="Twitter"><i class="fa fa-twitter-square"></i> Tweet</a>
+</span>
+<span class="social-share-facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://blue64.net/2008/06/webkit-day-2-benchmarksas/" title="Share on Facebook" itemprop="Facebook"><i class="fa fa-facebook-square"></i> Like</a>
+</span>
+<span class="social-share-googleplus">
+  <a href="https://plus.google.com/share?url=https://blue64.net/2008/06/webkit-day-2-benchmarksas/" title="Share on Google Plus" itemprop="GooglePlus"><i class="fa fa-google-plus-square"></i> +1</a>
+</span>
+<!-- /.social-share -->
+
+        
+      </footer>
+      <div class="entry-content">
+        <p>After using WebKit for the past few days it is evident to me that
+it performs better than Firefox on my Macs. The question is how
+much better? Is it possible to quantify the performance difference?
+After searching around
+found <a href="http://webkit.org/perf/sunspider-0.9/sunspider.html">this</a>
+JavaScript benchmarking site.</p>
+
+<p><strong>Details</strong></p>
+
+<p>The data was obtained by running
+the <a href="http://webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider JavaScript Benchmark.</a></p>
+
+<p>The benchmark was run on a 2.4GHz Core 2 Duo MacBook
+equipped with 4 gigs of memory running Leopard (10.5.3).</p>
+
+<p>To generate the below results for your self, follow the WebKit
+Results Link and then paste the Firefox results link in to the box
+that says “To compare to another run…”</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    TEST                   COMPARISON         FROM (Firefox)  TO (WebKit Nightly)
+
+    =============================================================================
+
+    ** TOTAL **:           1.57x as fast     3002.8ms +/- 1.3%   1918.6ms +/- 0.9%
+
+    =============================================================================
+
+      3d:                  1.47x as fast      383.8ms +/- 7.3%    260.6ms +/- 2.9%
+        cube:              1.61x as fast      135.2ms +/- 2.9%     84.2ms +/- 5.9%
+        morph:             1.53x as fast      126.4ms +/- 20.3%     82.8ms +/- 2.0%
+        raytrace:          1.31x as fast      122.2ms +/- 4.7%     93.6ms +/- 4.3%
+
+      access:              1.49x as fast      418.2ms +/- 3.4%    280.2ms +/- 4.1%
+        binary-trees:      1.38x as fast       49.8ms +/- 3.7%     36.0ms +/- 15.1%
+        fannkuch:          1.83x as fast      162.4ms +/- 4.5%     88.6ms +/- 3.8%
+        nbody:             1.19x as fast      149.0ms +/- 7.6%    124.8ms +/- 7.3%
+        nsieve:            1.85x as fast       57.0ms +/- 9.5%     30.8ms +/- 7.2%
+
+      bitops:              1.57x as fast      296.6ms +/- 3.6%    188.8ms +/- 4.5%
+        3bit-bits-in-byte: 1.84x as fast       49.0ms +/- 10.3%     26.6ms +/- 13.5%
+        bits-in-byte:      2.34x as fast       76.2ms +/- 3.1%     32.6ms +/- 8.8%
+        bitwise-and:       1.43x as fast       78.2ms +/- 5.9%     54.8ms +/- 4.4%
+        nsieve-bits:       1.25x as fast       93.2ms +/- 7.7%     74.8ms +/- 14.5%
+
+      controlflow:         1.46x as fast       39.4ms +/- 6.9%     27.0ms +/- 22.6%
+        recursive:         1.46x as fast       39.4ms +/- 6.9%     27.0ms +/- 22.6%
+
+      crypto:              1.44x as fast      186.8ms +/- 3.7%    129.6ms +/- 7.7%
+        aes:               1.59x as fast       72.4ms +/- 4.9%     45.6ms +/- 14.8%
+        md5:               1.45x as fast       57.6ms +/- 7.6%     39.6ms +/- 14.8%
+        sha1:              1.28x as fast       56.8ms +/- 9.3%     44.4ms +/- 27.6%
+
+      date:                2.12x as fast      365.8ms +/- 2.1%    172.6ms +/- 2.6%
+        format-tofte:      2.01x as fast      211.8ms +/- 1.1%    105.2ms +/- 3.5%
+        format-xparb:      2.28x as fast      154.0ms +/- 4.5%     67.4ms +/- 5.6%
+
+      math:                1.51x as fast      312.6ms +/- 4.9%    206.6ms +/- 4.1%
+        cordic:            1.79x as fast      121.2ms +/- 2.9%     67.6ms +/- 5.9%
+        partial-sums:      1.35x as fast      132.2ms +/- 9.7%     97.8ms +/- 3.7%
+        spectral-norm:     1.44x as fast       59.2ms +/- 8.3%     41.2ms +/- 8.6%
+
+      regexp:              1.33x as fast      265.0ms +/- 0.5%    198.8ms +/- 1.6%
+        dna:               1.33x as fast      265.0ms +/- 0.5%    198.8ms +/- 1.6%
+
+      string:              1.62x as fast      734.6ms +/- 0.7%    454.4ms +/- 1.6%
+        base64:            1.33x as fast       85.8ms +/- 1.9%     64.6ms +/- 4.0%
+        fasta:             2.25x as fast      192.2ms +/- 2.3%     85.4ms +/- 3.4%
+        tagcloud:          1.38x as fast      154.2ms +/- 1.4%    112.0ms +/- 7.2%
+        unpack-code:       1.67x as fast      197.8ms +/- 0.5%    118.6ms +/- 3.4%
+        validate-input:    1.42x as fast      104.6ms +/- 1.4%     73.8ms +/- 4.0%
+</code></pre></div></div>
+<p>As you can see from the benchmark results, WebKit performs
+~1.57x’s faster. The results are pretty much in line with my
+browsing experience. Please keep in mind these results are very
+specific to the conditions of my network, my computer, and the
+current utilization of the web server. Your results may vary.</p>
+
+<p><strong>Disclaimer</strong></p>
+
+<p>Please keep in mind benchmarks are benchmarks, and they are nothing
+more than numbers. This benchmark was not chosen because it favors
+WebKit in any way. Several sites use it to compare not only WebKit,
+but other browsers on other operating systems as well.
+Example <a href="http://blogs.zdnet.com/hardware/?p=1498">here</a>.</p>
+
+<p><strong>FYI</strong></p>
+
+<p>Webkit comes in ~1.68x’s faster than Safari 3.1.1. Safari 4 should
+be comparable to WebKit, since Safari 4 is based on the same code
+base as the current WebKit build which is based on the
+<a href="http://trac.webkit.org/wiki/SquirrelFish">SquirrelFish JavaScript</a>
+engine.</p>
+
+        
+          <div id="disqus_thread"></div><!-- /#disqus_thread -->
+          
+<script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_shortname = 'levine'; // required: replace example with your forum shortname
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function () {
+        var s = document.createElement('script'); s.async = true;
+        s.type = 'text/javascript';
+        s.src = 'https://' + disqus_shortname + '.disqus.com/count.js';
+        (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+    }());
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+        
+      </div><!-- /.entry-content -->
+    </div><!-- /.entry-wrapper -->
+    <nav class="pagination" role="navigation">
+      
+        <a href="https://blue64.net/2008/06/giving-webkit-a-try/" class="btn" title="Giving WebKit A Try">Previous</a>
+      
+      
+        <a href="https://blue64.net/2008/08/upgraded-site-to-wordpress-26/" class="btn" title="Upgraded Site To WordPress 2.6">Next</a>
+      
+    </nav><!-- /.pagination -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo" class="entry-wrapper">
+    
+
+<span>&copy; 2019 Steven Levine. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a>.</span>
+<div class="social-icons">
+	<a href="https://twitter.com/blue64" title="Steven Levine on Twitter" target="_blank"><i class="fa fa-twitter-square fa-2x"></i></a>
+	
+	
+	<a href="https://linkedin.com/in/levinesteve" title="Steven Levine on LinkedIn" target="_blank"><i class="fa fa-linkedin-square fa-2x"></i></a>
+	<a href="https://stackoverflow.com/users/63013/steven-levine" title="Steven Levine on StackExchange" target="_blank"><i class="fa fa-stack-exchange fa-2x"></i></a>
+	
+	
+	<a href="https://github.com/slevine" title="Steven Levine on Github" target="_blank"><i class="fa fa-github-square fa-2x"></i></a>
+	
+  
+	
+  <a href="https://blue64.net/feed.xml" title="Atom/RSS feed"><i class="fa fa-rss-square fa-2x"></i></a>
+</div><!-- /.social-icons -->
+
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script type="text/javascript">
+  var BASE_URL = 'https://blue64.net';
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://blue64.net/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://blue64.net/assets/js/scripts.min.js"></script>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-113658491-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+
+</body>
+</html>

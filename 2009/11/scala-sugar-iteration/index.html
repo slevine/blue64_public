@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Scala Sugar - Iteration | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Scala Sugar - Iteration" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this second installment of Scala Sugar, lets put the lists that we created in the previous post to use." />
+<meta property="og:description" content="In this second installment of Scala Sugar, lets put the lists that we created in the previous post to use." />
+<link rel="canonical" href="https://blue64.net/2009/11/scala-sugar-iteration/" />
+<meta property="og:url" content="https://blue64.net/2009/11/scala-sugar-iteration/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2009-11-22T14:58:11-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2009-11-22T14:58:11-05:00","datePublished":"2009-11-22T14:58:11-05:00","url":"https://blue64.net/2009/11/scala-sugar-iteration/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2009/11/scala-sugar-iteration/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this second installment of Scala Sugar, lets put the lists that we created in the previous post to use.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Scala Sugar - Iteration","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  scala-sugar-iteration">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Scala Sugar - Iteration
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">2 min read</span>
+
+    <time class="page-date dt-published" datetime="2009-11-22T14:58:11-05:00"><a class="u-url" href="">November 22, 2009</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#scala" title="Pages tagged Scala" rel="tag">Scala</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>In this second installment of Scala Sugar, lets put the lists that we created in the <a href="/2009/11/scala-sugar-lists/">previous post</a> to use.</p>
+
+<p>How do we typically interact with lists when writing non-trivial programs? We iterate over them! With that being said, lets explore how iteration in Scala compares with iteration in Java.</p>
+
+<p>Taking the lists in the previous post in to account, lets assign ourselves a task of iterating over each element in the list and converting them to uppercase.</p>
+
+<p>First, we all know how to do this in Java using a standard for each loop:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">(</span><span class="nc">String</span> <span class="n">s</span> <span class="k">:</span> <span class="kt">l</span><span class="o">)</span> <span class="o">{</span> <span class="nv">System</span><span class="o">.</span><span class="py">out</span><span class="o">.</span><span class="py">print</span><span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toUpperCase</span><span class="o">());</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<p>There are so many different ways to iterate in Scala, thus we are only going to talk about the most trivial ways.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">for</span> <span class="o">(</span><span class="n">s</span> <span class="o">\&lt;-</span> <span class="n">l</span><span class="o">)</span> <span class="nf">print</span> <span class="o">(</span><span class="nv">s</span><span class="o">.</span><span class="py">toUpperCase</span><span class="o">())</span>
+</code></pre></div></div>
+
+<p>-or-</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">l</span><span class="o">.</span><span class="py">map</span><span class="o">(</span><span class="nv">_</span><span class="o">.</span><span class="py">toUpperCase</span><span class="o">()).</span><span class="py">foreach</span><span class="o">(</span><span class="nf">printf</span><span class="o">(</span><span class="s">"%s"</span><span class="o">,</span> <span class="k">_</span><span class="o">))</span>
+</code></pre></div></div>
+
+<p><em>Download Source: <a href="http://github.com/slevine/scala-training/blob/master/src/main/scripts/collections/simpleLists.scala">simpleLists.scala</a></em></p>
+
+<p>As you can see, you can loop in Scala the same way that you do in Java, namely, with a for each loop. There is nothing special about that.</p>
+
+<p>The second loop is written in more a functional paradigm, as it uses the Scala map function. It allows you to iterate over the list without having to know anything about the details of the iteration itself. With Scala you are working at a much higher level. If we look at the Scala map function, it takes in a function as an argument, in this case the function is “toUpperCase()”. The map function then applies this function to all of the elements in the List, thus you don’t have to worry about the actual iteration logic. In this scenario, all the caller needs to worry about is that they have a List of elements, and they want some function f applied to all of them.</p>
+
+<p>You can chain functions together on a List. In this case, we changed a foreach to the end of the map. If we were to describe the what is going on in plain english, it would sound something like, take all the elements of l, apply “toUpperCase” to all of them, then for each of them, print them.</p>
+
+<p>The final interesting thing to notice in the above line of code is the “_” placeholder syntax. It looks strange to have a “_” there as part of the code, but all it is doing is acting as a placeholder for the function. It simply represents the current element of the List being operated on. Even though there are two “_“‘s in this example, they are completely independent of each other. The placeholder is a very powerful advanced concept in Scala and this example barely touches the surface of its usage. We will talk more about it in a dedicated post.</p>
+
+<p>As you can see, Scala supports both the “Java” way of iterating and a pure functional way. Again, this example is just one of the many different techniques for iterating in Scala. In a future post we will look at other ways of iterating in Scala.</p>
+
+<p>References</p>
+
+<ul>
+  <li>The code found in this post is hosted at
+  <a href="http://github.com/slevine/scala-training">github.com</a> along with other sample Scala code.</li>
+</ul>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2009/11/scala-sugar-iteration/';
+        this.page.identifier = 'https://blue64.net/2009/11/scala-sugar-iteration/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2009/11/scala-sugar-lists/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Scala Sugar - Lists
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2009/12/time-machine-over-a-network-drive/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Time Machine over a Network Drive
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>How to SSH without using a Password | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="How to SSH without using a Password" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The basis of using ssh without typing your password is public key based authentication. You need to generate a pair of public/private keys for this." />
+<meta property="og:description" content="The basis of using ssh without typing your password is public key based authentication. You need to generate a pair of public/private keys for this." />
+<link rel="canonical" href="https://blue64.net/2004/12/how-to-ssh-without-using-a-password/" />
+<meta property="og:url" content="https://blue64.net/2004/12/how-to-ssh-without-using-a-password/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2004-12-27T21:33:51-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2004-12-27T21:33:51-05:00","datePublished":"2004-12-27T21:33:51-05:00","url":"https://blue64.net/2004/12/how-to-ssh-without-using-a-password/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2004/12/how-to-ssh-without-using-a-password/"},"description":"The basis of using ssh without typing your password is public key based authentication. You need to generate a pair of public/private keys for this.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"}},"@type":"BlogPosting","headline":"How to SSH without using a Password","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  how-to-ssh-without-using-a-password">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">How to SSH without using a Password
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><div class="author-info">
+
+<span class="read-time">~1 min read</span>
+
+    <time class="page-date dt-published" datetime="2004-12-27T21:33:51-05:00"><a class="u-url" href="">December 27, 2004</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#howto" title="Pages tagged Howto" rel="tag">Howto</a></li><li class="page-taxonomy"><a href="/tags/#linux" title="Pages tagged Linux" rel="tag">Linux</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>The basis of using ssh without typing your password is public key based authentication. You need to generate a pair of public/private keys for this.</p>
+
+<p>Firstly, generate your public/private keys using ssh-keygen</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>% ssh-keygen -t rsa
+</code></pre></div></div>
+
+<p>You must use the -t option to specify that you are producing keys for SSH using RSA. This will generate your id_rsa and id_rsa.pub in the .ssh directory in your home directory.</p>
+
+<p>Copy ~/.ssh/id_rsa.pub to the server.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>% scp ~/.ssh/id_rsa.pub user@host:.
+</code></pre></div></div>
+
+<p>On the server run the following commands:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>% cat id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+% chmod 644 ~/.ssh/authorized_keys
+</code></pre></div></div>
+<p>Thats it! Easy as 1,2,3.</p>
+
+<p>Now you should be able connect to the server via ssh without being
+challenged for a password.</p>
+
+<p>If for some reason, it is not working for you, you may also need to
+do one of the following things to get it working:</p>
+
+<ul>
+  <li>Put the public key in .ssh/authorized_keys2</li>
+  <li>Change the permissions of .ssh to 700</li>
+  <li>Change the permissions of .ssh/authorized_keys2 to 640</li>
+</ul>
+
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2004/12/how-to-ssh-without-using-a-password/';
+        this.page.identifier = 'https://blue64.net/2004/12/how-to-ssh-without-using-a-password/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+
+  
+    <a class="page-next" href="/2005/06/method-synchronization/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Method Synchronization
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

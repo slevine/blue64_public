@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Giving WebKit A Try | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Giving WebKit A Try" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Just changed my default browser from Firefox to Webkit on Leopard (OS X 10.5.3). The main reason was because of the announcement of WebKits migration to the SquirrelFish Javascript interpreter. They claim that it is 1.6x’s faster than the previous WebKit interpreter and if its true, that is pretty good considering most of my daily work flow is based around web based applications." />
+<meta property="og:description" content="Just changed my default browser from Firefox to Webkit on Leopard (OS X 10.5.3). The main reason was because of the announcement of WebKits migration to the SquirrelFish Javascript interpreter. They claim that it is 1.6x’s faster than the previous WebKit interpreter and if its true, that is pretty good considering most of my daily work flow is based around web based applications." />
+<link rel="canonical" href="https://blue64.net/2008/06/giving-webkit-a-try/" />
+<meta property="og:url" content="https://blue64.net/2008/06/giving-webkit-a-try/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2008-06-27T15:26:05-04:00" />
+<script type="application/ld+json">
+{"dateModified":"2008-06-27T15:26:05-04:00","datePublished":"2008-06-27T15:26:05-04:00","url":"https://blue64.net/2008/06/giving-webkit-a-try/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2008/06/giving-webkit-a-try/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"Just changed my default browser from Firefox to Webkit on Leopard (OS X 10.5.3). The main reason was because of the announcement of WebKits migration to the SquirrelFish Javascript interpreter. They claim that it is 1.6x’s faster than the previous WebKit interpreter and if its true, that is pretty good considering most of my daily work flow is based around web based applications.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Giving WebKit A Try","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  giving-webkit-a-try">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Giving WebKit A Try
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">2 min read</span>
+
+    <time class="page-date dt-published" datetime="2008-06-27T15:26:05-04:00"><a class="u-url" href="">June 27, 2008</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#webkit" title="Pages tagged WebKit" rel="tag">WebKit</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>Just changed my default browser from Firefox to
+<a href="http://webkit.org/">Webkit</a> on Leopard (OS X 10.5.3). The main
+reason was because of
+the <a href="http://webkit.org/blog/189/announcing-squirrelfish/">announcement</a>
+of WebKits migration to the SquirrelFish
+Javascript interpreter. They claim that it is 1.6x’s faster
+than the previous WebKit interpreter and if its true, that is
+pretty good considering most of my daily work flow is based around
+web based applications.</p>
+
+<p><strong>Initial thoughts</strong></p>
+
+<p>It has only been a few hours since the switch, but I must say I am
+quite impressed with the performance especially on sites like
+GMail, Google Reader, and the TinyMCE editor for my blog. TinyMCE
+is not only faster, but now its “true” functionality is exposed as
+well. There are a few features available that were not available
+when using Firefox. The speed improvements alone are not really
+enough to keep my interest for long because of the other features
+WebKit lacks over Firefox. If there was a way to close the
+functionality gap, then we may have our selves a new default
+browser.</p>
+
+<p><strong>WebKit’s “Shortcomings” (Compared to Firefox + Favorite Plugins)</strong></p>
+
+<ol>
+  <li>No new tab button</li>
+  <li>No Google suggest built in to the search box</li>
+  <li>No way to configure links to open in new tabs rather than new
+windows</li>
+  <li>No AdBlock plus (plugin)</li>
+  <li>No Google Bookmarks button (plugin)</li>
+</ol>
+
+<p><strong>Initial Solutions to the “Shortcomings”</strong></p>
+
+<ol>
+  <li>This <a href="http://futurebuddha.net/newtabsafari/Safari_New_Tab.html">application</a>
+ will add a “New Tab” button on WebKit for you. If you decide to
+ install it, make sure you back up your Safari directory prior to
+ running the installer, as recommended by the author.</li>
+  <li><a href="http://www.inquisitorx.com/safari/">Inquisitor 3</a> will provide
+ you google suggest like functionality in your search box. It is
+ quite customizable, thus you can configure it use different search
+ engines, display keyword results or web page results, among many
+ other customizations.</li>
+  <li>This <a href="http://www.mactips.org/archives/2008/03/30/force-safari-to-open-all-links-in-new-tabs/">awesome tip</a>
+ shows you how to tell WebKit to open all links in new tabs instead
+ of new windows.</li>
+  <li><a href="http://safariadblock.sourceforge.net/">Safari AdBlock</a> is a
+ drop in replacement for the Firefox plugin Adblck Plus. Set it, and
+ forget it. Very easy to use. Haven’t really tested it yet with too
+ many sites, but from the few sites it was tested with, the results
+ look good.
+    <ul>
+      <li><em>Update: Switched to <a href="http://code.google.com/p/safariblock/">SafariBlock</a> because Safari AdBlock was letting too many adds slip through, especially Flash ones.</em></li>
+      <li><em><strong>Update Two</strong>: Switched to <a href="http://glimmerblocker.org/">GlimmerBlock</a> because SafariBlock was not really working well with Safari 4.</em></li>
+    </ul>
+  </li>
+  <li>Still working on it. Any Suggestions would be greatly
+ appreciated. If nothing shows up, will start working on a new
+ browser plug in to handle it. 
+    <ul>
+      <li><em>Update: Found a plugin called “</em><a href="http://macthemes2.net/forum/viewtopic.php?pid=277174#p277174"><em>Goggles</em></a><em>” that provides access to Google Bookmarks.</em></li>
+    </ul>
+  </li>
+  <li><em>Update: If you want the tab bar to always display even with one active tab use <a href="http://osx411.com/tip-alway-show-the-tab-bar-in-safari/">this great tip</a>.</em></li>
+</ol>
+
+<p><strong>Conclusion</strong></p>
+
+<p>There you have it, in a little less than two hours, default WebKit
+was transformed in to a Firefox 3 feature compatible browser. Look
+for a post in a few days to give my updated thoughts on Webkit
+after using it for a while.</p>
+
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2008/06/giving-webkit-a-try/';
+        this.page.identifier = 'https://blue64.net/2008/06/giving-webkit-a-try/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2008/06/proposed-java-7-feature-safe-rethrow/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Proposed Java 7 Feature: Safe Rethrow
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2008/06/webkit-day-2-benchmarksas/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        WebKit Day 2 - Benchmarks
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

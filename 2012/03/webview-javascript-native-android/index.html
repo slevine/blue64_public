@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>WebView(Javascript) -&gt; Native Android API | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="WebView(Javascript) -&gt; Native Android API" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Calling Javascript from an Android Webview" />
+<meta property="og:description" content="Calling Javascript from an Android Webview" />
+<link rel="canonical" href="https://blue64.net/2012/03/webview-javascript-native-android/" />
+<meta property="og:url" content="https://blue64.net/2012/03/webview-javascript-native-android/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:image" content="https://blue64.net/images/running.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-03-03T15:35:00-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2012-03-03T15:35:00-05:00","datePublished":"2012-03-03T15:35:00-05:00","url":"https://blue64.net/2012/03/webview-javascript-native-android/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2012/03/webview-javascript-native-android/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://blue64.net/images/running.jpg","@type":"imageObject"},"description":"Calling Javascript from an Android Webview","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"}},"@type":"BlogPosting","headline":"WebView(Javascript) -&gt; Native Android API","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  webview-javascript-native-android-api">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+  
+  
+  
+
+  <div class="page-image">
+    <img src="/images/running.jpg" class="entry-feature-image u-photo" alt="WebView(Javascript) -> Native Android API" >
+    
+      <div class="page-image-caption"><p><a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+</div>
+    
+  </div>
+
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">WebView(Javascript) -&gt; Native Android API
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><div class="author-info">
+
+<span class="read-time">4 min read</span>
+
+    <time class="page-date dt-published" datetime="2012-03-03T15:35:00-05:00"><a class="u-url" href="">March 3, 2012</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#android" title="Pages tagged Android" rel="tag">Android</a></li><li class="page-taxonomy"><a href="/tags/#scala" title="Pages tagged Scala" rel="tag">Scala</a></li><li class="page-taxonomy"><a href="/tags/#javascript" title="Pages tagged Javascript" rel="tag">Javascript</a></li><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>For a few weeks towards the end of last year I was developing an Android application.  During that time I discovered a few new (to me) things about the Android platform. One in particular that caught my attention was having Javascript code running locally on the device call a native Android function.</p>
+
+<p>Before getting into the technical details, let me first talk about a situation where this piece of functionality would be useful.  Lets say (for arguments sake), that you have to write an Android application that requires advanced and very polished charts.  What are you options?  You can try to find a native Android implementation that meets the requirement, but I must admit, I have been there and done that, and couldn’t find any particularly good libraries.  Yes there are some out there, but they didn’t have the polish I was looking for (please comment if you know of good ones).</p>
+
+<p>If there aren’t any good Android libraries available what can you do?  From personal experience I know there are a lot of good Javascript charting libraries out there.  How can this help when developing an Android application not a web application?  You can host the charting library on a server somewhere and reference them from an Android WebView?  From my experience, this solution is not optimal because of slow performance.  Even thought it was too slow, it still looked much better than any of the native libraries available.</p>
+
+<p>Is there way to get the Javascript code to run faster perhaps by taking advantage of the beefy hardware most Android devices run on?  Turns out it is quite easy to run the Javascript libraries directly on the device.  After moving the Javascript code from the server to the device the performance was greatly improved.  The charts rendered fast and were very responsive to the touch.</p>
+
+<p>Running Javascript on the device instead of the Server is fast, but it creates a different sort of problem, namely, now you have a view (Javascript Chart) running inside another view (WebView), how does the Javascript library get its data?  The obvious answer is to have the Javascript code call some (REST) service via HTTP.  For arguments sake, lets say, this would not work due to the fact that the data is only available via a proprietary Java wrapped protocol.  Is there a way for the Javascript code to make a Java call? There is and that is what the rest of this post is going to be about.</p>
+
+<p>For simplicity, I am going to abstract away the charts and data and replace them with a simple requirement, namely, have a WebView render the underlyingAndroid SDK version.</p>
+
+<p><em>Note: For the purposes of this post, and because I like it, I am going to use Scala as the programming language.  As always, you can find all the code on <a href="https://github.com/slevine/android-javascript-demo">Github</a>.</em></p>
+
+<p>The goal of this demo is to show how you can call Java from Javascript running in an Android WebView, thus we need to create a WebView, populate it with a simple html file and then enable Javascript.</p>
+
+<p>MainActivity.scala - setting up basic view</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Step 1: Create WebView
+</span>  <span class="k">val</span> <span class="nv">webView</span><span class="k">:</span> <span class="kt">WebView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WebView</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+
+  <span class="c1">// Step 2: Load page from assets
+</span>  <span class="n">webView</span> <span class="nf">loadUrl</span> <span class="o">(</span><span class="s">"file:///android_asset/index.html"</span><span class="o">)</span>
+
+  <span class="c1">// Step 3: Enable Javascript
+</span>  <span class="nv">webView</span><span class="o">.</span><span class="py">getSettings</span> <span class="nf">setJavaScriptEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>So far, so easy.  Next, we need to create a simple Scala function in our <code class="highlighter-rouge">MainActivity</code> to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called <code class="highlighter-rouge">sdkVersion()</code></p>
+
+<p>MainActivity.scala - function to expose SDK version</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="k">object</span> <span class="nc">jsFun</span> <span class="o">{</span>
+      <span class="k">def</span> <span class="nf">sdkVersion</span><span class="o">()</span> <span class="k">=</span> <span class="nv">android</span><span class="o">.</span><span class="py">os</span><span class="o">.</span><span class="py">Build</span><span class="o">.</span><span class="py">VERSION</span><span class="o">.</span><span class="py">SDK</span>
+  <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Next we need to make this function available to Javascript by adding it to the DOM.</p>
+
+<p>MainActivity.scala - Adding a function to the DOM</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Add the above function to the DOM as "Android"
+</span>  <span class="c1">// The function can now be invoked from Javascript with the following: Android.sdkVersion()
+</span>  <span class="n">webView</span> <span class="nf">addJavascriptInterface</span><span class="o">(</span><span class="n">jsFun</span><span class="o">,</span> <span class="s">"Android"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p><em>Optional step:</em> When developing Javascript applications it is sometimes helpfull to be able to debug something to the browser console.  Believe it or not, it is quite easy to implement the browser’s console implementation with an Android one, and instead of logging the message to the browser console, it will send them to the Android Logcat system.</p>
+
+<p>MainActivity.scala - Implement Javascript console.log</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// provide the WebView with a console.log implementation
+</span>   <span class="n">webView</span> <span class="n">setWebChromeClient</span> <span class="k">new</span> <span class="nc">WebChromeClient</span> <span class="o">{</span>
+      <span class="k">override</span> <span class="k">def</span> <span class="nf">onConsoleMessage</span><span class="o">(</span><span class="n">consoleMessage</span><span class="k">:</span> <span class="kt">ConsoleMessage</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
+        <span class="k">val</span> <span class="nv">msg</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(</span><span class="n">consoleMessage</span>
+          <span class="o">.</span><span class="py">messageLevel</span><span class="o">.</span><span class="py">name</span><span class="o">).</span><span class="py">append</span><span class="o">(</span><span class="sc">'\t'</span><span class="o">)</span>
+          <span class="o">.</span><span class="py">append</span><span class="o">(</span><span class="nv">consoleMessage</span><span class="o">.</span><span class="py">message</span><span class="o">).</span><span class="py">append</span><span class="o">(</span><span class="sc">'\t'</span><span class="o">)</span>
+          <span class="o">.</span><span class="py">append</span><span class="o">(</span><span class="nv">consoleMessage</span><span class="o">.</span><span class="py">sourceId</span><span class="o">).</span><span class="py">append</span><span class="o">(</span><span class="s">" ("</span><span class="o">)</span>
+          <span class="o">.</span><span class="py">append</span><span class="o">(</span><span class="nv">consoleMessage</span><span class="o">.</span><span class="py">lineNumber</span><span class="o">).</span><span class="py">append</span><span class="o">(</span><span class="s">")\n"</span><span class="o">)</span>
+        <span class="nf">if</span> <span class="o">(</span><span class="nv">consoleMessage</span><span class="o">.</span><span class="py">messageLevel</span> <span class="o">==</span> <span class="nv">ConsoleMessage</span><span class="o">.</span><span class="py">MessageLevel</span><span class="o">.</span><span class="py">ERROR</span><span class="o">)</span>
+          <span class="nv">Log</span><span class="o">.</span><span class="py">e</span><span class="o">(</span><span class="s">"JavascriptExmple"</span><span class="o">,</span> <span class="nv">msg</span><span class="o">.</span><span class="py">toString</span><span class="o">())</span>
+        <span class="k">else</span>
+          <span class="nv">Log</span><span class="o">.</span><span class="py">d</span><span class="o">(</span><span class="s">"JavascriptExmple"</span><span class="o">,</span> <span class="nv">msg</span><span class="o">.</span><span class="py">toString</span><span class="o">())</span>
+        <span class="kc">true</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Finally we need to create our html/javascript view.</p>
+
+<p>Lets create a file called <code class="highlighter-rouge">index.html</code> and place it under <code class="highlighter-rouge">src/main/assets</code> and add at least the following code to it:</p>
+
+<p>index.html - default page that calls our Android.sdkVersion() function via Javascript</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div&gt;</span>Click <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">"#"</span><span class="nt">&gt;</span>here<span class="nt">&lt;/a&gt;</span> to invoke an Android function to
+   find out the Android SDK version used to build this App.
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sdk"</span><span class="nt">&gt;</span>SDK:<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;script&gt;</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">This message should appear as a debug message in Logcat.</span><span class="dl">"</span><span class="p">);</span>
+    <span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">a</span><span class="dl">"</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+        <span class="nx">$</span><span class="p">(</span><span class="dl">'</span><span class="s1">.sdk</span><span class="dl">'</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="nx">Android</span><span class="p">.</span><span class="nx">sdkVersion</span><span class="p">());</span>
+    <span class="p">});</span>
+<span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+<p>As you can see here, we are invoking the Android (Scala) method called <code class="highlighter-rouge">sdkVersion()</code> and appending the results of the call to a div using JQuery.</p>
+
+<p>Thats all there is to it, now you know how to invoke an Android function from Javascript running in an Android WebView.</p>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2012/03/webview-javascript-native-android/';
+        this.page.identifier = 'https://blue64.net/2012/03/webview-javascript-native-android/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2011/09/migration-from-wordpress-to-octopress-complete/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Mission Accomplished, Migration From Wordpress to Octopress Complete!
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        On Deciding Between PUT and POST When Creating a RESTful Resource
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

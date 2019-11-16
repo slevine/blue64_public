@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Configuring a Java Development Environment on OS X Tiger | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Configuring a Java Development Environment on OS X Tiger" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Since I just received my new MacBook Pro, I am tasked with setting up my development environment. Since most of my development is Java/Java EE based, the first thing I need to do is decide on the file system layout for all of the Java artifacts. I.e., JDK, IDE’s, Open Source Packages, App Servers, etc… I also need to decide on how I will control the Java runtime environment. I.e., Run App Server under Java 5, run a build under Java 1.4, run a Java Swing app under yet a different virtual machine. Here are my thoughts on each of these:" />
+<meta property="og:description" content="Since I just received my new MacBook Pro, I am tasked with setting up my development environment. Since most of my development is Java/Java EE based, the first thing I need to do is decide on the file system layout for all of the Java artifacts. I.e., JDK, IDE’s, Open Source Packages, App Servers, etc… I also need to decide on how I will control the Java runtime environment. I.e., Run App Server under Java 5, run a build under Java 1.4, run a Java Swing app under yet a different virtual machine. Here are my thoughts on each of these:" />
+<link rel="canonical" href="https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/" />
+<meta property="og:url" content="https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2006-02-25T15:19:31-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2006-02-25T15:19:31-05:00","datePublished":"2006-02-25T15:19:31-05:00","url":"https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"Since I just received my new MacBook Pro, I am tasked with setting up my development environment. Since most of my development is Java/Java EE based, the first thing I need to do is decide on the file system layout for all of the Java artifacts. I.e., JDK, IDE’s, Open Source Packages, App Servers, etc… I also need to decide on how I will control the Java runtime environment. I.e., Run App Server under Java 5, run a build under Java 1.4, run a Java Swing app under yet a different virtual machine. Here are my thoughts on each of these:","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Configuring a Java Development Environment on OS X Tiger","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  configuring-a-java-development-environment-on-os-x-tiger">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Configuring a Java Development Environment on OS X Tiger
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">3 min read</span>
+
+    <time class="page-date dt-published" datetime="2006-02-25T15:19:31-05:00"><a class="u-url" href="">February 25, 2006</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#howto" title="Pages tagged Howto" rel="tag">Howto</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>Since I just received my new MacBook Pro, I am tasked with setting
+up my development environment. Since most of my development is
+Java/Java EE based, the first thing I need to do is decide on the
+file system layout for all of the Java artifacts. I.e., JDK, IDE’s,
+Open Source Packages, App Servers, etc… I also need to decide on
+how I will control the Java runtime environment. I.e., Run App
+Server under Java 5, run a build under Java 1.4, run a Java Swing
+app under yet a different virtual machine. Here are my thoughts on
+each of these:</p>
+
+<p><strong>File System Layout</strong>
+There are several options available here. Typically I like to do
+things in a industry standard type way, but after hours of
+searching on Google, I was not really able to find a “Standard” way
+for laying out the file system. Thus, it looks like I will need to
+come up with my own personal layout.</p>
+
+<p>Option 1: Use the Apple Paradigm
+When you run a fresh in install of OS X Tiger, you get several
+JDK’s pre-installed. They are located under:
+/System/Library/Frameworks/JavaVM.framework/Versions. Under
+Versions, you will find each installed VM there. On mine I have
+1.3.1, 1.4.2, and 1.5.0. I will talk about how to reference each of
+these in the next part of this article. Ok, now we know where the
+JDK’s are installed. I think this directory structure will suit my
+needs just fine.</p>
+
+<p>The next thing I need to figure out is where to
+install my IDE’s to. I really shouldn’t say “IDE’s” because there
+is really only one IDE that I need to install, which is Eclipse.
+The other IDE I am referring is Apple’s XCode, but the installer
+for this package comes with the Tiger DVD. I installed it to
+Apple’s default location which is: /Developer/Applications. I
+actually think this directory structure makes a lot of sense
+because it gives you a way to partition development libraries from
+“production” libraries. All I mean by “production” libraries are
+libraries that the OS leverages to run non development
+applications. The XCode installer also sets up several other
+directories under /Developer such as /Java, /Tools, /Makefiles,
+/SDKs, etc.. Wow, it sets up a /Java directory for me to leverage,
+so it makes figuring out where to place my Java artifacts a lot
+easier. Thus, here is my planned directory structure:</p>
+
+<p><em>/Developer/Applications:</em>
+I will install Eclipse to here, since <a href="eclipse.org">Eclipse</a> is a “Developer Application” not just a Java
+IDE.</p>
+
+<p><em>/Developer/Java:</em>
+I will create three directories under here, namely, <em>Servers</em>, <em>Tools</em> and <em>Frameworks</em>.</p>
+
+<p><em>/Developer/Java/Servers:</em>
+I will place “Servers” here such as <a href="http://jboss.org">Jboss</a>, <a href="http://bea.com">Weblogic</a>, Tomcat, etc…</p>
+
+<p><em>/Developer/Java/Tools:</em>
+I will place “Tools” here such as <a href="http://ant.apache.org">Ant</a>, <a href="http://maven.apache.org">Maven</a>, GCJ, etc… <em>/Developer/Java/Frameworks:</em> I will place “Frameworks”
+here such as, Apache <a href="http://logging.apache.org">Loj4J</a>, <a href="http://xmlbeans.apache.org">XMLBeans</a>, BeanUtils, Xerces, <a href="http://hibernate.org">Hibernate</a>,
+<a href="http://jboss.org/products/seam">Boss Seam</a>, etc…</p>
+
+<p>Option 2: Use the Unix/Linux Paradigm
+Ah, yes the good old Linix paradigm. It is actually quite simple.
+Under this paradigm there is one main directory that holds
+everything Java. It is:</p>
+
+<p><em>/usr/local</em> <em>/usr/local/jdk1.x.x:</em> This is
+where I will place all of my JDK’s.</p>
+
+<p><em>/usr/local/jboss.x:</em> This is
+where I will place all of my Java Servers.</p>
+
+<p><em>/usr/local:</em> I will
+create a directory called <em>/eclipse</em> and install Eclipse here. I
+will also create a directory called <em>/java/lib</em> and <em>/java/tools</em>.</p>
+
+<p><em>/usr/local/java/lib:</em> This is where I will place all of my
+“Frameworks” This directory is equivalent to the “Frameworks”
+directory above.</p>
+
+<p><em>/usr/local/java/tools:</em> This is where I will
+place my “Tools” such as Ant and Maven.</p>
+
+<p>That sums up 2 potential
+layouts. Personally I am going to go with Option 1 for several
+reasons, namely, OS X is not *Nix, thus it deserves a directory
+structure that works best for it. Also, I have been using the *Nix
+paradigm since I have been developing, and sometimes it is nice to
+change things up a little bit. With that said, you can see that
+these two directory structures are so similar, you must be thinking
+what is the difference? Once scenario uses <em>/usr/local</em> as a base
+and the other uses <em>/Developer/Java</em>? Physically, there is not much
+separating the two. Logically, The Apple paradigm makes a lot more
+sense, because of the pseudo development partition. I think it
+keeps things neat an organized.</p>
+
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/';
+        this.page.identifier = 'https://blue64.net/2006/02/configuring-a-java-development-environment-on-os-x-tiger/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2006/02/handy-os-x-application-for-blogging/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Handy OS X Application for Blogging
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2006/02/directory-size-from-the-cmd-line/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Directory size from the cmd line
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

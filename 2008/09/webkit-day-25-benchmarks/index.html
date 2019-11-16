@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>WebKit Day 2.5 Benchmarks | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="WebKit Day 2.5 Benchmarks" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="The recent release of Google Chrome Beta for Windows has re-stirred the good old browser wars. Chrome is based on WebKit, but uses the V8 Javascript Engine Currently Chrome is a Windows only browser, so it is not possible for me to benchmark the browser first hand, but the claims have been that it is faster than both Firefox and WebKit on Windows." />
+<meta property="og:description" content="The recent release of Google Chrome Beta for Windows has re-stirred the good old browser wars. Chrome is based on WebKit, but uses the V8 Javascript Engine Currently Chrome is a Windows only browser, so it is not possible for me to benchmark the browser first hand, but the claims have been that it is faster than both Firefox and WebKit on Windows." />
+<link rel="canonical" href="https://blue64.net/2008/09/webkit-day-25-benchmarks/" />
+<meta property="og:url" content="https://blue64.net/2008/09/webkit-day-25-benchmarks/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2008-09-24T09:31:43-04:00" />
+<script type="application/ld+json">
+{"dateModified":"2008-09-24T09:31:43-04:00","datePublished":"2008-09-24T09:31:43-04:00","url":"https://blue64.net/2008/09/webkit-day-25-benchmarks/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2008/09/webkit-day-25-benchmarks/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"The recent release of Google Chrome Beta for Windows has re-stirred the good old browser wars. Chrome is based on WebKit, but uses the V8 Javascript Engine Currently Chrome is a Windows only browser, so it is not possible for me to benchmark the browser first hand, but the claims have been that it is faster than both Firefox and WebKit on Windows.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"WebKit Day 2.5 Benchmarks","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  webkit-day-2-5-benchmarks">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">WebKit Day 2.5 Benchmarks
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">2 min read</span>
+
+    <time class="page-date dt-published" datetime="2008-09-24T09:31:43-04:00"><a class="u-url" href="">September 24, 2008</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#webkit" title="Pages tagged WebKit" rel="tag">WebKit</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>The recent release of <a href="http://snurl.com/3tc5q">Google Chrome Beta</a>
+for Windows has re-stirred the good old browser wars. Chrome is
+based on WebKit, but uses the
+<a href="http://snurl.com/3tcc1">V8 Javascript Engine</a> Currently Chrome is
+a Windows only browser, so it is not possible for me to benchmark
+the browser first hand, but the claims have been that it is faster
+than both Firefox and WebKit on Windows.</p>
+
+<p>Those are pretty bold claims, especially since the folks over at
+WebKit just released the
+<a href="http://snurl.com/3tc4t">SquirrelFish Extreme</a> Javascript engine.
+Based on my initial personal non-scientific benchmarks, it looks
+fast! Almost 2x’s as fast as the previous SquirrelFish
+implementation. See the results below.</p>
+
+<p>After using WebKit for the past two months it is clear to me,
+WebKit is the best browser for me on Mac. There is one small issue
+with using WebKit, namely, since you are running a nightly build,
+you need download and update the binary quite often, and some of
+the time, the daily build is not the stablest. Again, this is just
+a minor price to pay in order to take advantage of the latest and
+greatest build. It is nothing specific to WebKit, it applies to any
+beta software.</p>
+
+<p><strong>Latest Results</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    TEST                   COMPARISON         FROM                 TO
+                                             (SquirrelFish)    (SquirrelFish Extreme)
+    =============================================================================
+
+    ** TOTAL **:           1.86x as fast     1918.6ms +/- 0.9%   1032.6ms +/- 1.4%
+
+    =============================================================================
+
+      3d:                  1.59x as fast      260.6ms +/- 2.9%    164.2ms +/- 4.6%
+        cube:              1.53x as fast       84.2ms +/- 5.9%     55.2ms +/- 4.3%
+        morph:             1.36x as fast       82.8ms +/- 2.0%     61.0ms +/- 4.8%
+        raytrace:          1.95x as fast       93.6ms +/- 4.3%     48.0ms +/- 11.1%
+
+      access:              2.49x as fast      280.2ms +/- 4.1%    112.4ms +/- 6.0%
+        binary-trees:      1.64x as fast       36.0ms +/- 15.1%     22.0ms +/- 22.2%
+        fannkuch:          4.76x as fast       88.6ms +/- 3.8%     18.6ms +/- 9.0%
+        nbody:             2.03x as fast      124.8ms +/- 7.3%     61.6ms +/- 2.3%
+
+      bitops:              2.31x as fast      188.8ms +/- 4.5%     81.8ms +/- 9.9%
+        3bit-bits-in-byte: 1.96x as fast       26.6ms +/- 13.5%     13.6ms +/- 24.7%
+        bits-in-byte:      1.96x as fast       32.6ms +/- 8.8%     16.6ms +/- 22.2%
+        bitwise-and:       1.77x as fast       54.8ms +/- 4.4%     31.0ms +/- 15.5%
+        nsieve-bits:       3.63x as fast       74.8ms +/- 14.5%     20.6ms +/- 15.7%
+
+      controlflow:         1.35x as fast       27.0ms +/- 22.6%     20.0ms +/- 19.2%
+        recursive:         1.35x as fast       27.0ms +/- 22.6%     20.0ms +/- 19.2%
+
+      crypto:              1.98x as fast      129.6ms +/- 7.7%     65.4ms +/- 6.7%
+        aes:               2.51x as fast       45.6ms +/- 14.8%     18.2ms +/- 24.3%
+        md5:               1.74x as fast       39.6ms +/- 14.8%     22.8ms +/- 6.0%
+        sha1:              1.82x as fast       44.4ms +/- 27.6%     24.4ms +/- 6.8%
+
+      date:                1.78x as fast      172.6ms +/- 2.6%     96.8ms +/- 2.9%
+        format-tofte:      2.42x as fast      105.2ms +/- 3.5%     43.4ms +/- 3.3%
+        format-xparb:      1.26x as fast       67.4ms +/- 5.6%     53.4ms +/- 5.8%
+
+      math:                1.50x as fast      206.6ms +/- 4.1%    138.0ms +/- 1.7%
+        cordic:            1.59x as fast       67.6ms +/- 5.9%     42.4ms +/- 4.4%
+        partial-sums:      1.45x as fast       97.8ms +/- 3.7%     67.6ms +/- 3.6%
+        spectral-norm:     1.47x as fast       41.2ms +/- 8.6%     28.0ms +/- 6.3%
+
+      regexp:              4.27x as fast      198.8ms +/- 1.6%     46.6ms +/- 6.4%
+        dna:               4.27x as fast      198.8ms +/- 1.6%     46.6ms +/- 6.4%
+
+      string:              1.48x as fast      454.4ms +/- 1.6%    307.4ms +/- 2.4%
+        base64:            2.56x as fast       64.6ms +/- 4.0%     25.2ms +/- 10.7%
+        fasta:             1.43x as fast       85.4ms +/- 3.4%     59.6ms +/- 5.6%
+        tagcloud:          1.14x as fast      112.0ms +/- 7.2%     98.2ms +/- 2.7%
+        unpack-code:       1.75x as fast      118.6ms +/- 3.4%     67.8ms +/- 3.0%
+        validate-input:    1.30x as fast       73.8ms +/- 4.0%     56.6ms +/- 9.5%
+</code></pre></div></div>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2008/09/webkit-day-25-benchmarks/';
+        this.page.identifier = 'https://blue64.net/2008/09/webkit-day-25-benchmarks/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2008/08/upgraded-site-to-wordpress-26/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Upgraded Site To WordPress 2.6
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2008/10/a-little-salt-with-that-hash/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        A little Salt with that Hash?
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

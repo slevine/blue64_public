@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>WebKit Day 2 - Benchmarks | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="WebKit Day 2 - Benchmarks" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="After using WebKit for the past few days it is evident to me that it performs better than Firefox on my Macs. The question is how much better? Is it possible to quantify the performance difference? After searching around found this JavaScript benchmarking site." />
+<meta property="og:description" content="After using WebKit for the past few days it is evident to me that it performs better than Firefox on my Macs. The question is how much better? Is it possible to quantify the performance difference? After searching around found this JavaScript benchmarking site." />
+<link rel="canonical" href="https://blue64.net/2008/06/webkit-day-2-benchmarksas/" />
+<meta property="og:url" content="https://blue64.net/2008/06/webkit-day-2-benchmarksas/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2008-06-30T09:49:24-04:00" />
+<script type="application/ld+json">
+{"dateModified":"2008-06-30T09:49:24-04:00","datePublished":"2008-06-30T09:49:24-04:00","url":"https://blue64.net/2008/06/webkit-day-2-benchmarksas/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2008/06/webkit-day-2-benchmarksas/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"After using WebKit for the past few days it is evident to me that it performs better than Firefox on my Macs. The question is how much better? Is it possible to quantify the performance difference? After searching around found this JavaScript benchmarking site.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"WebKit Day 2 - Benchmarks","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  webkit-day-2-benchmarks">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">WebKit Day 2 - Benchmarks
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">3 min read</span>
+
+    <time class="page-date dt-published" datetime="2008-06-30T09:49:24-04:00"><a class="u-url" href="">June 30, 2008</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#webkit" title="Pages tagged WebKit" rel="tag">WebKit</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>After using WebKit for the past few days it is evident to me that
+it performs better than Firefox on my Macs. The question is how
+much better? Is it possible to quantify the performance difference?
+After searching around
+found <a href="http://webkit.org/perf/sunspider-0.9/sunspider.html">this</a>
+JavaScript benchmarking site.</p>
+
+<p><strong>Details</strong></p>
+
+<p>The data was obtained by running
+the <a href="http://webkit.org/perf/sunspider-0.9/sunspider.html">SunSpider JavaScript Benchmark.</a></p>
+
+<p>The benchmark was run on a 2.4GHz Core 2 Duo MacBook
+equipped with 4 gigs of memory running Leopard (10.5.3).</p>
+
+<p>To generate the below results for your self, follow the WebKit
+Results Link and then paste the Firefox results link in to the box
+that says “To compare to another run…”</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    TEST                   COMPARISON         FROM (Firefox)  TO (WebKit Nightly)
+
+    =============================================================================
+
+    ** TOTAL **:           1.57x as fast     3002.8ms +/- 1.3%   1918.6ms +/- 0.9%
+
+    =============================================================================
+
+      3d:                  1.47x as fast      383.8ms +/- 7.3%    260.6ms +/- 2.9%
+        cube:              1.61x as fast      135.2ms +/- 2.9%     84.2ms +/- 5.9%
+        morph:             1.53x as fast      126.4ms +/- 20.3%     82.8ms +/- 2.0%
+        raytrace:          1.31x as fast      122.2ms +/- 4.7%     93.6ms +/- 4.3%
+
+      access:              1.49x as fast      418.2ms +/- 3.4%    280.2ms +/- 4.1%
+        binary-trees:      1.38x as fast       49.8ms +/- 3.7%     36.0ms +/- 15.1%
+        fannkuch:          1.83x as fast      162.4ms +/- 4.5%     88.6ms +/- 3.8%
+        nbody:             1.19x as fast      149.0ms +/- 7.6%    124.8ms +/- 7.3%
+        nsieve:            1.85x as fast       57.0ms +/- 9.5%     30.8ms +/- 7.2%
+
+      bitops:              1.57x as fast      296.6ms +/- 3.6%    188.8ms +/- 4.5%
+        3bit-bits-in-byte: 1.84x as fast       49.0ms +/- 10.3%     26.6ms +/- 13.5%
+        bits-in-byte:      2.34x as fast       76.2ms +/- 3.1%     32.6ms +/- 8.8%
+        bitwise-and:       1.43x as fast       78.2ms +/- 5.9%     54.8ms +/- 4.4%
+        nsieve-bits:       1.25x as fast       93.2ms +/- 7.7%     74.8ms +/- 14.5%
+
+      controlflow:         1.46x as fast       39.4ms +/- 6.9%     27.0ms +/- 22.6%
+        recursive:         1.46x as fast       39.4ms +/- 6.9%     27.0ms +/- 22.6%
+
+      crypto:              1.44x as fast      186.8ms +/- 3.7%    129.6ms +/- 7.7%
+        aes:               1.59x as fast       72.4ms +/- 4.9%     45.6ms +/- 14.8%
+        md5:               1.45x as fast       57.6ms +/- 7.6%     39.6ms +/- 14.8%
+        sha1:              1.28x as fast       56.8ms +/- 9.3%     44.4ms +/- 27.6%
+
+      date:                2.12x as fast      365.8ms +/- 2.1%    172.6ms +/- 2.6%
+        format-tofte:      2.01x as fast      211.8ms +/- 1.1%    105.2ms +/- 3.5%
+        format-xparb:      2.28x as fast      154.0ms +/- 4.5%     67.4ms +/- 5.6%
+
+      math:                1.51x as fast      312.6ms +/- 4.9%    206.6ms +/- 4.1%
+        cordic:            1.79x as fast      121.2ms +/- 2.9%     67.6ms +/- 5.9%
+        partial-sums:      1.35x as fast      132.2ms +/- 9.7%     97.8ms +/- 3.7%
+        spectral-norm:     1.44x as fast       59.2ms +/- 8.3%     41.2ms +/- 8.6%
+
+      regexp:              1.33x as fast      265.0ms +/- 0.5%    198.8ms +/- 1.6%
+        dna:               1.33x as fast      265.0ms +/- 0.5%    198.8ms +/- 1.6%
+
+      string:              1.62x as fast      734.6ms +/- 0.7%    454.4ms +/- 1.6%
+        base64:            1.33x as fast       85.8ms +/- 1.9%     64.6ms +/- 4.0%
+        fasta:             2.25x as fast      192.2ms +/- 2.3%     85.4ms +/- 3.4%
+        tagcloud:          1.38x as fast      154.2ms +/- 1.4%    112.0ms +/- 7.2%
+        unpack-code:       1.67x as fast      197.8ms +/- 0.5%    118.6ms +/- 3.4%
+        validate-input:    1.42x as fast      104.6ms +/- 1.4%     73.8ms +/- 4.0%
+</code></pre></div></div>
+<p>As you can see from the benchmark results, WebKit performs
+~1.57x’s faster. The results are pretty much in line with my
+browsing experience. Please keep in mind these results are very
+specific to the conditions of my network, my computer, and the
+current utilization of the web server. Your results may vary.</p>
+
+<p><strong>Disclaimer</strong></p>
+
+<p>Please keep in mind benchmarks are benchmarks, and they are nothing
+more than numbers. This benchmark was not chosen because it favors
+WebKit in any way. Several sites use it to compare not only WebKit,
+but other browsers on other operating systems as well.
+Example <a href="http://blogs.zdnet.com/hardware/?p=1498">here</a>.</p>
+
+<p><strong>FYI</strong></p>
+
+<p>Webkit comes in ~1.68x’s faster than Safari 3.1.1. Safari 4 should
+be comparable to WebKit, since Safari 4 is based on the same code
+base as the current WebKit build which is based on the
+<a href="http://trac.webkit.org/wiki/SquirrelFish">SquirrelFish JavaScript</a>
+engine.</p>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2008/06/webkit-day-2-benchmarksas/';
+        this.page.identifier = 'https://blue64.net/2008/06/webkit-day-2-benchmarksas/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2008/06/giving-webkit-a-try/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Giving WebKit A Try
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2008/08/upgraded-site-to-wordpress-26/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Upgraded Site To WordPress 2.6
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>The Power of Big Query with Public Data | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="The Power of Big Query with Public Data" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="If you are looking for an easy way to query a public dataset you should definitely check out Big Query’s publicly available datasets." />
+<meta property="og:description" content="If you are looking for an easy way to query a public dataset you should definitely check out Big Query’s publicly available datasets." />
+<link rel="canonical" href="https://blue64.net/2018/02/the-power-of-bq/" />
+<meta property="og:url" content="https://blue64.net/2018/02/the-power-of-bq/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2018-02-04T17:03:00-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2018-02-04T17:03:00-05:00","datePublished":"2018-02-04T17:03:00-05:00","url":"https://blue64.net/2018/02/the-power-of-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2018/02/the-power-of-bq/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"If you are looking for an easy way to query a public dataset you should definitely check out Big Query’s publicly available datasets.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"The Power of Big Query with Public Data","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  the-power-of-big-query-with-public-data">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">The Power of Big Query with Public Data
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">4 min read</span>
+
+    <time class="page-date dt-published" datetime="2018-02-04T17:03:00-05:00"><a class="u-url" href="">February 4, 2018</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#gcp" title="Pages tagged GCP" rel="tag">GCP</a></li><li class="page-taxonomy"><a href="/tags/#bigquery" title="Pages tagged BigQuery" rel="tag">BigQuery</a></li><li class="page-taxonomy"><a href="/tags/#bigdata" title="Pages tagged BigData" rel="tag">BigData</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <blockquote>
+  <p>TLDR - If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for.</p>
+</blockquote>
+
+<h3 id="background">Background</h3>
+
+<p>Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Cleary, won’t be able to click my way through enough repos to get a clear respresentation, so I had to figure out a way to find some hard numbers to answer my question.</p>
+
+<h3 id="first-attempt">First Attempt</h3>
+
+<p>The first place where I tried to answer this simple question was to use the <a href="https://github.com/search?q=pom.xml&amp;type=Code&amp;utf8=%E2%9C%93">Github search box</a>.  After trying different combinations and even within the advanced search, found it really difficult to get the results because of too much noise.  The main problem was that when searching for <code class="highlighter-rouge">pom.xml</code> the place it showed up most often was in <code class="highlighter-rouge">.gitignore</code> which was not really relevant to my question.  This itself seemed a bit strange to me, as why would projects not want to version control their build artifacts?  Is the  <code class="highlighter-rouge">pom.xml</code> being generated as part of the build itself?  Will leave these interesting questions for another afternoon.</p>
+
+<h3 id="the-solution">The Solution</h3>
+
+<p>Soon after this, I remembered that <a href="https://cloud.google.com/bigquery/">Big Query</a> has <a href="https://cloud.google.com/bigquery/public-data/">public datasets</a> available for all to use <em>(for free)</em>, and decdied to take a quick peek to see if the <a href="https://cloud.google.com/bigquery/public-data/github">GitHub dataset</a> was there, and sure enough, it was. Great.  After some exploring around the <code class="highlighter-rouge">github_repos</code> dataset, was able to find a table called <code class="highlighter-rouge">files</code> which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located wihin a project and then do a simple count.  After a quick browse around the tables, was able to find the <em>files</em> table and it had the following shape:</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>repo_name</td>
+      <td>STRING</td>
+      <td>NULLABLE</td>
+    </tr>
+    <tr>
+      <td>ref</td>
+      <td>STRING</td>
+      <td>NULLABLE</td>
+    </tr>
+    <tr>
+      <td>path</td>
+      <td>STRING</td>
+      <td>NULLABLE</td>
+    </tr>
+    <tr>
+      <td>mode</td>
+      <td>INTEGER</td>
+      <td>NULLABLE</td>
+    </tr>
+    <tr>
+      <td>id</td>
+      <td>STRING</td>
+      <td>NULLABLE</td>
+    </tr>
+    <tr>
+      <td>symlink_target</td>
+      <td>STRING</td>
+      <td>NULLABLE</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>After some simple data exploration was able to get a good idea of the meaning of the data with the following query:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="p">[</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">:</span><span class="n">github_repos</span><span class="p">.</span><span class="n">files</span><span class="p">]</span> <span class="k">where</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'build.sbt'</span> <span class="k">LIMIT</span> <span class="mi">2</span>
+</code></pre></div></div>
+
+<p>yielding:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Row</th>
+      <th>repo_name</th>
+      <th>ref</th>
+      <th>path</th>
+      <th>mode</th>
+      <th>id</th>
+      <th>symlink_target</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Knewton/kafka-manager</td>
+      <td>refs/heads/master</td>
+      <td>build.sbt</td>
+      <td>33188</td>
+      <td>934503…</td>
+      <td>null</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Radsaggi/zipkin</td>
+      <td>refs/heads/master</td>
+      <td>build.sbt</td>
+      <td>33188</td>
+      <td>634bab3…</td>
+      <td>null</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Clearly this looks like the right table to use to answer my question about counting the different build tool usages.</p>
+
+<p>The next step was to come up with a query that can count the instances of each build artifact, meaning, count the number of  <code class="highlighter-rouge">build.gradle</code>, <code class="highlighter-rouge">build.sbt</code>, and <code class="highlighter-rouge">pom.xml</code> across the Github dataset.  The results should give a good indication of how many projects use each build tool.</p>
+
+<p>Here is that query:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">sbt</span><span class="p">.</span><span class="n">cnt</span><span class="p">,</span> <span class="n">gradle</span><span class="p">.</span><span class="n">cnt</span><span class="p">,</span> <span class="n">maven</span><span class="p">.</span><span class="n">cnt</span>
+<span class="k">FROM</span>
+  <span class="p">(</span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">cnt</span> <span class="k">FROM</span> <span class="p">[</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">:</span><span class="n">github_repos</span><span class="p">.</span><span class="n">files</span><span class="p">]</span> <span class="k">where</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'build.sbt'</span><span class="p">)</span> <span class="n">sbt</span>
+<span class="k">CROSS</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">cnt</span> <span class="k">FROM</span> <span class="p">[</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">:</span><span class="n">github_repos</span><span class="p">.</span><span class="n">files</span><span class="p">]</span> <span class="k">where</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'pom.xml'</span><span class="p">)</span> <span class="n">maven</span>
+<span class="k">CROSS</span> <span class="k">JOIN</span>
+  <span class="p">(</span><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="n">cnt</span> <span class="k">FROM</span> <span class="p">[</span><span class="n">bigquery</span><span class="o">-</span><span class="k">public</span><span class="o">-</span><span class="k">data</span><span class="p">:</span><span class="n">github_repos</span><span class="p">.</span><span class="n">files</span><span class="p">]</span> <span class="k">where</span> <span class="n">path</span> <span class="o">=</span> <span class="s1">'build.gradle'</span><span class="p">)</span> <span class="n">gradle</span>
+</code></pre></div></div>
+
+<p>which yielded the following results:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Row</th>
+      <th style="text-align: left">sbt_cnt</th>
+      <th style="text-align: left">gradle_cnt</th>
+      <th style="text-align: left">maven_cnt</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">15,628</td>
+      <td style="text-align: left">91,528</td>
+      <td style="text-align: left">116,535</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. <sup><a href="#dataFootnote1">1</a></sup>  If I was going to take this experiemnt to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.</p>
+
+<blockquote>
+  <p>The great thing about using Big Query with public datasets is the fact that there is no ETL required.</p>
+</blockquote>
+
+<p>If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for.  The great thing about using Big Query with public datasets is the fact that there is no ETL required. The only<sup><a href="#dataFootnote2">2</a></sup> thing required to run a query against a public dataset is to head to the <a href="https://bigquery.cloud.google.com">Big Query Console</a>, pick a dataset, type in the query, and within seconds you will have results to review.</p>
+
+<p>What are you waiting for?</p>
+
+<h5 id="notes">Notes</h5>
+
+<p><a name="dataFootnote1">1</a><em>: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiement.</em></p>
+
+<p><a name="dataFootnote2">2</a><em>: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.</em></p>
+
+        </div>
+
+        
+          <div class="page-share">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblue64.net%2F2018%2F02%2Fthe-power-of-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=The+Power+of+Big+Query+with+Public+Data%20https%3A%2F%2Fblue64.net%2F2018%2F02%2Fthe-power-of-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fblue64.net%2F2018%2F02%2Fthe-power-of-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=The+Power+of+Big+Query+with+Public+Data&url=https%3A%2F%2Fblue64.net%2F2018%2F02%2Fthe-power-of-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+</div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2018/02/the-power-of-bq/';
+        this.page.identifier = 'https://blue64.net/2018/02/the-power-of-bq/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2013/12/notes-from-a-talk-on-evolving-java/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Notes from a Talk on Evolving Java
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2019/11/querying-externally-partitioned-data-with-bq/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Querying External Data with BigQuery
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

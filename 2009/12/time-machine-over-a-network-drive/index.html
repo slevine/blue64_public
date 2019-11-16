@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Time Machine over a Network Drive | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Time Machine over a Network Drive" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post describes the steps involved when setting up Time Machine to backup to a Network Drive. These steps are only required if you want to back up to a device other than a Time Capsule. It is pretty quick and easy, so without further due, lets get started." />
+<meta property="og:description" content="This post describes the steps involved when setting up Time Machine to backup to a Network Drive. These steps are only required if you want to back up to a device other than a Time Capsule. It is pretty quick and easy, so without further due, lets get started." />
+<link rel="canonical" href="https://blue64.net/2009/12/time-machine-over-a-network-drive/" />
+<meta property="og:url" content="https://blue64.net/2009/12/time-machine-over-a-network-drive/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2009-12-13T14:04:45-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2009-12-13T14:04:45-05:00","datePublished":"2009-12-13T14:04:45-05:00","url":"https://blue64.net/2009/12/time-machine-over-a-network-drive/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2009/12/time-machine-over-a-network-drive/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"This post describes the steps involved when setting up Time Machine to backup to a Network Drive. These steps are only required if you want to back up to a device other than a Time Capsule. It is pretty quick and easy, so without further due, lets get started.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Time Machine over a Network Drive","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  time-machine-over-a-network-drive">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Time Machine over a Network Drive
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">1 min read</span>
+
+    <time class="page-date dt-published" datetime="2009-12-13T14:04:45-05:00"><a class="u-url" href="">December 13, 2009</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#howto" title="Pages tagged Howto" rel="tag">Howto</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li><li class="page-taxonomy"><a href="/tags/#technology" title="Pages tagged Technology" rel="tag">Technology</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>This post describes the steps involved when setting up Time Machine to backup to a Network Drive.  These steps are only required if you want to back up to a device other than a Time Capsule.  It is pretty quick and easy, so without further due, lets get started.</p>
+
+<p><strong>Step 1: Enable network backups in Time Machine</strong></p>
+
+<p>In a terminal window cut/paste the following command:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>defaults write com.apple.systempreferences TMShowUnsupportedNetworkVolumes 1
+</code></pre></div></div>
+
+<blockquote>
+  <p>Update: Steps 2 &amp; 3 are only required if you are not running Snow Leopard.  If you are, then all you need to do is mount the network drive you wish to use as a Time Machine destination, and then proceed to Step 4.</p>
+</blockquote>
+
+<p><strong>Step 2: Create Timemachine backup volume</strong></p>
+
+<p>In a terminal window cut/paste the following command:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hdiutil create -fs HFS+J -volname "Backup of computer-name" computer-name_[mac address without':'].sparsebundle
+</code></pre></div></div>
+
+<p><em>The simplest way to obtain your mac address is to open a terminal window and type the command: <code class="highlighter-rouge">ifconfig -a</code>, and look for the section of the output where it says: <code class="highlighter-rouge">ether 00:33:44:55:66:77</code></em></p>
+
+<p><em>The simplest way to obtain your computer name is to open a terminal window and type the command: <code class="highlighter-rouge">hostname</code>, it will return the name of your computer, example, <code class="highlighter-rouge">my-hostname</code>.</em></p>
+
+<p>Putting it all together, based on the above examples, you would run the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hdiutil create -fs HFS+J -volname "Backup of my-hostname" my-hostname_003344556677.sparsebundle
+</code></pre></div></div>
+
+<p><strong>Step 3: Copy file created in step 2 to network Time Machine backup destination</strong>*</p>
+
+<p>Using finder or terminal, copy the newly created .sparsebundle file to the place you want your Time Machine backup to reside.</p>
+
+<p><strong>Step 4: Open Timemachine preferences, and the network drive should show up as a backup target</strong></p>
+
+<p>If for some reason it doesn’t, try opening and closing the Time Machine preferences, as it may take a moment for it to detect the newly available network drive.</p>
+
+<p><strong>Step 5: Rest easy knowing your mac is now backed up to a network storage volume.</strong></p>
+
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2009/12/time-machine-over-a-network-drive/';
+        this.page.identifier = 'https://blue64.net/2009/12/time-machine-over-a-network-drive/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2009/11/scala-sugar-iteration/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Scala Sugar - Iteration
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        With Grape, Groovy Is On Par with Native Scripting Languages
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

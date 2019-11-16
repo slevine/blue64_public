@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Going Functional with Scala | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Going Functional with Scala" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Lately it seems like functional programming has been the talk of the town, the new (old) paradigm that is making a comeback in a major way. For a while, I resisted the urge to follow the paradigm de jour, being the hard core OO guy that I am, but now it is clear to me that it is more than just hype. There are many reasons functional programming makes sense as a paradigm for developing software today, but the one that I am most interested in is the fact that it handles concurrency so well, thus providing us the building blocks to develop extremely scalable applications." />
+<meta property="og:description" content="Lately it seems like functional programming has been the talk of the town, the new (old) paradigm that is making a comeback in a major way. For a while, I resisted the urge to follow the paradigm de jour, being the hard core OO guy that I am, but now it is clear to me that it is more than just hype. There are many reasons functional programming makes sense as a paradigm for developing software today, but the one that I am most interested in is the fact that it handles concurrency so well, thus providing us the building blocks to develop extremely scalable applications." />
+<link rel="canonical" href="https://blue64.net/2009/01/going-functional-with-scala/" />
+<meta property="og:url" content="https://blue64.net/2009/01/going-functional-with-scala/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2009-01-15T16:59:32-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2009-01-15T16:59:32-05:00","datePublished":"2009-01-15T16:59:32-05:00","url":"https://blue64.net/2009/01/going-functional-with-scala/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2009/01/going-functional-with-scala/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"Lately it seems like functional programming has been the talk of the town, the new (old) paradigm that is making a comeback in a major way. For a while, I resisted the urge to follow the paradigm de jour, being the hard core OO guy that I am, but now it is clear to me that it is more than just hype. There are many reasons functional programming makes sense as a paradigm for developing software today, but the one that I am most interested in is the fact that it handles concurrency so well, thus providing us the building blocks to develop extremely scalable applications.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Going Functional with Scala","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  going-functional-with-scala">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Going Functional with Scala
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">3 min read</span>
+
+    <time class="page-date dt-published" datetime="2009-01-15T16:59:32-05:00"><a class="u-url" href="">January 15, 2009</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#functional" title="Pages tagged Functional" rel="tag">Functional</a></li><li class="page-taxonomy"><a href="/tags/#java" title="Pages tagged Java" rel="tag">Java</a></li><li class="page-taxonomy"><a href="/tags/#scala" title="Pages tagged Scala" rel="tag">Scala</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>Lately it seems like functional programming has been the talk of
+the town, the new (old) paradigm that is making a comeback in a
+major way. For a while, I resisted the urge to follow the paradigm
+de jour, being the hard core OO guy that I am, but now it is clear
+to me that it is more than just hype. There are many reasons
+functional programming makes sense as a paradigm for developing
+software today, but the one that I am most interested in is the
+fact that it handles concurrency so well, thus providing us the
+building blocks to develop extremely scalable applications.</p>
+
+<p>FP(Functional Programming) has been on my mind for a while. The seed
+was placed there in late 2007 by the Java Posse listening to their
+<a href="http://javaposse.com/index.php?post_id=289334">interview with Martin Odersky</a>.
+They were not talking about FP per se, but more about a specific
+JVM language called <a href="http://www.scala-lang.org/">Scala</a> (pronounced
+skah-lah not scale-la). Scala is not a pure functional language, it
+is actually a fusion between functional and object oriented
+programming. It brings together the best of both worlds. My
+exposure to Scala did not end there, as I got another huge dose at
+Java One 2008. Two of my favorite sessions there were either on
+Scala, or Scala was a major discussion point.</p>
+
+<p>The first session was the Script Bowl. This session was not specifically about Scala, it
+was more of a JVM scripting language battle, and in the end JRuby
+was crowned king by the audience. In my mind, Scala was the clear
+winner, because of the simple, yet elegant and powerfull
+concurrency demonstrated. The presenter wrote what looked like a
+relatively simple program, and it was capable of indexing tons of
+RSS feed dumps in real time on a typical multi-core laptop
+computer. I remember thinking to my self, wow, it would take me a
+lot more time and effort to write a similar program in Java, and it
+probably wouldn’t have the same level of scalability as the one
+demonstrated. The Scala code was able to fully utilize the
+multi-core processors it was running on.</p>
+
+<p>The second session was on Scala presented by the father of Scala
+him self Martin Odersky. During that session I was wowed again with
+some of Scala’s features like it:</p>
+
+<ul>
+  <li>is scalable because it works for very small and very large systems.</li>
+  <li>“is the Java programming language of the future.”</li>
+  <li>is object oriented, functional, and a scripting language.</li>
+  <li>leverages <a href="http://www.scala-lang.org/node/242">Actor’s</a> as the primary concurrency construct.</li>
+  <li>fits seamlessly in to a Java environment.</li>
+  <li>is a composition language, as it adds the notion of Traits.</li>
+  <li>has an updated type system supporting type inference.</li>
+</ul>
+
+<p>After those two sessions, I headed over to the Java One bookstore
+to check out the Beta version of
+<a href="http://www.artima.com/shop/programming_in_scala">Programming in Scala</a>.
+I was impressed, but couldn’t help thinking, is Scala for me? Can I
+use it at work? Is it viable in the enterprise?</p>
+
+<p>Fast forward 7 months to today, and let me answer my own questions with one word:
+yes!</p>
+
+<ul>
+  <li>Is it for me? Yes, because Scala is not only something new, it
+  is something advanced, because it was written in a no compromise
+  academic environment. If nothing else it is a great way to broaden
+  my horizons as a programmer.</li>
+  <li>Can I use this at work? Yes, Scala code compiles down to Java
+  byte code, so theoretically, if I was very evil, I could write all
+  my code at work in Scala, run Scalac on it, and add the class files
+  to the application, and no one would be any the wiser. Will I do
+  that? No way, I am simply trying to illustrate a point that Scala
+  is totally compatible with any existing Java environment.</li>
+  <li>Is it viable in the enterprise? Yes, with its advanced
+  concurrency model, I can only imagine the type of throughput you
+  can achieve. (Looking forward to finding out)</li>
+</ul>
+
+<p>Now you know where my interest in Scala comes from. Hopefully after
+reading this post, you will be a bit curious about it as well.</p>
+
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2009/01/going-functional-with-scala/';
+        this.page.identifier = 'https://blue64.net/2009/01/going-functional-with-scala/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2009/01/new-webkit-feature/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> New Webkit Feature
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2009/01/quicksilver-is-a-timesaver/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Quicksilver is a timesaver
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

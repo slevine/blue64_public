@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Querying External Data with BigQuery | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Querying External Data with BigQuery" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature." />
+<meta property="og:description" content="In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature." />
+<link rel="canonical" href="https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/" />
+<meta property="og:url" content="https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:image" content="https://blue64.net/images/taxi.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-11-14T17:03:00-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","url":"https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://blue64.net/images/taxi.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Querying External Data with BigQuery","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  querying-external-data-with-bigquery">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul>
+<li><a href="/about/">About</a></li>
+<li><a href="/archives/">Archives</a></li>
+<li><a href="/search/">Search</a></li>
+</ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+  
+  
+  
+
+  <div class="page-image">
+    <img src="/images/taxi.jpg" class="entry-feature-image u-photo" alt="Querying External Data with BigQuery">
+    
+      <div class="page-image-caption">
+<p><a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+</div>
+    
+  </div>
+
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Querying External Data with BigQuery
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author">
+<img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info">
+<div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div>
+<ul class="author-links">
+<li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li>
+<li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li>
+<li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li>
+<li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li>
+<li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li>
+</ul>
+
+<span class="read-time">7 min read</span>
+
+    <time class="page-date dt-published" datetime="2019-11-14T17:03:00-05:00"><a class="u-url" href="">November 14, 2019</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies">
+<li class="page-taxonomy"><a href="/tags/#gcp" title="Pages tagged GCP" rel="tag">GCP</a></li>
+<li class="page-taxonomy"><a href="/tags/#bigquery" title="Pages tagged BigQuery" rel="tag">BigQuery</a></li>
+<li class="page-taxonomy"><a href="/tags/#spark" title="Pages tagged Spark" rel="tag">Spark</a></li>
+<li class="page-taxonomy"><a href="/tags/#bigdata" title="Pages tagged BigData" rel="tag">BigData</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <blockquote>
+  <p>TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS.  It is a really cool feature.</p>
+</blockquote>
+
+<h3 id="some-background">Some Background</h3>
+
+<p>I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable of querying cloud object stores like Spark, Presto, Hive, Drill, among others.  With that being said, when Google Cloud announced that <a href="https://cloud.google.com/blog/products/data-analytics/keep-parquet-and-orc-from-the-data-graveyard-with-new-bigquery-features">BigQuery has beta support for querying Parquet and ORC files in Google Cloud Storage</a>, it really peaked my curiosity.  Thus, had no choice but to find a large dataset in Parquet format and try to query it with BigQuery.  Sounds easy enough, right?</p>
+
+<p>To get started, I needed to find a large Hive Partitioned Dataset to use.  After some quick digging and searching, I wasn’t able to find one so the only logical thing to do was to create my own.  One of my favorate features of BigQuery is the fact that it has tons of public datasets available to use for these sort of things.  Being that I spend most of my days working in NYC, I have always found the NYC Taxi Data particularly interesting, so thought why not start there?  For reference, the name of the dataset is <a href="https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-tlc-trips?filter=solution-type:dataset&amp;q=taxi&amp;id=e4902dee-0577-42a0-ac7c-436c04ea50b6"><code class="highlighter-rouge">bigquery-public-data:new_york_taxi_trips</code></a>.  This Dataset contains taxi rides paritioned by taxi company and year.  For the purposes of this post, I will be using <code class="highlighter-rouge">tlc_yellow_trips_2018</code> table because it is the most recent and has nearly 18GBs of raw data.</p>
+
+<h3 id="creating-hive-partitioned-data-on-gcs-using-spark-and-bigquery">Creating Hive Partitioned Data on GCS using Spark and BigQuery</h3>
+
+<p>With an interesting table in mind, the next step is to create an Hive Partitioned version of it on Google Cloud Storage in the Parquet format.  There are countless ways to handle this, again for the purposes of this post, I decided to use a simple Spark Shell script running on a Cloud DataProc cluster.</p>
+
+<p>The first step is to spin up a Cloud DataProc cluster using the <code class="highlighter-rouge">glcoud</code> command line:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcloud dataproc clusters create cluster-taxidata-extractor <span class="se">\</span>
+    <span class="nt">--region</span> us-central1 <span class="se">\</span>
+    <span class="nt">--subnet</span> default <span class="se">\</span>
+    <span class="nt">--zone</span> us-central1-a <span class="se">\</span>
+    <span class="nt">--master-machine-type</span> n1-standard-4 <span class="se">\</span>
+    <span class="nt">--master-boot-disk-size</span> 500 <span class="se">\</span>
+    <span class="nt">--num-workers</span> 2 <span class="se">\</span>
+    <span class="nt">--worker-machine-type</span> n1-standard-4 <span class="se">\</span>
+    <span class="nt">--worker-boot-disk-size</span> 500 <span class="se">\</span>
+    <span class="nt">--image-version</span> 1.3-deb9 <span class="se">\</span>
+    <span class="nt">--project</span> <span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>
+</code></pre></div></div>
+
+<p>The above command will spin up 3 node cluster each having 4 vCPUs and 15GBs of memory providng YARN with 8 cores and 24GBs of memory. This seems like more than enough horsepower for the task.  Once the cluster is operational, <code class="highlighter-rouge">ssh</code> in with the following command:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcloud compute ssh ${HOSTNAME} --project=${PROJECT_ID} --zone=${ZONE} 
+</code></pre></div></div>
+
+<p>Once in, need to spin up Spark Shell, but with one cavet, namely adding the <a href="https://github.com/GoogleCloudPlatform/spark-bigquery-connector">spark-bigquery-connector</a> to its enviorment.  This is necessary in order to leverage the latest and greatest Big Query Storage APIs.  The final command is:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spark-shell <span class="nt">--jars</span> gs://spark-lib/bigquery/spark-bigquery-latest.jar 
+</code></pre></div></div>
+
+<p>Once in, it is easy to start exploring the data to figure out the best way to partition data.  After a bit of review, I decided the most logical way to partition it is by ride date.  There are two fields that can be used to achieve this, either <code class="highlighter-rouge">pickup_datetime</code> or <code class="highlighter-rouge">dropoff_datetime</code>. I decided to use <code class="highlighter-rouge">pickup_datetime</code> taking in to account that some rides may start one day and end another day, I.e, 11.45p to 12.30a, these rides will be counted on the day they originated.  There is one wrinkle in this decision, namely, the spark-bigquery-connector doesn’t have a native type to cast BigQuery’s <code class="highlighter-rouge">DATETIME</code> into so it simply casts it in to a <code class="highlighter-rouge">STRING</code>, which is not very useful as a partition key.  Thus, custom code is needed to perform the cast from a <code class="highlighter-rouge">DATETIME</code> in to a <code class="highlighter-rouge">DATE</code>.  The final code looks something like:</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">spark</span><span class="o">.</span><span class="py">read</span><span class="o">.</span><span class="py">format</span><span class="o">(</span><span class="s">"bigquery"</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"table"</span><span class="o">,</span> <span class="s">"bigquery-public-data:new_york_taxi_trips.tlc_yellow_trips_2018"</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">load</span><span class="o">()</span>
+    <span class="o">.</span><span class="py">withColumn</span><span class="o">(</span><span class="s">"trip_date"</span><span class="o">,</span> <span class="o">(</span><span class="nf">col</span><span class="o">(</span><span class="s">"pickup_datetime"</span><span class="o">).</span><span class="py">cast</span><span class="o">(</span><span class="s">"date"</span><span class="o">)))</span>
+    <span class="o">.</span><span class="py">write</span><span class="o">.</span><span class="py">partitionBy</span><span class="o">(</span><span class="s">"trip_date"</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">format</span><span class="o">(</span><span class="s">"parquet"</span><span class="o">)</span>
+    <span class="o">.</span><span class="py">save</span><span class="o">(</span><span class="s">"gs://${PROJET_ID}/new-york-taxi-trips/yellow/2018"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>The above code is pretty self explanatory. With that being said, let’s quickly walk through it.  First, we load the table from BigQuery in to a DataFrame, next is the cast mentioned above, followed by partitioning information and file format, finally saving it.  After hitting return, I went to grab a coffee. By the time I got back to my desk, I had 18GB of Taxi ride data partitioned by <code class="highlighter-rouge">trip_date</code> in my GCS bucket already. That was easy <img class="emoji" title=":smile:" alt=":smile:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f604.png" height="20" width="20"></p>
+
+<p>For reference the files should look something like:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ gsutil <span class="nb">ls </span>gs://<span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/_SUCCESS
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-01/
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-01/UUID.snappy.parquet
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-01/UUID.snappy.parquet
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-02/
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-02/UUID.snappy.parquet
+gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01-02/UUID.snappy.parquet
+...
+</code></pre></div></div>
+
+<p><em>Pro Tip: This would be a great time to <strong>shut down</strong> the DataProc cluster since it is no longer needed.</em></p>
+
+<h3 id="create-an-external-table-in-bigquery">Create an External Table in BigQuery</h3>
+
+<p>Now that we have a sample Hive Partitoined dataset in GCS to work with, let’s set it up as an external table in BigQuery.  To get started, an external table definition needs to be created.  Here is the command to create it:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bq mkdef <span class="se">\</span>
+    <span class="nt">--source_format</span><span class="o">=</span>PARQUET <span class="se">\</span>
+    <span class="nt">--hive_partitioning_mode</span><span class="o">=</span>AUTO <span class="se">\</span>
+    <span class="nt">--hive_partitioning_source_uri_prefix</span><span class="o">=</span>gs://<span class="o">{</span>PROJECT_ID<span class="o">}</span>/new-york-taxi-trips/yellow/2018/ <span class="se">\</span>
+    gs://new-york-taxi-trips/yellow/2018/<span class="k">*</span>.parquet <span class="o">&gt;</span> taxi-table-def
+</code></pre></div></div>
+
+<p><code class="highlighter-rouge">taxi-table-def</code> should look something like:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"hivePartitioningOptions"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"AUTO"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sourceUriPrefix"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gs://{PROJET_ID}/new-york-taxi-trips/yellow/2018/"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"sourceFormat"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PARQUET"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sourceUris"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="s2">"gs://{PROJET_ID}/new-york-taxi-trips/yellow/2018/*.parquet"</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>With the defintion file in hand, the next step is to create the external table in BigQuery.  This can be accomplished with the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bq mk <span class="nt">--external_table_definition</span><span class="o">=</span>taxi-table-def <span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>:nyc_taxi.2018_external
+</code></pre></div></div>
+
+<p><em>Note: This assumes you already have a Dataset named <code class="highlighter-rouge">nyc_taxi</code>, if you don’t now would be a great time to create it, or change the above command to match the name of the Dataset you want to add the external table reference to.</em></p>
+
+<p>After running the above, you should get a message saying <code class="highlighter-rouge">Table '${PROJECT_ID}:nyc_taxi.2018_external' successfully created.</code></p>
+
+<p>If the table was successfully created, it should also appear in the BigQuery UI as an external table available to query.</p>
+
+<h3 id="query-a-bigquery-external-table">Query a BigQuery External Table</h3>
+
+<p>The final (and easist) step is to query the Hive Partitioned Parquet files which requires nothing special at all.  The query semantics for an external table are exactly the same as querying a normal table.</p>
+
+<p>Let’s run a few queries to validate that things are working as they should.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span><span class="n">_external</span>
+<span class="c1">-- Query complete (13.9 sec elapsed, 20.9 GB processed)</span>
+<span class="c1">-- Result: 112234626 </span>
+
+<span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">FROM</span> <span class="nv">`bigquery-public-data.new_york_taxi_trips.tlc_yellow_trips_2018`</span>
+<span class="c1">-- Query complete (0.6 sec elapsed, 0 B processed)</span>
+<span class="c1">-- Result: 112234626</span>
+</code></pre></div></div>
+
+<p>Looks great!  There are the same number of records in the external sink table as the original source table. The only difference between the two queries is the run time and the bytes processed, which is to be expected being that one is querying external Parquet files.</p>
+
+<p>Now, lets see if BigQuery is able to decrease the amount of bytes processed if only querying a specific set of partitions, in this case the month of January:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span> <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span><span class="n">_external</span>
+<span class="k">where</span> <span class="n">trip_date</span> <span class="k">between</span> <span class="nv">"2018-01-01"</span> <span class="k">and</span> <span class="nv">"2018-01-31"</span>
+<span class="c1">-- Query complete (9.1 sec elapsed, 1.6 GB processed)</span>
+<span class="c1">-- 8760090</span>
+</code></pre></div></div>
+
+<p>Again, looks great!  Clearly, BigQuery was able to filter the bytes scanned dramatically (1.6 GB vs 20.9 GB).  In fact if we look at the Execution Details:</p>
+
+<p><img src="/images/querying-externally-partitioned-data-with-bq_1.png" alt="BigQuery Execution Details"></p>
+
+<p>we can see that the query started with the full <code class="highlighter-rouge">8,760,090</code> rows, and narrowed down to <code class="highlighter-rouge">217</code>. This number is not random, it maps directly to the number of files that existd on GCS.  Lets verify:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ gsutil <span class="nb">ls </span>gs://<span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01<span class="se">\*</span> | <span class="nb">grep </span>parquet | <span class="nb">wc
+     </span>217     217   27342
+</code></pre></div></div>
+
+<p>Perfect, the number of Parquet files under January <code class="highlighter-rouge">2018-01-*</code> is <code class="highlighter-rouge">217</code>.</p>
+
+<p>One final thing to verify is if the number of bytes decrease based upon columns specified in the <code class="highlighter-rouge">select</code>, which would prove that BigQuery is not only taking advantage of the Hive Based Partitions, but also the columnar Parquet format.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">pickup_datetime</span> <span class="k">FROM</span> <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span><span class="n">_external</span>
+<span class="c1">-- Query complete (16.0 sec elapsed, 2.2 GB processed)</span>
+</code></pre></div></div>
+
+<p>Again, as expected, the number of bytes processed was narrowed down (2.2 GB vs 20.9 GB).</p>
+
+<p>Another great feature of an external table is that you can join it with any other table, external or not, thus it makes querying external Parquet files seemless.</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span>
+  <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_trips</span><span class="p">,</span>
+  <span class="n">tr</span><span class="p">.</span><span class="n">pickup_location_id</span><span class="p">,</span>
+  <span class="n">geo</span><span class="p">.</span><span class="n">zone_name</span>
+<span class="k">FROM</span>
+  <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span><span class="n">_external</span> <span class="n">tr</span><span class="p">,</span>
+  <span class="nv">`bigquery-public-data.new_york_taxi_trips`</span><span class="p">.</span><span class="n">taxi_zone_geom</span> <span class="n">geo</span>
+<span class="k">WHERE</span>
+  <span class="n">tr</span><span class="p">.</span><span class="n">pickup_location_id</span> <span class="o">=</span> <span class="n">geo</span><span class="p">.</span><span class="n">zone_id</span>
+<span class="k">GROUP</span> <span class="k">BY</span>
+  <span class="n">tr</span><span class="p">.</span><span class="n">pickup_location_id</span><span class="p">,</span>
+  <span class="n">geo</span><span class="p">.</span><span class="n">zone_name</span>
+<span class="k">ORDER</span> <span class="k">BY</span>
+  <span class="n">total_trips</span> <span class="k">DESC</span>
+</code></pre></div></div>
+
+<p>This query aggregates the number of pickups by <code class="highlighter-rouge">zone_id</code> and then joins the id with the public Dataset table <code class="highlighter-rouge">taxi_zone_geom</code>.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left">Row</th>
+      <th style="text-align: left">total_trips</th>
+      <th style="text-align: left">pickup_location_id</th>
+      <th style="text-align: left">zone_name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left">1</td>
+      <td style="text-align: left">4629205</td>
+      <td style="text-align: left">237</td>
+      <td style="text-align: left">Upper East Side South</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">2</td>
+      <td style="text-align: left">4317981</td>
+      <td style="text-align: left">161</td>
+      <td style="text-align: left">Midtown Center</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">3</td>
+      <td style="text-align: left">4203814</td>
+      <td style="text-align: left">236</td>
+      <td style="text-align: left">Upper East Side North</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">4</td>
+      <td style="text-align: left">3944764</td>
+      <td style="text-align: left">162</td>
+      <td style="text-align: left">Midtown East</td>
+    </tr>
+    <tr>
+      <td style="text-align: left">5</td>
+      <td style="text-align: left">3821688</td>
+      <td style="text-align: left">230</td>
+      <td style="text-align: left">Times Sq/Theatre District</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The most pickups in 2018 were in the <em>Upper East Side South</em>, who would have known? <img class="emoji" title=":man_shrugging:" alt=":man_shrugging:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f937-2642.png" height="20" width="20"></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>Querying Hive Partitioned Parquet files directly from BigQuery is a very exciting and impressive new feature.  The thing that I especially like about it is the fact that you can transparently query across external and regular tables without fuss.  The number of use cases that come to mind are tremendous. I can’t wait to see how folks use it in their day to day data operations.</p>
+
+        </div>
+
+        
+          <div class="page-share">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Querying+External+Data+with+BigQuery%20https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=Querying+External+Data+with+BigQuery&amp;url=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+</div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/';
+        this.page.identifier = 'https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2018/02/the-power-of-bq/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> The Power of Big Query with Public Data
+
+      </span>
+    </a>
+  
+
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div>
+<div class="copyright">
+    
+      <p>© 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

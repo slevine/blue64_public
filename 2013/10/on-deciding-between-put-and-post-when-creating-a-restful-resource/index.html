@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>On Deciding Between PUT and POST When Creating a RESTful Resource | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="On Deciding Between PUT and POST When Creating a RESTful Resource" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="On Deciding Between PUT and POST When Creating a RESTful Resource" />
+<meta property="og:description" content="On Deciding Between PUT and POST When Creating a RESTful Resource" />
+<link rel="canonical" href="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" />
+<meta property="og:url" content="https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:image" content="https://blue64.net/images/running.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-10-29T21:15:00-04:00" />
+<script type="application/ld+json">
+{"dateModified":"2013-10-29T21:15:00-04:00","datePublished":"2013-10-29T21:15:00-04:00","url":"https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://blue64.net/images/running.jpg","@type":"imageObject"},"description":"On Deciding Between PUT and POST When Creating a RESTful Resource","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"}},"@type":"BlogPosting","headline":"On Deciding Between PUT and POST When Creating a RESTful Resource","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  on-deciding-between-put-and-post-when-creating-a-restful-resource">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+  
+  
+  
+
+  <div class="page-image">
+    <img src="/images/running.jpg" class="entry-feature-image u-photo" alt="On Deciding Between PUT and POST When Creating a RESTful Resource" >
+    
+      <div class="page-image-caption"><p><a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+</div>
+    
+  </div>
+
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">On Deciding Between PUT and POST When Creating a RESTful Resource
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><div class="author-info">
+
+<span class="read-time">4 min read</span>
+
+    <time class="page-date dt-published" datetime="2013-10-29T21:15:00-04:00"><a class="u-url" href="">October 29, 2013</a>
+</time>
+
+  </div>
+</div>
+
+        
+  <h3 class="page-taxonomies-title">Categories</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy">posts</li>
+  </ul>
+
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#rest" title="Pages tagged REST" rel="tag">REST</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>The goal of this post is to try to help you figure out which HTTP verb: <code class="highlighter-rouge">PUT</code> or <code class="highlighter-rouge">POST</code> is more appropriate to use when adding and updating resources.</p>
+
+<p>Before we can get in to the details of which HTTP verb to use when, we first need to understand the type of “back end” or “server” or “service” we are trying to add the RESTful API to.  For the purposes of this post, we will refer to the service providing the API as the <em>“Resource Archetype”</em>.</p>
+
+<p>To start, we need to distinguish the differences between the two basic types of resource archetypes, namely, a <em>collection</em> and a <em>datastore</em> or “store” for short.</p>
+
+<ul>
+  <li>A <strong>collection</strong> is a <strong>server-managed</strong> directory of resources.  This means that clients may <strong>propose</strong> the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an <code class="highlighter-rouge">ID</code> that is associated with the newly created resource.</li>
+</ul>
+
+<blockquote>
+  <p>For the purposes of this conversation, we are not going to get in to the details of how the server provides the ID to the client, it is out of the scope of this post.</p>
+</blockquote>
+
+<ul>
+  <li>A <strong>store</strong> is a <strong>client-managed</strong> resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the <strong>client</strong>  is responsible for assigning an <code class="highlighter-rouge">ID</code> to the resource and managing the workflow around that task.</li>
+</ul>
+
+<p>These terms feel too abstract, lets walk through two concrete examples to fully illustrate the two concepts.</p>
+
+<p>Firstly, lets discuss a collection.  The simplest form of a collection is a middleware stack on top of a physical datastore.  For our example, the physical datastore is a NoSQL database, lets say <a href="http://basho.com/riak/">Riak</a>.  Sitting on top of Riak is <a href="http://spray.io/">Spray</a> and <a href="http://akka.io/">Akka</a>, which provide a RESTful middleware stack.  For the purposes of this example, all you need to know about Spray and Akka is that Spray provides an API to accept RESTful requests and reply to them, and Akka provides an abstraction around the physical transport between Spray and the actual socket.  <strong>The main point of all this is that Spray is acting as the middleware/business logic, and it will be handling the request and determining if Riak will be updated</strong>.</p>
+
+<blockquote>
+  <p>Try not to get bogged down understanding these technologies if you are not familiar with them, try instead to substitute a framework/database that you are familiar with, as it doesn’t change the context of this example.</p>
+</blockquote>
+
+<p>Now lets set up our example store, which ends up being a lot simpler than the collection, mainly because there is no middleware between the physical datastore and the client.  So following the example of the collection, the store would simply be a <a href="http://basho.com/riak/">Riak</a> instance.</p>
+
+<p>Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a <code class="highlighter-rouge">PUT</code> vs a <code class="highlighter-rouge">POST</code> when creating or updating a resource.</p>
+
+<p>When interacting with a <strong>store</strong>:</p>
+
+<ul>
+  <li>A <code class="highlighter-rouge">PUT</code> must be used to add a new resource, with the ID specified by the <strong>client</strong>.</li>
+  <li>A <code class="highlighter-rouge">PUT</code> must also be used to <strong>update</strong> or replace an already stored resource.</li>
+</ul>
+
+<p>The reason you <code class="highlighter-rouge">PUT</code> to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. <em>This is another way of saying the request is idempotent.</em></p>
+
+<p>When interacting with a <strong>collection</strong>:</p>
+
+<ul>
+  <li>A <code class="highlighter-rouge">POST</code> must be used to create a new resource, and the collection provides the ID to the client.</li>
+  <li>A <code class="highlighter-rouge">PUT</code> must be used to <strong>update</strong> or replace an already stored resource.</li>
+</ul>
+
+<p>The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can <code class="highlighter-rouge">POST</code> (request) the creation of the new resource, and not get back an <code class="highlighter-rouge">ID</code>, meaning the request failed.  Another thing to take notice of is the fact that no <code class="highlighter-rouge">ID</code> gets passed from the client, because it is assumed that the server is handling this logic.</p>
+
+<p>If you take a step back to think about our above collection example, it is possible that Spray has many different clients, besides the RESTful one.  That is why it needs to manage the notion of identity.  Whereas, in the store example, if Riak is exposed to the client directly without a middleware, chances are, that Riak database is meant only for the RESTful client.</p>
+
+<p>Here is a additional example taken directly from the <a href="http://docs.basho.com/riak/latest/dev/references/http/store-object/">Riak documentation</a> that also illustrates the point that when a client is providing an <code class="highlighter-rouge">ID</code>, the request should be a <code class="highlighter-rouge">PUT</code>, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the <code class="highlighter-rouge">ID</code> to the client, and of course this request is a <code class="highlighter-rouge">POST</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT /buckets/bucket/keys/key    # User-defined key
+POST /buckets/bucket/keys       # Riak-defined key
+</code></pre></div></div>
+
+<p>As always, please feel free to comment on this post or email me with any comments, questions, or concerns.</p>
+
+<p>Thanks for reading.</p>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/';
+        this.page.identifier = 'https://blue64.net/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2012/03/webview-javascript-native-android/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> WebView(Javascript) -&gt; Native Android API
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2013/12/notes-from-a-talk-on-evolving-java/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Notes from a Talk on Evolving Java
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

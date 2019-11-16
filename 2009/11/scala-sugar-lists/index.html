@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Scala Sugar - Lists | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Scala Sugar - Lists" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm." />
+<meta property="og:description" content="If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm." />
+<link rel="canonical" href="https://blue64.net/2009/11/scala-sugar-lists/" />
+<meta property="og:url" content="https://blue64.net/2009/11/scala-sugar-lists/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2009-11-21T16:01:58-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2009-11-21T16:01:58-05:00","datePublished":"2009-11-21T16:01:58-05:00","url":"https://blue64.net/2009/11/scala-sugar-lists/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2009/11/scala-sugar-lists/"},"author":{"@type":"Person","name":"Steven Levine"},"description":"If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Scala Sugar - Lists","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  scala-sugar-lists">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+      
+        <div class="site-title animated fadeIn"><a href="/">Steven Levine</a></div>
+      
+      <p class="site-description animated fadeIn" itemprop="description">Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</p>
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Scala Sugar - Lists
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">2 min read</span>
+
+    <time class="page-date dt-published" datetime="2009-11-21T16:01:58-05:00"><a class="u-url" href="">November 21, 2009</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#scala" title="Pages tagged Scala" rel="tag">Scala</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <p>If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm.</p>
+
+<p>Of course, learning a new programming paradigm is not going to happen over night, it is going to take a bit of time. Over the course of the next few months, I am going to be posting a series of posts documenting my progress learning Scala. They will be written from the perspective of a “hardcore” Java programmer being enlightened by a sweet new language. I will write about all of the “sugar” Scala has to offer a Java programmer, and that is how I came up with title “Scala Sugar”.</p>
+
+<p>In this first installment of Scala Sugar lets discuss one of the most fundamental concepts required to write any non-trivial program, namely Lists. For the longest time, Lists in Java didn’t bother me at all, as they seemed “normal” to me. That was until I was introduced to dynamic languages a few years back. Now, Lists in Java seem extremely verbose to me as I wonder why in Java you can’t just create and populate a list with a single line of code. Lets look at our first Java vs Scala comparison.</p>
+
+<p>Lets create a trivial list of three lowercase strings.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="nc">List</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;</span> <span class="n">l</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ArrayList</span><span class="o">&lt;</span><span class="nc">String</span><span class="o">&gt;();</span>
+<span class="n">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"a"</span><span class="o">);</span>
+<span class="n">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"b"</span><span class="o">);</span>
+<span class="n">l</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"c"</span><span class="o">);</span>
+</code></pre></div></div>
+<p>In Java it takes a minimum of 6 lines of code to declare a list of 3 strings!
+Now lets declare the same list in Scala.</p>
+
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">val</span> <span class="nv">l</span> <span class="k">=</span> <span class="nc">List</span><span class="o">(</span><span class="s">"a"</span><span class="o">,</span> <span class="s">"b"</span><span class="o">,</span> <span class="s">"c"</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>Thats it, one line of code! The most important things to pay attention to are:</p>
+
+<ul>
+  <li>No need to import List in Scala, as most fundamental classes are imported by default in Scala</li>
+  <li>You do not have to give ‘l’ a type in Scala. Scala uses Type inference which means that it can infer its type from the object it is pointing to. It is important to realize that Scala is statically typed, it just doesn’t require you to type your variables when you define them. The compiler is smart enough to figure it out.</li>
+  <li>You can construct a list with elements in Scala, no need to “add” each element separately.</li>
+</ul>
+
+<p>Even in this trivial example, you can start to see how clean and concise Scala is.</p>
+
+<p>In my next post we will explore different ways to iterate over the lists.</p>
+
+<p><strong>References</strong></p>
+
+<ul>
+  <li>The code found in this post is hosted at <a href="http://github.com/slevine/scala-training">github.com</a> along with other sample Scala code.</li>
+</ul>
+
+        </div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://blue64.net/2009/11/scala-sugar-lists/';
+        this.page.identifier = 'https://blue64.net/2009/11/scala-sugar-lists/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2009/11/scala-reduceleft/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Scala reduceLeft
+
+      </span>
+    </a>
+  
+
+  
+    <a class="page-next" href="/2009/11/scala-sugar-iteration/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        Scala Sugar - Iteration
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

@@ -23,14 +23,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature." />
 <meta property="og:description" content="In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature." />
-<link rel="canonical" href="https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/" />
-<meta property="og:url" content="https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/" />
+<link rel="canonical" href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
+<meta property="og:url" content="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
 <meta property="og:site_name" content="Steven Levine" />
-<meta property="og:image" content="https://blue64.net/images/taxi.jpg" />
+<meta property="og:image" content="https://stevenlevine.dev/images/taxi.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-11-14T17:03:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","url":"https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://blue64.net/images/taxi.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://blue64.net/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Querying External Data with BigQuery","@context":"https://schema.org"}</script>
+{"dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","url":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/taxi.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Querying External Data with BigQuery","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -130,7 +130,7 @@
             <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
           </li>
 <li class="author-link">
-            <a class="u-url" rel="me" href="https://twitter.com/blue64"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+            <a class="u-url" rel="me" href="https://twitter.com/_stevenlevine"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
           </li>
 <li class="author-link">
             <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
@@ -390,10 +390,10 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
         
           <div class="page-share">
-  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
-  <a href="https://twitter.com/intent/tweet?text=Querying+External+Data+with+BigQuery%20https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
-  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
-  <a href="https://reddit.com/submit?title=Querying+External+Data+with+BigQuery&amp;url=https%3A%2F%2Fblue64.net%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Querying+External+Data+with+BigQuery%20https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=Querying+External+Data+with+BigQuery&amp;url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
 </div>
 
         
@@ -404,8 +404,8 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
     <div id="disqus_thread"></div>
     <script>
       var disqus_config = function () {
-        this.page.url = 'https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/';
-        this.page.identifier = 'https://blue64.net/2019/11/querying-externally-partitioned-data-with-bq/';
+        this.page.url = 'https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/';
+        this.page.identifier = 'https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/';
       };
 
       (function() {

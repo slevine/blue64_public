@@ -21,8 +21,8 @@
 <meta property="og:title" content="Querying External Data with BigQuery" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitoned Parquet files on GCS. It is a really cool feature." />
-<meta property="og:description" content="In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature." />
+<meta name="description" content="In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature." />
+<meta property="og:description" content="In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature." />
 <link rel="canonical" href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
 <meta property="og:url" content="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
 <meta property="og:site_name" content="Steven Levine" />
@@ -30,7 +30,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-11-14T17:03:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","url":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/taxi.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Querying External Data with BigQuery","@context":"https://schema.org"}</script>
+{"dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","url":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/taxi.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"Querying External Data with BigQuery","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -168,18 +168,18 @@
       <div class="page-content">
         <div class="e-content">
           <blockquote>
-  <p>TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitoned Parquet files on GCS.  It is a really cool feature.</p>
+  <p>TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS.  It is a really cool feature.</p>
 </blockquote>
 
 <h3 id="some-background">Some Background</h3>
 
 <p>I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable of querying cloud object stores like Spark, Presto, Hive, Drill, among others.  With that being said, when Google Cloud announced that <a href="https://cloud.google.com/blog/products/data-analytics/keep-parquet-and-orc-from-the-data-graveyard-with-new-bigquery-features">BigQuery has beta support for querying Parquet and ORC files in Google Cloud Storage</a>, it really peaked my curiosity.  Thus, had no choice but to find a large dataset in Parquet format and try to query it with BigQuery.  Sounds easy enough, right?</p>
 
-<p>To get started, I needed to find a large Hive Partitioned Dataset to use.  After some quick digging and searching, I wasn’t able to find one so the only logical thing to do was to create my own.  One of my favorate features of BigQuery is the fact that it has tons of public datasets available to use for these sort of things.  Being that I spend most of my days working in NYC, I have always found the NYC Taxi Data particularly interesting, so thought why not start there?  For reference, the name of the dataset is <a href="https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-tlc-trips?filter=solution-type:dataset&amp;q=taxi&amp;id=e4902dee-0577-42a0-ac7c-436c04ea50b6"><code class="highlighter-rouge">bigquery-public-data:new_york_taxi_trips</code></a>.  This Dataset contains taxi rides paritioned by taxi company and year.  For the purposes of this post, I will be using <code class="highlighter-rouge">tlc_yellow_trips_2018</code> table because it is the most recent and has nearly 18GBs of raw data.</p>
+<p>To get started, I needed to find a large Hive Partitioned Dataset to use.  After some quick digging and searching, I wasn’t able to find one so the only logical thing to do was to create my own.  One of my favorite features of BigQuery is the fact that it has tons of public datasets available to use for these sort of things.  Being that I spend most of my days working in NYC, I have always found the NYC Taxi Data particularly interesting, so thought why not start there?  For reference, the name of the dataset is <a href="https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-tlc-trips?filter=solution-type:dataset&amp;q=taxi&amp;id=e4902dee-0577-42a0-ac7c-436c04ea50b6"><code class="highlighter-rouge">bigquery-public-data:new_york_taxi_trips</code></a>.  This Dataset contains taxi rides partitioned by taxi company and year.  For the purposes of this post, I will be using <code class="highlighter-rouge">tlc_yellow_trips_2018</code> table because it is the most recent and has nearly 18GBs of raw data.</p>
 
-<h3 id="creating-hive-partitioned-data-on-gcs-using-spark-and-bigquery">Creating Hive Partitioned Data on GCS using Spark and BigQuery</h3>
+<h3 id="creating-hive-partitioned-data-in-gcs-using-spark-and-bigquery">Creating Hive Partitioned Data in GCS using Spark and BigQuery</h3>
 
-<p>With an interesting table in mind, the next step is to create an Hive Partitioned version of it on Google Cloud Storage in the Parquet format.  There are countless ways to handle this, again for the purposes of this post, I decided to use a simple Spark Shell script running on a Cloud DataProc cluster.</p>
+<p>With an interesting table in mind, the next step is to create a Hive Partitioned version of it on Google Cloud Storage in the Parquet format.  There are countless ways to handle this, again for the purposes of this post, I decided to use a simple Spark Shell script running on a Cloud DataProc cluster.</p>
 
 <p>The first step is to spin up a Cloud DataProc cluster using the <code class="highlighter-rouge">glcoud</code> command line:</p>
 
@@ -196,17 +196,17 @@
     <span class="nt">--project</span> <span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>
 </code></pre></div></div>
 
-<p>The above command will spin up 3 node cluster each having 4 vCPUs and 15GBs of memory providng YARN with 8 cores and 24GBs of memory. This seems like more than enough horsepower for the task.  Once the cluster is operational, <code class="highlighter-rouge">ssh</code> in with the following command:</p>
+<p>The above command will spin up 3 node cluster each having 4 vCPUs and 15GBs of memory providing YARN with 8 cores and 24GBs of memory. This seems like more than enough horsepower for the task.  Once the cluster is operational, <code class="highlighter-rouge">ssh</code> in with the following command:</p>
 
 <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gcloud compute ssh ${HOSTNAME} --project=${PROJECT_ID} --zone=${ZONE} 
 </code></pre></div></div>
 
-<p>Once in, need to spin up Spark Shell, but with one cavet, namely adding the <a href="https://github.com/GoogleCloudPlatform/spark-bigquery-connector">spark-bigquery-connector</a> to its enviorment.  This is necessary in order to leverage the latest and greatest Big Query Storage APIs.  The final command is:</p>
+<p>Once in, need to spin up Spark Shell, but with one caveat, namely adding the <a href="https://github.com/GoogleCloudPlatform/spark-bigquery-connector">spark-bigquery-connector</a> to its environment.  This is necessary in order to leverage the latest and greatest Big Query Storage APIs.  The final command is:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>spark-shell <span class="nt">--jars</span> gs://spark-lib/bigquery/spark-bigquery-latest.jar 
 </code></pre></div></div>
 
-<p>Once in, it is easy to start exploring the data to figure out the best way to partition data.  After a bit of review, I decided the most logical way to partition it is by ride date.  There are two fields that can be used to achieve this, either <code class="highlighter-rouge">pickup_datetime</code> or <code class="highlighter-rouge">dropoff_datetime</code>. I decided to use <code class="highlighter-rouge">pickup_datetime</code> taking in to account that some rides may start one day and end another day, I.e, 11.45p to 12.30a, these rides will be counted on the day they originated.  There is one wrinkle in this decision, namely, the spark-bigquery-connector doesn’t have a native type to cast BigQuery’s <code class="highlighter-rouge">DATETIME</code> into so it simply casts it in to a <code class="highlighter-rouge">STRING</code>, which is not very useful as a partition key.  Thus, custom code is needed to perform the cast from a <code class="highlighter-rouge">DATETIME</code> in to a <code class="highlighter-rouge">DATE</code>.  The final code looks something like:</p>
+<p>Once in, it is easy to start exploring the data to figure out the best way to partition data.  After a bit of review, I decided the most logical way to partition it is by ride date.  There are two fields that can be used to achieve this, either <code class="highlighter-rouge">pickup_datetime</code> or <code class="highlighter-rouge">dropoff_datetime</code>. I decided to use <code class="highlighter-rouge">pickup_datetime</code> taking into account that some rides may start one day and end another day, I.e, 11.45p to 12.30a, these rides will be counted on the day they originated.  There is one wrinkle in this decision, namely, the spark-bigquery-connector doesn’t have a native type to cast BigQuery’s <code class="highlighter-rouge">DATETIME</code> into so it simply casts it in to a <code class="highlighter-rouge">STRING</code>, which is not very useful as a partition key.  Thus, custom code is needed to perform the cast from a <code class="highlighter-rouge">DATETIME</code> in to a <code class="highlighter-rouge">DATE</code>.  The final code looks something like:</p>
 
 <div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">spark</span><span class="o">.</span><span class="py">read</span><span class="o">.</span><span class="py">format</span><span class="o">(</span><span class="s">"bigquery"</span><span class="o">)</span>
     <span class="o">.</span><span class="py">option</span><span class="o">(</span><span class="s">"table"</span><span class="o">,</span> <span class="s">"bigquery-public-data:new_york_taxi_trips.tlc_yellow_trips_2018"</span><span class="o">)</span>
@@ -237,7 +237,7 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
 <h3 id="create-an-external-table-in-bigquery">Create an External Table in BigQuery</h3>
 
-<p>Now that we have a sample Hive Partitoined dataset in GCS to work with, let’s set it up as an external table in BigQuery.  To get started, an external table definition needs to be created.  Here is the command to create it:</p>
+<p>Now that we have a sample Hive Partitioned dataset in GCS to work with, let’s set it up as an external table in BigQuery.  To get started, an external table definition needs to be created.  Here is the command to create it:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bq mkdef <span class="se">\</span>
     <span class="nt">--source_format</span><span class="o">=</span>PARQUET <span class="se">\</span>
@@ -260,12 +260,12 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div></div>
 
-<p>With the defintion file in hand, the next step is to create the external table in BigQuery.  This can be accomplished with the following command:</p>
+<p>With the definition file in hand, the next step is to create the external table in BigQuery.  This can be accomplished with the following command:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bq mk <span class="nt">--external_table_definition</span><span class="o">=</span>taxi-table-def <span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>:nyc_taxi.2018_external
 </code></pre></div></div>
 
-<p><em>Note: This assumes you already have a Dataset named <code class="highlighter-rouge">nyc_taxi</code>, if you don’t now would be a great time to create it, or change the above command to match the name of the Dataset you want to add the external table reference to.</em></p>
+<p><em>Note: This assumes you already have a Dataset named <code class="highlighter-rouge">nyc_taxi</code>, if you don’t, now would be a great time to create it, or change the above command to match the name of the Dataset you want to add the external table reference to.</em></p>
 
 <p>After running the above, you should get a message saying <code class="highlighter-rouge">Table '${PROJECT_ID}:nyc_taxi.2018_external' successfully created.</code></p>
 
@@ -273,7 +273,7 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
 <h3 id="query-a-bigquery-external-table">Query a BigQuery External Table</h3>
 
-<p>The final (and easist) step is to query the Hive Partitioned Parquet files which requires nothing special at all.  The query semantics for an external table are exactly the same as querying a normal table.</p>
+<p>The final (and easiest) step is to query the Hive Partitioned Parquet files which requires nothing special at all.  The query semantics for an external table are exactly the same as querying a normal table.</p>
 
 <p>Let’s run a few queries to validate that things are working as they should.</p>
 
@@ -301,7 +301,7 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
 <p><img src="/images/querying-externally-partitioned-data-with-bq_1.png" alt="BigQuery Execution Details"></p>
 
-<p>we can see that the query started with the full <code class="highlighter-rouge">8,760,090</code> rows, and narrowed down to <code class="highlighter-rouge">217</code>. This number is not random, it maps directly to the number of files that existd on GCS.  Lets verify:</p>
+<p>we can see that the query started with the full <code class="highlighter-rouge">8,760,090</code> rows, and narrowed down to <code class="highlighter-rouge">217</code>. This number is not random, it maps directly to the number of files that exist in GCS.  Lets verify:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ gsutil <span class="nb">ls </span>gs://<span class="k">${</span><span class="nv">PROJET_ID</span><span class="k">}</span>/new-york-taxi-trips/yellow/2018/trip_date<span class="o">=</span>2018-01<span class="se">\*</span> | <span class="nb">grep </span>parquet | <span class="nb">wc
      </span>217     217   27342
@@ -317,7 +317,7 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
 <p>Again, as expected, the number of bytes processed was narrowed down (2.2 GB vs 20.9 GB).</p>
 
-<p>Another great feature of an external table is that you can join it with any other table, external or not, thus it makes querying external Parquet files seemless.</p>
+<p>Another great feature of an external table is that you can join it with any other table, external or not, thus it makes querying external Parquet files seamless.</p>
 
 <div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">SELECT</span>
   <span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">AS</span> <span class="n">total_trips</span><span class="p">,</span>

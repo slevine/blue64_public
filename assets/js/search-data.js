@@ -225,7 +225,7 @@ var store = [{
         "url": "https://stevenlevine.dev/2018/02/the-power-of-bq/"
       },{
         "title": "Querying External Data with BigQuery",
-        "excerpt":"TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Parquet files on GCS. It is a really cool feature. Some Background I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable of querying...","categories": [],
+        "excerpt":"TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature. Some Background I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable...","categories": [],
         "tags": ["GCP","BigQuery","Spark","BigData"],
         "url": "https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"
       }]

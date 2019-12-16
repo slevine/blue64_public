@@ -72,3 +72,71 @@ appending to this document.
 View my publicly-auditable identity here: https://keybase.io/stevelevine
 
 ==================================================================
+==================================================================
+https://keybase.io/stevelevine
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://stevenlevine.dev
+  * I am stevelevine (https://keybase.io/stevelevine) on keybase.
+  * I have a public key with fingerprint A4D5 89E2 503C 5061 913D  3599 2670 0D7B F029 5495
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0101ced4d98994435b3d97982b01305a907a88a06ac515968d8953b0c6f452a890ce0a",
+      "fingerprint": "a4d589e2503c5061913d359926700d7bf0295495",
+      "host": "keybase.io",
+      "key_id": "26700d7bf0295495",
+      "kid": "0101ced4d98994435b3d97982b01305a907a88a06ac515968d8953b0c6f452a890ce0a",
+      "uid": "7c718531e3d441905855853c316f1300",
+      "username": "stevelevine"
+    },
+    "service": {
+      "hostname": "stevenlevine.dev",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 1
+  },
+  "ctime": 1576463607,
+  "expire_in": 157680000,
+  "prev": "466d29dd963c8297a248fe4bbfc21247d13279600ab869f61d04f7f3f0486e69",
+  "seqno": 13,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.1.3
+Comment: https://keybase.io/crypto
+
+yMIoAnicrVJrSBVBFL7X7HVLsqIoEoJVIcpqdmdnduemQYWKBgWJiVjddndmvUvX
+3dvevdcuZUQPCpKIfhUZkRVGlCJFD4mw0JKkRPthaNHrRw+EoqIHBTWrBf3oZ8PA
+MOd833e+czhdWeMCoSArC87d0bN4U7D31slkYOPnkS/bBd2haSG8XdjCRh8Woyzh
+RbZYVAgLQASiwahMiUqILEOkQ0oUoko6ECFAGgGKpqoawJqBRESwSlWCoA4MbMpI
+0lQCDAY0oUAwLbuWuXHXsj0uq8kUqYRJCEADASwSEVKICJGwAgBVdBNIBMkEcWLU
+SfgMbk7XEmyJ5fAY/0RG7f0D/599J0flFEMRVQRFBqksiwQgFfELDShik+sBH5hg
+rq3VMY5OeCzFYixl2UxoKBB4ImUZzJ+t38zfIHsMtYSyFJeIu47nGE6MZ6OeF0+E
+fbaXjvvweqZHfgtFdMumfJyckWJuwnJsISxypOFZvrKIFCxjiIFSILBtcctlEcse
+C6uAH78OLxcWZIypRCglGBqqRBRNklWTybpuGpIoyQoVoaQQDICmq5iYWKRANhUT
+mkBWMcNE8FvbajtcG3KfWq3flVVra17S5Y3f7tyQGQiGAhPGZ/h7FghNzv6zfaWD
+kwL74i1vuhrQ++rntGehfW361w9H+vLfFtZPTY+Unx7IWt38fXNdKHeg/8eBxsu4
+7/PTjBUf1HPC/Ue708Fj7VXZDwpbpt26/XF8Y9HVjp9dBy83HRkwuzta1oXllbNf
+VngVQ1npZcsrSdSdU/mxMjN2Zs3515eeD668E4uOPLm+4l7p/YmtCD2cPbHG/Lrs
+Z9PhnAVD8+b1L2pvTuwps4ofZex72dvWWJ5XO6tz6ZWjJbDk04v8/GSkba7Wcipn
+ffG2gw1r9rYG8mA3Mi6eqHEm7HJBdZ0+PGnG47Ov3jXvlOLHL8y/21M5ubCZ5t6Y
+UrS2qV5Y9Wxm9v68qujNw9+Gg+WH8C+WHTry
+=ljy0
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/stevelevine
+
+==================================================================

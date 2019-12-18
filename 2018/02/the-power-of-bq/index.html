@@ -155,7 +155,7 @@
 
 <h3 id="background">Background</h3>
 
-<p>Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Cleary, won’t be able to click my way through enough repos to get a clear respresentation, so I had to figure out a way to find some hard numbers to answer my question.</p>
+<p>Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Clearly, won’t be able to click my way through enough repos to get a clear representation, so I had to figure out a way to find some hard numbers to answer my question.</p>
 
 <h3 id="first-attempt">First Attempt</h3>
 
@@ -163,7 +163,7 @@
 
 <h3 id="the-solution">The Solution</h3>
 
-<p>Soon after this, I remembered that <a href="https://cloud.google.com/bigquery/">Big Query</a> has <a href="https://cloud.google.com/bigquery/public-data/">public datasets</a> available for all to use <em>(for free)</em>, and decdied to take a quick peek to see if the <a href="https://cloud.google.com/bigquery/public-data/github">GitHub dataset</a> was there, and sure enough, it was. Great.  After some exploring around the <code class="highlighter-rouge">github_repos</code> dataset, was able to find a table called <code class="highlighter-rouge">files</code> which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located wihin a project and then do a simple count.  After a quick browse around the tables, was able to find the <em>files</em> table and it had the following shape:</p>
+<p>Soon after this, I remembered that <a href="https://cloud.google.com/bigquery/">Big Query</a> has <a href="https://cloud.google.com/bigquery/public-data/">public datasets</a> available for all to use <em>(for free)</em>, and decided to take a quick peek to see if the <a href="https://cloud.google.com/bigquery/public-data/github">GitHub dataset</a> was there, and sure enough, it was. Great.  After some exploring around the <code class="highlighter-rouge">github_repos</code> dataset, was able to find a table called <code class="highlighter-rouge">files</code> which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located within a project and then do a simple count.  After a quick browse around the tables, was able to find the <em>files</em> table and it had the following shape:</p>
 
 <table>
   <tbody>
@@ -277,7 +277,7 @@
   </tbody>
 </table>
 
-<p>There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. <sup><a href="#dataFootnote1">1</a></sup>  If I was going to take this experiemnt to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.</p>
+<p>There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. <sup><a href="#dataFootnote1">1</a></sup>  If I was going to take this experiment to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.</p>
 
 <blockquote>
   <p>The great thing about using Big Query with public datasets is the fact that there is no ETL required.</p>
@@ -289,7 +289,7 @@
 
 <h5 id="notes">Notes</h5>
 
-<p><a name="dataFootnote1">1</a><em>: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiement.</em></p>
+<p><a name="dataFootnote1">1</a><em>: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiment.</em></p>
 
 <p><a name="dataFootnote2">2</a><em>: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.</em></p>
 

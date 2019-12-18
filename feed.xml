@@ -1,4 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2019-11-17T22:31:59-05:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">Querying External Data with BigQuery</title><link href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" rel="alternate" type="text/html" title="Querying External Data with BigQuery" /><published>2019-11-14T17:03:00-05:00</published><updated>2019-11-14T17:03:00-05:00</updated><id>https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq</id><content type="html" xml:base="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2019-12-18T11:54:48-05:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">BigQuery Integer Partitioning is in Beta</title><link href="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" rel="alternate" type="text/html" title="BigQuery Integer Partitioning is in Beta" /><published>2019-12-16T14:03:00-05:00</published><updated>2019-12-16T14:03:00-05:00</updated><id>https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta</id><content type="html" xml:base="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/">&lt;blockquote&gt;
+  &lt;p&gt;TLDR - It is now possible to create integer partitioned tables in BigQuery.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;If you weren’t paying close attention to the latest GCP announcements, you may have missed the announcement of  &lt;a href=&quot;https://cloud.google.com/bigquery/docs/creating-integer-range-partitions&quot;&gt;BigQuery Integer Range Partitioning is now in Beta&lt;/a&gt;.  This is a long awaited feature for teams that wish to partition their data by a value other than a &lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt;.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
+
+&lt;h3 id=&quot;creating-an-integer-range-partitioned-table&quot;&gt;Creating an Integer Range Partitioned Table&lt;/h3&gt;
+
+&lt;p&gt;For the purposes of this post, I will be using the same NYC Taxi Ride dataset that I used &lt;a href=&quot;https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/&quot;&gt;in my previous post&lt;/a&gt;. Let’s create  an integer range partitioned table based on the &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;.  Creating this table is no different from creating any other table except for the fact that you have to add &lt;code class=&quot;highlighter-rouge&quot;&gt;--range_partitioning&lt;/code&gt; with a partition range when calling &lt;code class=&quot;highlighter-rouge&quot;&gt;bq mk&lt;/code&gt;.  The first parameter represents the lower end of the range, the second the high end, and the last one represents the bucketing interval.  &lt;em&gt;The example command below creates 60 buckets of 5.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;bq&lt;/code&gt; cli, you can create an Integer Range partitioned table using the following command:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ bq mk &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;--range_partitioning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;pickup_location_id,0,300,5 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  nyc_taxi.2018_by_pickup_location_id  &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;s2&quot;&gt;&quot;vendor_id: string, pickup_datetime: string, dropoff_datetime: string, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+     passenger_count: integer, trip_distance: numeric, rate_code: string, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+     store_and_fwd_flag: string, payment_type: string, fare_amount: numeric, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+     extra: numeric, mta_tax: numeric, tip_amount: numeric, tolls_amount: numeric, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+     imp_surcharge: numeric, total_amount: numeric, pickup_location_id: integer, &lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;
+     dropoff_location_id: string, trip_date: date&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After running the command, you should see:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Table &lt;span class=&quot;s1&quot;&gt;'nyc_taxi.2018_by_pickup_location_id'&lt;/span&gt; successfully created.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s double check to make sure our table is partitioned as we expect. To do so, we can query the meta data of the table using the &lt;code class=&quot;highlighter-rouge&quot;&gt;bq&lt;/code&gt; command again:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ bq show &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;prettyjson nyc_taxi.2018_by_pickup_location_id | jq .rangePartitioning
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;em&gt;Note: If you don’t have &lt;a href=&quot;https://github.com/stedolan/jq&quot;&gt;jq&lt;/a&gt; installed, you should install it RIGHT NOW, as it is the most useful tool you will ever install when working with json in bash.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;And we get:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;field&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;pickup_location_id&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;range&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;end&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;300&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;interval&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;5&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;start&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;0&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Great, our table is partitioned by &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
+
+&lt;h3 id=&quot;loading-data-in-to-the-table&quot;&gt;Loading Data in to the Table&lt;/h3&gt;
+
+&lt;p&gt;Loading the data in to our newly created table is very straight forward– there are no special requirements when loading data.  The data will automatically be partitioned when using load jobs, queries, as well as streaming inserts.  For simplicity, we can load data in to the table using a simple &lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt; statement:&lt;/p&gt;
+
+&lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nyc_taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2018&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_by_pickup_location_id&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nyc_taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2018&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;query-performance&quot;&gt;Query Performance&lt;/h3&gt;
+
+&lt;p&gt;For the purposes of this post, let’s assume the metric we are trying to calculate is total revenue grouped by &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;, i.e, Upper East Side South, Midtown East, Newark Airport, etc..  With that being said, If we run this query against our original date partitioned table, it is safe to assume the performance would be less than ideal due to the fact that we do not have a way to filter out locations that do not pertain to our aggregation.&lt;/p&gt;
+
+&lt;p&gt;Here is what it looks like when I try to run the aggregation against the &lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt; partitioned version of the table.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-date-partitioned.png&quot; alt=&quot;int-partitioning-query-table-date-partitioned&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;You can see right away that it scanned a lot more data than necessary, as we are only looking for data pertaining to &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; 237.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-date-partitioned-execution.png&quot; alt=&quot;int-partitioning-query-table-date-partitioned-execution&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;From the execution details we can see that it did in fact have to parse the entire dataset &lt;em&gt;(112,333,368 records)&lt;/em&gt;.  Clearly this is not the most efficient way to get the aggregation, but before the introduction of Integer based partitioning it was the only way.&lt;/p&gt;
+
+&lt;p&gt;Now, if we run the same query against a table that is partitioned on &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The results of the query are the same, but as you can see the number of bytes scanned has dropped to only &lt;code class=&quot;highlighter-rouge&quot;&gt;317 MB&lt;/code&gt; vs &lt;code class=&quot;highlighter-rouge&quot;&gt;2.5 GB&lt;/code&gt; which is a huge improvement.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-execution.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-execution&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Once again, looking at the execution details, as expected, we can see that the number of records processed has dropped to &lt;em&gt;13,891,961 records&lt;/em&gt;. This is great, but I think we can do better.&lt;/p&gt;
+
+&lt;p&gt;As you can see, the total number of trips is &lt;em&gt;4,631,835&lt;/em&gt;, yet we scanned almost 3 times as many records. Why is this?  If we reconsider the number we used to bucket the partitions by, namely, &lt;strong&gt;5&lt;/strong&gt;, that means each bucket will have 5 different pickup locations. From the analysis, it is clear that there is a “hotspot” near id 237 that we need to fix, but how?  It is quite easy, if we recreate the table bucketed by 1 instead of 5, meaning, each id gets its own bucket that should allow BigQuery the ability to pull records for a single id.  This can easily be achieved by changing the above create table from:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;--range_partitioning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;pickup_location_id,0,300,5
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;-to-&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;--range_partitioning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;pickup_location_id,0,300,1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Let’s run the query again on the new table:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-bucket-by-1.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-bucket-by-1&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Great, the number of bytes scanned has gone down even further to &lt;code class=&quot;highlighter-rouge&quot;&gt;106 MB&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-bucket-by-1-execution.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-bucket-by-1-execution&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;From the execution details, we can see that the number of records scanned matches the total number of trips exactly, which means that this time when performing the aggregation, we only processed records with the matching id, which is exactly what you want to do when trying to design the most efficient partitioning strategy.  Clearly when deciding on a partitioning strategy an important factor to consider, among many, is at what granularity to bucket the partition.  There is no silver bullet here, as everyone has different query requirements.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Note: if you compare the execution times of the queries for the examples, even though the “less efficient” query scanned the entire dataset, the actual runtime of the query is comparable &lt;strong&gt;which is remarkable&lt;/strong&gt;.  The introduction of Integer based partitioning will mostly help the budget in these situations, I.e., less bytes scanned.&lt;/p&gt;
+
+  &lt;p&gt;This dataset was only 21GB (which is not very large.) As a result the query times seem comparable. However, if we were running these queries against huge data sets, think IOT time series data, it would be a very different result.  In that case, being able to narrow the dataset down to a &lt;code class=&quot;highlighter-rouge&quot;&gt;sensor_id&lt;/code&gt;’s worth of data vs scanning the entire dataset will make a huge difference.&lt;/p&gt;
+&lt;/blockquote&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/ues.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/ues.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Querying External Data with BigQuery</title><link href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" rel="alternate" type="text/html" title="Querying External Data with BigQuery" /><published>2019-11-14T17:03:00-05:00</published><updated>2019-11-14T17:03:00-05:00</updated><id>https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq</id><content type="html" xml:base="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS.  It is a really cool feature.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -221,7 +326,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;h3 id=&quot;background&quot;&gt;Background&lt;/h3&gt;
 
-&lt;p&gt;Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Cleary, won’t be able to click my way through enough repos to get a clear respresentation, so I had to figure out a way to find some hard numbers to answer my question.&lt;/p&gt;
+&lt;p&gt;Late one Sunday afternoon, I found myself browsing around a few high profile JVM projects on GitHub and noticed that they all used different build tools.  The build tools were spread across Gradle, Maven, and SBT.  After seeing this, started wondering what the actual distribution was for the different build tools on GitHub.  Clearly, won’t be able to click my way through enough repos to get a clear representation, so I had to figure out a way to find some hard numbers to answer my question.&lt;/p&gt;
 
 &lt;h3 id=&quot;first-attempt&quot;&gt;First Attempt&lt;/h3&gt;
 
@@ -229,7 +334,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
 
-&lt;p&gt;Soon after this, I remembered that &lt;a href=&quot;https://cloud.google.com/bigquery/&quot;&gt;Big Query&lt;/a&gt; has &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/&quot;&gt;public datasets&lt;/a&gt; available for all to use &lt;em&gt;(for free)&lt;/em&gt;, and decdied to take a quick peek to see if the &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/github&quot;&gt;GitHub dataset&lt;/a&gt; was there, and sure enough, it was. Great.  After some exploring around the &lt;code class=&quot;highlighter-rouge&quot;&gt;github_repos&lt;/code&gt; dataset, was able to find a table called &lt;code class=&quot;highlighter-rouge&quot;&gt;files&lt;/code&gt; which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located wihin a project and then do a simple count.  After a quick browse around the tables, was able to find the &lt;em&gt;files&lt;/em&gt; table and it had the following shape:&lt;/p&gt;
+&lt;p&gt;Soon after this, I remembered that &lt;a href=&quot;https://cloud.google.com/bigquery/&quot;&gt;Big Query&lt;/a&gt; has &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/&quot;&gt;public datasets&lt;/a&gt; available for all to use &lt;em&gt;(for free)&lt;/em&gt;, and decided to take a quick peek to see if the &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/github&quot;&gt;GitHub dataset&lt;/a&gt; was there, and sure enough, it was. Great.  After some exploring around the &lt;code class=&quot;highlighter-rouge&quot;&gt;github_repos&lt;/code&gt; dataset, was able to find a table called &lt;code class=&quot;highlighter-rouge&quot;&gt;files&lt;/code&gt; which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located within a project and then do a simple count.  After a quick browse around the tables, was able to find the &lt;em&gt;files&lt;/em&gt; table and it had the following shape:&lt;/p&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
@@ -343,7 +448,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
   &lt;/tbody&gt;
 &lt;/table&gt;
 
-&lt;p&gt;There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. &lt;sup&gt;&lt;a href=&quot;#dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;  If I was going to take this experiemnt to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.&lt;/p&gt;
+&lt;p&gt;There you have it, based on the data in this dataset, Maven out numbers SBT and Gradle. &lt;sup&gt;&lt;a href=&quot;#dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;  If I was going to take this experiment to the next level, I would take this data and join it with the repository’s most prevalent language, meaning, Java, Scala, etc.. to be able to say which build tool is most often used for which language.&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;The great thing about using Big Query with public datasets is the fact that there is no ETL required.&lt;/p&gt;
@@ -355,7 +460,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;h5 id=&quot;notes&quot;&gt;Notes&lt;/h5&gt;
 
-&lt;p&gt;&lt;a name=&quot;dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;em&gt;: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiement.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a name=&quot;dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;em&gt;: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiment.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a name=&quot;dataFootnote2&quot;&gt;2&lt;/a&gt;&lt;em&gt;: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.&lt;/em&gt;&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">If you are looking for an easy way to query a public dataset you should definitely check out Big Query's publicly available datasets.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/github.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/github.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Notes from a Talk on Evolving Java</title><link href="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/" rel="alternate" type="text/html" title="Notes from a Talk on Evolving Java" /><published>2013-12-02T22:03:00-05:00</published><updated>2013-12-02T22:03:00-05:00</updated><id>https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java</id><content type="html" xml:base="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/">&lt;p&gt;Recently I attended a talk given by &lt;a href=&quot;https://twitter.com/@briangoetz&quot;&gt;Brian Goetz&lt;/a&gt;, about evolving Java.  It was refreshing to hear that Java is moving forward again from the Java Language architect himself.  Like others, I have mixed feeling about how some of the features were added to the language, but overall, after hearing Brian’s talk, Java is getting the attention it needs to “keep up”.&lt;/p&gt;
 
@@ -1024,74 +1129,4 @@ POST /buckets/bucket/keys       # Riak-defined key
 &lt;span class=&quot;n&quot;&gt;max_time&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Thats it, you should be able to debug your Rails/Ruby code in RubyMine without issues.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Howto" /><category term="Ruby" /><summary type="html">If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the ruby-debug-ide19 gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.</summary></entry><entry><title type="html">With Grape, Groovy Is On Par with Native Scripting Languages</title><link href="https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/" rel="alternate" type="text/html" title="With Grape, Groovy Is On Par with Native Scripting Languages" /><published>2009-12-24T14:31:36-05:00</published><updated>2009-12-24T14:31:36-05:00</updated><id>https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages</id><content type="html" xml:base="https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/">&lt;p&gt;If you haven’t heard, the latest version of Groovy was &lt;a href=&quot;http://docs.codehaus.org/display/GROOVY/Groovy+1.7+release+notes&quot;&gt;released&lt;/a&gt; this week and included with it, among many other great features, was &lt;a href=&quot;http://groovy.codehaus.org/Grape&quot;&gt;Grape&lt;/a&gt; (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.&lt;/p&gt;
-
-&lt;p&gt;If Grape doesn’t use a build file, how does it know what dependencies are necessary to run the code? Does it figure it out for you on the fly? Unfortunately, it is not that smart (yet), perhaps the next release. If it doesn’t figure it out for you, then how do you specify your dependencies? You configure your dependencies by using the&lt;code class=&quot;highlighter-rouge&quot;&gt;@Grapes&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;@Grab&lt;/code&gt; annotations.&lt;/p&gt;
-
-&lt;p&gt;What is so good about being able to configure your dependencies via annotations?&lt;/p&gt;
-
-&lt;p&gt;If you are working with Groovy scripts, it frees you up from having to worry about dependency management and allows you to focus more on what the script needs to do much like when working with other scripting languages like Ruby or Perl. In order to clearly demonstrate the advantages of Grape, lets walk through an example.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;The problem&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Trying to keep up with my ever changing IP address after switching ISP’s earlier this year. There are several services running at my home that I need access to on a daily basis. If my IP changes over night, after a brown out, or for some other reason, I need to know about it asap.&lt;/p&gt;
-
-&lt;p&gt;In order to keep up with my IP address, I wrote a set of scripts that perform the following:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Obtains the current IP address of the server where it is running&lt;/li&gt;
-  &lt;li&gt;Looks up the most recent IP address of the server in a log file&lt;/li&gt;
-  &lt;li&gt;If the current IP address is different that the most recent IP address:
-    &lt;ul&gt;
-      &lt;li&gt;Updates the log file with the current IP address&lt;/li&gt;
-      &lt;li&gt;Send the new IP address in a customizable email to a configurable address&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;If the IP address’s are the same, it does nothing.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;The Solution&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;It took a total of three Groovy classes/scripts to solve this problem. We are not going to get in to the details of the solution because I want to stay focused on Grape.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;You can find all of the code discussed in this post &lt;a href=&quot;http://github.com/slevine/my-ip&quot;&gt;on github&lt;/a&gt;.
-Please feel free to download and use it. Feedback is welcome as well.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This simple Groovy class first connects to a mail server, and then sends the change of address message.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;400: Invalid request
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/263323.js?file=Mailer.groovy&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The most interesting things to pay attention to are:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;@Grapes&lt;/code&gt; block after all of the imports, you can see this groovy class depends on javax.activation and javax.mail jars.&lt;/li&gt;
-  &lt;li&gt;Thanks to Grapes, you can compile this class simply by invoking &lt;code class=&quot;highlighter-rouge&quot;&gt;groovyc Mailer.groovy&lt;/code&gt; as opposed to having to configure either Maven, Gant, Ant, or some other build tool to manage the dependencies and classpath for you.&lt;/li&gt;
-  &lt;li&gt;What’s the big deal? Read more to find out!&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;This next code snipped represents the “main” entry point of my solution. It simply obtains the current IP address of the machine it is running on, checks the current address against the most recent known address stored in a log file, and then uses the previous class to send an email if the IP address has changed.&lt;/p&gt;
-
-&lt;noscript&gt;&lt;pre&gt;400: Invalid request
-&lt;/pre&gt;&lt;/noscript&gt;
-&lt;script src=&quot;https://gist.github.com/263323.js?file=whatsMyIp.groovy&quot;&gt; &lt;/script&gt;
-
-&lt;p&gt;The most interesting thing to pay attention to in this script is:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;/usr/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;bin&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;env&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;groovy&lt;/span&gt;&lt;/code&gt; on the first line on the script.&lt;/li&gt;
-  &lt;li&gt;This line enables the script to be called directly from the command line like: &lt;code class=&quot;highlighter-rouge&quot;&gt;./whatsMyIp.groovy&lt;/code&gt; instead of &lt;code class=&quot;highlighter-rouge&quot;&gt;groovy whatsMyIp.groovy&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;strong&gt;The Big Deal!&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;If Grape didn’t exist the only way to invoke this script would be to invoke it with a build tool such as Maven, GAnt, or some other. If a build tool didn’t suit you then you would have to invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;groovy -classpath=/path/activation.jar...&lt;/code&gt; and manage the dependencies there. Both of these solutions work fine, but are clunky.&lt;/p&gt;
-
-&lt;p&gt;If you were to solve this problem using a language such as Ruby, you would not have to worry about dependency management since Ruby is so closely integrated with the OS. You would simply run &lt;code class=&quot;highlighter-rouge&quot;&gt;gem install some gem&lt;/code&gt;, and this would install the dependencies at the OS level. Thus allowing you to focus on your script and letting the Ruby runtime focus on the dependencies. Invoking &lt;code class=&quot;highlighter-rouge&quot;&gt;./someScript.rb&lt;/code&gt; is common in Ruby.&lt;/p&gt;
-
-&lt;p&gt;Grape gives Groovy scripts the same clean dependency abstraction. It is possible to invoke &lt;code class=&quot;highlighter-rouge&quot;&gt;./whatsMyIp.groovy&lt;/code&gt; without having to worry about any dependency management. Once the groovy runtime comes across the Grape annotations, it loads the dependencies on demand freeing the Groovy script from having to be wrapped with a dependency management layer.&lt;/p&gt;
-
-&lt;p&gt;This is a huge deal because now simple Groovy scripts can leverage the entire Java ecosystem from the command line without having to wrap the invocation with a build tool. Groovy Scripts are now clean, simple, and easy. I hope this inspires you to go out and convert some Ruby or Perl script to Groovy.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Groovy" /><category term="Howto" /><category term="Java" /><summary type="html">If you haven’t heard, the latest version of Groovy was released this week and included with it, among many other great features, was Grape (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.</summary></entry></feed>
+&lt;p&gt;Thats it, you should be able to debug your Rails/Ruby code in RubyMine without issues.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Howto" /><category term="Ruby" /><summary type="html">If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the ruby-debug-ide19 gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.</summary></entry></feed>

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>BigQuery Integer Partitioning is in Beta | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="BigQuery Integer Partitioning is in Beta" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it." />
+<meta property="og:description" content="This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it." />
+<link rel="canonical" href="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" />
+<meta property="og:url" content="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:image" content="https://stevenlevine.dev/images/ues.jpg" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2019-12-16T14:03:00-05:00" />
+<script type="application/ld+json">
+{"dateModified":"2019-12-16T14:03:00-05:00","datePublished":"2019-12-16T14:03:00-05:00","url":"https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/ues.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"BigQuery Integer Partitioning is in Beta","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  bigquery-integer-partitioning-is-in-beta">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+  
+  
+  
+
+  <div class="page-image">
+    <img src="/images/ues.jpg" class="entry-feature-image u-photo" alt="BigQuery Integer Partitioning is in Beta" >
+    
+      <div class="page-image-caption"><p><a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+</div>
+    
+  </div>
+
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">BigQuery Integer Partitioning is in Beta
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/_stevenlevine"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">5 min read</span>
+
+    <time class="page-date dt-published" datetime="2019-12-16T14:03:00-05:00"><a class="u-url" href="">December 16, 2019</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#gcp" title="Pages tagged GCP" rel="tag">GCP</a></li><li class="page-taxonomy"><a href="/tags/#bigquery" title="Pages tagged BigQuery" rel="tag">BigQuery</a></li><li class="page-taxonomy"><a href="/tags/#bigdata" title="Pages tagged BigData" rel="tag">BigData</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <blockquote>
+  <p>TLDR - It is now possible to create integer partitioned tables in BigQuery.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</p>
+</blockquote>
+
+<p>If you weren’t paying close attention to the latest GCP announcements, you may have missed the announcement of  <a href="https://cloud.google.com/bigquery/docs/creating-integer-range-partitions">BigQuery Integer Range Partitioning is now in Beta</a>.  This is a long awaited feature for teams that wish to partition their data by a value other than a <code class="highlighter-rouge">date</code>.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</p>
+
+<h3 id="creating-an-integer-range-partitioned-table">Creating an Integer Range Partitioned Table</h3>
+
+<p>For the purposes of this post, I will be using the same NYC Taxi Ride dataset that I used <a href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">in my previous post</a>. Let’s create  an integer range partitioned table based on the <code class="highlighter-rouge">pickup_location_id</code>.  Creating this table is no different from creating any other table except for the fact that you have to add <code class="highlighter-rouge">--range_partitioning</code> with a partition range when calling <code class="highlighter-rouge">bq mk</code>.  The first parameter represents the lower end of the range, the second the high end, and the last one represents the bucketing interval.  <em>The example command below creates 60 buckets of 5.</em></p>
+
+<p>Using the <code class="highlighter-rouge">bq</code> cli, you can create an Integer Range partitioned table using the following command:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ bq mk <span class="se">\</span>
+  <span class="nt">--range_partitioning</span><span class="o">=</span>pickup_location_id,0,300,5 <span class="se">\</span>
+  nyc_taxi.2018_by_pickup_location_id  <span class="se">\</span>
+    <span class="s2">"vendor_id: string, pickup_datetime: string, dropoff_datetime: string, </span><span class="se">\</span><span class="s2">
+     passenger_count: integer, trip_distance: numeric, rate_code: string, </span><span class="se">\</span><span class="s2">
+     store_and_fwd_flag: string, payment_type: string, fare_amount: numeric, </span><span class="se">\</span><span class="s2">
+     extra: numeric, mta_tax: numeric, tip_amount: numeric, tolls_amount: numeric, </span><span class="se">\</span><span class="s2">
+     imp_surcharge: numeric, total_amount: numeric, pickup_location_id: integer, </span><span class="se">\</span><span class="s2">
+     dropoff_location_id: string, trip_date: date"</span>
+</code></pre></div></div>
+
+<p>After running the command, you should see:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Table <span class="s1">'nyc_taxi.2018_by_pickup_location_id'</span> successfully created.
+</code></pre></div></div>
+
+<p>Let’s double check to make sure our table is partitioned as we expect. To do so, we can query the meta data of the table using the <code class="highlighter-rouge">bq</code> command again:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>❯ bq show <span class="nt">--format</span><span class="o">=</span>prettyjson nyc_taxi.2018_by_pickup_location_id | jq .rangePartitioning
+</code></pre></div></div>
+
+<p><em>Note: If you don’t have <a href="https://github.com/stedolan/jq">jq</a> installed, you should install it RIGHT NOW, as it is the most useful tool you will ever install when working with json in bash.</em></p>
+
+<p>And we get:</p>
+
+<div class="language-json highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pickup_location_id"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"range"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"end"</span><span class="p">:</span><span class="w"> </span><span class="s2">"300"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"interval"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"start"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div></div>
+
+<p>Great, our table is partitioned by <code class="highlighter-rouge">pickup_location_id</code> bucketed by 5.</p>
+
+<h3 id="loading-data-in-to-the-table">Loading Data in to the Table</h3>
+
+<p>Loading the data in to our newly created table is very straight forward– there are no special requirements when loading data.  The data will automatically be partitioned when using load jobs, queries, as well as streaming inserts.  For simplicity, we can load data in to the table using a simple <code class="highlighter-rouge">insert</code> statement:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">insert</span> <span class="k">into</span> <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span><span class="n">_by_pickup_location_id</span>
+<span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">nyc_taxi</span><span class="p">.</span><span class="mi">2018</span>
+</code></pre></div></div>
+
+<h3 id="query-performance">Query Performance</h3>
+
+<p>For the purposes of this post, let’s assume the metric we are trying to calculate is total revenue grouped by <code class="highlighter-rouge">pickup_location_id</code>, i.e, Upper East Side South, Midtown East, Newark Airport, etc..  With that being said, If we run this query against our original date partitioned table, it is safe to assume the performance would be less than ideal due to the fact that we do not have a way to filter out locations that do not pertain to our aggregation.</p>
+
+<p>Here is what it looks like when I try to run the aggregation against the <code class="highlighter-rouge">date</code> partitioned version of the table.</p>
+
+<p><img src="/images/int-partitioning-query-table-date-partitioned.png" alt="int-partitioning-query-table-date-partitioned" /></p>
+
+<p>You can see right away that it scanned a lot more data than necessary, as we are only looking for data pertaining to <code class="highlighter-rouge">pickup_location_id</code> 237.</p>
+
+<p><img src="/images/int-partitioning-query-table-date-partitioned-execution.png" alt="int-partitioning-query-table-date-partitioned-execution" /></p>
+
+<p>From the execution details we can see that it did in fact have to parse the entire dataset <em>(112,333,368 records)</em>.  Clearly this is not the most efficient way to get the aggregation, but before the introduction of Integer based partitioning it was the only way.</p>
+
+<p>Now, if we run the same query against a table that is partitioned on <code class="highlighter-rouge">pickup_location_id</code> bucketed by 5.</p>
+
+<p><img src="/images/int-partitioning-query-table-integer-partitioned.png" alt="int-partitioning-query-table-integer-partitioned" /></p>
+
+<p>The results of the query are the same, but as you can see the number of bytes scanned has dropped to only <code class="highlighter-rouge">317 MB</code> vs <code class="highlighter-rouge">2.5 GB</code> which is a huge improvement.</p>
+
+<p><img src="/images/int-partitioning-query-table-integer-partitioned-execution.png" alt="int-partitioning-query-table-integer-partitioned-execution" /></p>
+
+<p>Once again, looking at the execution details, as expected, we can see that the number of records processed has dropped to <em>13,891,961 records</em>. This is great, but I think we can do better.</p>
+
+<p>As you can see, the total number of trips is <em>4,631,835</em>, yet we scanned almost 3 times as many records. Why is this?  If we reconsider the number we used to bucket the partitions by, namely, <strong>5</strong>, that means each bucket will have 5 different pickup locations. From the analysis, it is clear that there is a “hotspot” near id 237 that we need to fix, but how?  It is quite easy, if we recreate the table bucketed by 1 instead of 5, meaning, each id gets its own bucket that should allow BigQuery the ability to pull records for a single id.  This can easily be achieved by changing the above create table from:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">--range_partitioning</span><span class="o">=</span>pickup_location_id,0,300,5
+</code></pre></div></div>
+
+<p>-to-</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">--range_partitioning</span><span class="o">=</span>pickup_location_id,0,300,1
+</code></pre></div></div>
+
+<p>Let’s run the query again on the new table:</p>
+
+<p><img src="/images/int-partitioning-query-table-integer-partitioned-bucket-by-1.png" alt="int-partitioning-query-table-integer-partitioned-bucket-by-1" /></p>
+
+<p>Great, the number of bytes scanned has gone down even further to <code class="highlighter-rouge">106 MB</code>.</p>
+
+<p><img src="/images/int-partitioning-query-table-integer-partitioned-bucket-by-1-execution.png" alt="int-partitioning-query-table-integer-partitioned-bucket-by-1-execution" /></p>
+
+<p>From the execution details, we can see that the number of records scanned matches the total number of trips exactly, which means that this time when performing the aggregation, we only processed records with the matching id, which is exactly what you want to do when trying to design the most efficient partitioning strategy.  Clearly when deciding on a partitioning strategy an important factor to consider, among many, is at what granularity to bucket the partition.  There is no silver bullet here, as everyone has different query requirements.</p>
+
+<blockquote>
+  <p>Note: if you compare the execution times of the queries for the examples, even though the “less efficient” query scanned the entire dataset, the actual runtime of the query is comparable <strong>which is remarkable</strong>.  The introduction of Integer based partitioning will mostly help the budget in these situations, I.e., less bytes scanned.</p>
+
+  <p>This dataset was only 21GB (which is not very large.) As a result the query times seem comparable. However, if we were running these queries against huge data sets, think IOT time series data, it would be a very different result.  In that case, being able to narrow the dataset down to a <code class="highlighter-rouge">sensor_id</code>’s worth of data vs scanning the entire dataset will make a huge difference.</p>
+</blockquote>
+
+
+        </div>
+
+        
+          <div class="page-share">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=BigQuery+Integer+Partitioning+is+in+Beta%20https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=BigQuery+Integer+Partitioning+is+in+Beta&url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+</div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/';
+        this.page.identifier = 'https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2019/11/querying-externally-partitioned-data-with-bq/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> Querying External Data with BigQuery
+
+      </span>
+    </a>
+  
+
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

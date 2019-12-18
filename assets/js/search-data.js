@@ -228,4 +228,9 @@ var store = [{
         "excerpt":"TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature. Some Background I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable...","categories": [],
         "tags": ["GCP","BigQuery","Spark","BigData"],
         "url": "https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"
+      },{
+        "title": "BigQuery Integer Partitioning is in Beta",
+        "excerpt":"TLDR - It is now possible to create integer partitioned tables in BigQuery. This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it. If you weren’t paying close attention to the latest GCP announcements, you may...","categories": [],
+        "tags": ["GCP","BigQuery","BigData"],
+        "url": "https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/"
       }]

@@ -21,8 +21,8 @@
 <meta property="og:title" content="First Impressions of the M1 MacBook Pro" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="I will walk you through the ups and downs of owning the new M1 MacBook Pro and what it takes to get everything up and running." />
-<meta property="og:description" content="I will walk you through the ups and downs of owning the new M1 MacBook Pro and what it takes to get everything up and running." />
+<meta name="description" content="I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it." />
+<meta property="og:description" content="I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it." />
 <link rel="canonical" href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" />
 <meta property="og:url" content="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" />
 <meta property="og:site_name" content="Steven Levine" />
@@ -30,7 +30,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-12-28T16:15:00-05:00" />
 <script type="application/ld+json">
-{"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/mac-new.jpg","@type":"imageObject"},"url":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"First Impressions of the M1 MacBook Pro","dateModified":"2020-12-28T16:15:00-05:00","datePublished":"2020-12-28T16:15:00-05:00","description":"I will walk you through the ups and downs of owning the new M1 MacBook Pro and what it takes to get everything up and running.","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","url":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/","author":{"@type":"Person","name":"Steven Levine"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"First Impressions of the M1 MacBook Pro","dateModified":"2020-12-28T16:15:00-05:00","datePublished":"2020-12-28T16:15:00-05:00","description":"I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it.","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/mac-new.jpg","@type":"imageObject"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -141,7 +141,7 @@
 
         
   <h3 class="page-taxonomies-title">Tags</h3>
-  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#mac" title="Pages tagged Mac" rel="tag">Mac</a></li>
   </ul>
 
 
@@ -164,12 +164,12 @@
 <p>My initial impression of the machine is <em>very positive</em> for many reasons.  Here is a list of them in no particular order.</p>
 
 <ul>
-  <li>Amazing performance compared to my 2017 i7 based MacBook Pro, to be specific, here are the Geekbench numbers for my 2017 Macbook:</li>
+  <li>Amazing performance compared to my 2017 i7 based MacBook Pro, to be specific, here are the Geekbench numbers for my 2017 MacBook:</li>
 </ul>
 
 <p><img src="/images/geekbench-i7-mbp.png" alt="geekbench-i7-mbp" /></p>
 
-<p>compared to the new M1 Macbook Pro:</p>
+<p>compared to the new M1 MacBook Pro:</p>
 
 <p><img src="/images/geekbench-m1-mbp.png" alt="geekbench-m1-mbp" /></p>
 
@@ -222,13 +222,13 @@
   <li>Create a copy of the iTerm App and check off “Open using Rosetta”</li>
 </ul>
 
-<p><img src="/images/iterm-rosetta.png" width="300" /></p>
+<p><img src="/images/iterm-rosetta.png" style="width: 65%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
 <ul>
   <li>Create a new iTerm profile where the launch command is <code class="highlighter-rouge">arch -x86_64 zsh</code></li>
 </ul>
 
-<p><img src="/images/iterm-i386.png" width="300" /></p>
+<p><img src="/images/iterm-i386.png" style="width: 75%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
 <p>I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN <code class="highlighter-rouge">arm64</code> session from an <code class="highlighter-rouge">i386</code> one.  Luckily, there is an easy way to fix this which is to add the current <code class="highlighter-rouge">$(arch)</code> to your shell somewhere.</p>
 
@@ -241,13 +241,14 @@
 
 <p>As you can see, it is quite straightforward, and after adding <code class="highlighter-rouge">arch</code> to my left prompt config next to <code class="highlighter-rouge">os_icon</code> I get a shell that clearly shows which architecture it is currently running on.</p>
 
-<p><img src="/images/shell-arm.png" width="375" /> <img src="/images/shell-i386.png" width="375" /></p>
+<p><img src="/images/shell-arm.png" style="width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /> 
+<img src="/images/shell-i386.png" style="width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
 <p>Running Brew under Rosetta solved most issues, but there were still a few issues remaining.</p>
 
 <p>The first of which is I couldn’t install new Python versions using pyenv.  <code class="highlighter-rouge">pyenv install</code> failed every time I ran it, no matter which Python version, no matter if I was under <code class="highlighter-rouge">arm64</code> or <code class="highlighter-rouge">i386</code>.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct <code class="highlighter-rouge">usr/lib</code> by adding <code class="highlighter-rouge">LDFLAGS</code> to the environment before running <code class="highlighter-rouge">pyenv</code>.  The full command that worked for me was:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-L</span><span class="si">$(</span>xcrun <span class="nt">--show-sdk-path</span><span class="si">)</span><span class="s2">/usr/lib"</span> pyenv <span class="nb">install </span>3.8.6<span class="sb">`</span>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-L</span><span class="si">$(</span>xcrun <span class="nt">--show-sdk-path</span><span class="si">)</span><span class="s2">/usr/lib"</span> pyenv <span class="nb">install </span>3.8.6
 </code></pre></div></div>
 
 <p>The next issue I faced was getting the <a href="https://formulae.brew.sh/cask/google-cloud-sdk">google-cloud-sdk</a> and <a href="https://formulae.brew.sh/formula/awscli#default">awscli</a> installed and working with Brew.  Installing the google-cloud-sdk, I.e., <code class="highlighter-rouge">brew install google-cloud-sdk</code> failed with a cryptic error message: <code class="highlighter-rouge">2845 illegal hardware instruction</code>. The <code class="highlighter-rouge">awscli</code> formula installed, but all <code class="highlighter-rouge">aws</code> commands were failing with nearly the same cryptic error message: <code class="highlighter-rouge">2892 illegal hardware instruction</code>.</p>

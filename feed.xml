@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2020-12-30T11:12:08-05:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00-05:00</published><updated>2020-12-28T16:15:00-05:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2020-12-30T14:01:03-05:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00-05:00</published><updated>2020-12-28T16:15:00-05:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - I &lt;strong&gt;really&lt;/strong&gt; like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -13,12 +13,12 @@
 &lt;p&gt;My initial impression of the machine is &lt;em&gt;very positive&lt;/em&gt; for many reasons.  Here is a list of them in no particular order.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Amazing performance compared to my 2017 i7 based MacBook Pro, to be specific, here are the Geekbench numbers for my 2017 Macbook:&lt;/li&gt;
+  &lt;li&gt;Amazing performance compared to my 2017 i7 based MacBook Pro, to be specific, here are the Geekbench numbers for my 2017 MacBook:&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/geekbench-i7-mbp.png&quot; alt=&quot;geekbench-i7-mbp&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;compared to the new M1 Macbook Pro:&lt;/p&gt;
+&lt;p&gt;compared to the new M1 MacBook Pro:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/geekbench-m1-mbp.png&quot; alt=&quot;geekbench-m1-mbp&quot; /&gt;&lt;/p&gt;
 
@@ -71,13 +71,13 @@
   &lt;li&gt;Create a copy of the iTerm App and check off “Open using Rosetta”&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/iterm-rosetta.png&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/iterm-rosetta.png&quot; style=&quot;width: 65%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
   &lt;li&gt;Create a new iTerm profile where the launch command is &lt;code class=&quot;highlighter-rouge&quot;&gt;arch -x86_64 zsh&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/iterm-i386.png&quot; width=&quot;300&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/iterm-i386.png&quot; style=&quot;width: 75%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN &lt;code class=&quot;highlighter-rouge&quot;&gt;arm64&lt;/code&gt; session from an &lt;code class=&quot;highlighter-rouge&quot;&gt;i386&lt;/code&gt; one.  Luckily, there is an easy way to fix this which is to add the current &lt;code class=&quot;highlighter-rouge&quot;&gt;$(arch)&lt;/code&gt; to your shell somewhere.&lt;/p&gt;
 
@@ -90,13 +90,14 @@
 
 &lt;p&gt;As you can see, it is quite straightforward, and after adding &lt;code class=&quot;highlighter-rouge&quot;&gt;arch&lt;/code&gt; to my left prompt config next to &lt;code class=&quot;highlighter-rouge&quot;&gt;os_icon&lt;/code&gt; I get a shell that clearly shows which architecture it is currently running on.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/images/shell-arm.png&quot; width=&quot;375&quot; /&gt; &lt;img src=&quot;/images/shell-i386.png&quot; width=&quot;375&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/shell-arm.png&quot; style=&quot;width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt; 
+&lt;img src=&quot;/images/shell-i386.png&quot; style=&quot;width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Running Brew under Rosetta solved most issues, but there were still a few issues remaining.&lt;/p&gt;
 
 &lt;p&gt;The first of which is I couldn’t install new Python versions using pyenv.  &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv install&lt;/code&gt; failed every time I ran it, no matter which Python version, no matter if I was under &lt;code class=&quot;highlighter-rouge&quot;&gt;arm64&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;i386&lt;/code&gt;.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct &lt;code class=&quot;highlighter-rouge&quot;&gt;usr/lib&lt;/code&gt; by adding &lt;code class=&quot;highlighter-rouge&quot;&gt;LDFLAGS&lt;/code&gt; to the environment before running &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;.  The full command that worked for me was:&lt;/p&gt;
 
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-L&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;xcrun &lt;span class=&quot;nt&quot;&gt;--show-sdk-path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/usr/lib&quot;&lt;/span&gt; pyenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.8.6&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-L&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;xcrun &lt;span class=&quot;nt&quot;&gt;--show-sdk-path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/usr/lib&quot;&lt;/span&gt; pyenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.8.6
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;The next issue I faced was getting the &lt;a href=&quot;https://formulae.brew.sh/cask/google-cloud-sdk&quot;&gt;google-cloud-sdk&lt;/a&gt; and &lt;a href=&quot;https://formulae.brew.sh/formula/awscli#default&quot;&gt;awscli&lt;/a&gt; installed and working with Brew.  Installing the google-cloud-sdk, I.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install google-cloud-sdk&lt;/code&gt; failed with a cryptic error message: &lt;code class=&quot;highlighter-rouge&quot;&gt;2845 illegal hardware instruction&lt;/code&gt;. The &lt;code class=&quot;highlighter-rouge&quot;&gt;awscli&lt;/code&gt; formula installed, but all &lt;code class=&quot;highlighter-rouge&quot;&gt;aws&lt;/code&gt; commands were failing with nearly the same cryptic error message: &lt;code class=&quot;highlighter-rouge&quot;&gt;2892 illegal hardware instruction&lt;/code&gt;.&lt;/p&gt;
@@ -109,7 +110,7 @@
 
 &lt;h3 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h3&gt;
 
-&lt;p&gt;I &lt;strong&gt;really&lt;/strong&gt; like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time.  With that being said, the question is should you get one?  If you ask me, it depends on a few things.  First, are you in the market for a new MBP?  If so, are you currently working on a 13” MacBook or looking for a smaller form factor?  If you answer yes to these questions, then I would say go for it!  You will not be disappointed.  On the other hand, if you are not currently looking or looking for a larger form factor then you should definitely wait for the 15” version of the M1 (or maybe M2) MacBook Pro.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Mac" /><summary type="html">I will walk you through the ups and downs of owning the new M1 MacBook Pro and what it takes to get everything up and running.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/mac-new.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/mac-new.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">BigQuery Integer Partitioning is in Beta</title><link href="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" rel="alternate" type="text/html" title="BigQuery Integer Partitioning is in Beta" /><published>2019-12-16T14:03:00-05:00</published><updated>2019-12-16T14:03:00-05:00</updated><id>https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta</id><content type="html" xml:base="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/">&lt;blockquote&gt;
+&lt;p&gt;I &lt;strong&gt;really&lt;/strong&gt; like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time.  With that being said, the question is should you get one?  If you ask me, it depends on a few things.  First, are you in the market for a new MBP?  If so, are you currently working on a 13” MacBook or looking for a smaller form factor?  If you answer yes to these questions, then I would say go for it!  You will not be disappointed.  On the other hand, if you are not currently looking or looking for a larger form factor then you should definitely wait for the 15” version of the M1 (or maybe M2) MacBook Pro.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Mac" /><summary type="html">I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/mac-new.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/mac-new.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">BigQuery Integer Partitioning is in Beta</title><link href="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" rel="alternate" type="text/html" title="BigQuery Integer Partitioning is in Beta" /><published>2019-12-16T14:03:00-05:00</published><updated>2019-12-16T14:03:00-05:00</updated><id>https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta</id><content type="html" xml:base="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - It is now possible to create integer partitioned tables in BigQuery.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
 &lt;/blockquote&gt;
 

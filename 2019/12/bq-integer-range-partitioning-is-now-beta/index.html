@@ -23,14 +23,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it." />
 <meta property="og:description" content="This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it." />
-<link rel="canonical" href="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" />
-<meta property="og:url" content="https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/" />
+<link rel="canonical" href="http://localhost:4000/2019/12/bq-integer-range-partitioning-is-now-beta/" />
+<meta property="og:url" content="http://localhost:4000/2019/12/bq-integer-range-partitioning-is-now-beta/" />
 <meta property="og:site_name" content="Steven Levine" />
-<meta property="og:image" content="https://stevenlevine.dev/images/ues.jpg" />
+<meta property="og:image" content="http://localhost:4000/images/ues.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-12-16T14:03:00-05:00" />
 <script type="application/ld+json">
-{"dateModified":"2019-12-16T14:03:00-05:00","datePublished":"2019-12-16T14:03:00-05:00","url":"https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/"},"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/ues.jpg","@type":"imageObject"},"author":{"@type":"Person","name":"Steven Levine"},"description":"This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"@type":"BlogPosting","headline":"BigQuery Integer Partitioning is in Beta","@context":"https://schema.org"}</script>
+{"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"http://localhost:4000/images/ues.jpg","@type":"imageObject"},"url":"http://localhost:4000/2019/12/bq-integer-range-partitioning-is-now-beta/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"BigQuery Integer Partitioning is in Beta","dateModified":"2019-12-16T14:03:00-05:00","datePublished":"2019-12-16T14:03:00-05:00","description":"This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019/12/bq-integer-range-partitioning-is-now-beta/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -71,7 +71,7 @@
   <div class="navigation-wrapper">
     <a href="#menu-toggle" id="menu-toggle">Menu</a>
     <nav id="primary-nav" class="site-nav animated drop">
-      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/search/">Search</a></li></ul>
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/tags/">Tags</a></li><li><a href="/search/">Search</a></li></ul>
     </nav>
   </div><!-- /.navigation-wrapper -->
 
@@ -261,34 +261,16 @@
 
         
           <div class="page-share">
-  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
-  <a href="https://twitter.com/intent/tweet?text=BigQuery+Integer+Partitioning+is+in+Beta%20https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
-  <a href="https://reddit.com/submit?title=BigQuery+Integer+Partitioning+is+in+Beta&url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=BigQuery+Integer+Partitioning+is+in+Beta%20http%3A%2F%2Flocalhost%3A4000%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Flocalhost%3A4000%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=BigQuery+Integer+Partitioning+is+in+Beta&url=http%3A%2F%2Flocalhost%3A4000%2F2019%2F12%2Fbq-integer-range-partitioning-is-now-beta%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
 </div>
 
         
 
         
           
-  <div class="page-comments">
-    <div id="disqus_thread"></div>
-    <script>
-      var disqus_config = function () {
-        this.page.url = 'https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/';
-        this.page.identifier = 'https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/';
-      };
-
-      (function() {
-        var d = document, s = d.createElement('script');
-        s.src = 'https://levine.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-      })();
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
-  </div>
-
 
         
 
@@ -304,6 +286,14 @@
   
 
   
+    <a class="page-next" href="/2020/12/first-impressions-of-the-new-mac-m1-macbook/">
+      <h4 class="page-pagination-label">Next</h4>
+      <span class="page-pagination-title">
+        First Impressions of the M1 MacBook Pro
+ <i class="fas fa-arrow-right"></i>
+      </span>
+    </a>
+  
 </nav>
 
       </div>
@@ -318,23 +308,14 @@
 <!-- end custom footer snippets -->
 <div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
     
-      <p>&copy; 2019 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+      <p>&copy; 2020 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
     
   </div>
 </footer>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
-  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-113658491-1', 'auto');
-    ga('send', 'pageview');
-  }
-  </script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
 
 
   </body>

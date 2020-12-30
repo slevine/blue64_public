@@ -236,6 +236,6 @@ var store = [{
       },{
         "title": "First Impressions of the M1 MacBook Pro",
         "excerpt":"TLDR - I really like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time. When I read about Apple’s announcement of the new M1 MacBook Pro featuring the Apple M1 Chip, I must admit, it made me a bit excited about Macs...","categories": [],
-        "tags": ["Mac"],
+        "tags": ["Development","Mac"],
         "url": "https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"
       }]

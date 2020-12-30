@@ -23,13 +23,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm." />
 <meta property="og:description" content="If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm." />
-<link rel="canonical" href="http://localhost:4000/2009/11/scala-sugar-lists/" />
-<meta property="og:url" content="http://localhost:4000/2009/11/scala-sugar-lists/" />
+<link rel="canonical" href="https://stevenlevine.dev/2009/11/scala-sugar-lists/" />
+<meta property="og:url" content="https://stevenlevine.dev/2009/11/scala-sugar-lists/" />
 <meta property="og:site_name" content="Steven Levine" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2009-11-21T16:01:58-05:00" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/2009/11/scala-sugar-lists/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Scala Sugar - Lists","dateModified":"2009-11-21T16:01:58-05:00","datePublished":"2009-11-21T16:01:58-05:00","description":"If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2009/11/scala-sugar-lists/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"url":"https://stevenlevine.dev/2009/11/scala-sugar-lists/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Scala Sugar - Lists","dateModified":"2009-11-21T16:01:58-05:00","datePublished":"2009-11-21T16:01:58-05:00","description":"If I want to become a real Scala Ninja, I am going to have change the way I think about coding. For the past 10 years I have been programming primarily using the object oriented paradigm. Although Scala supports pure object oriented programming, it is my desire to learn to program in Scala in a complete functional paradigm.","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2009/11/scala-sugar-lists/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -186,6 +186,24 @@ Now lets declare the same list in Scala.</p>
 
         
           
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2009/11/scala-sugar-lists/';
+        this.page.identifier = 'https://stevenlevine.dev/2009/11/scala-sugar-lists/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
 
         
 
@@ -230,7 +248,16 @@ Now lets declare the same list in Scala.</p>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
 
 
   </body>

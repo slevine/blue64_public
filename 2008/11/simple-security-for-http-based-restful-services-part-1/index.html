@@ -23,13 +23,13 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="This is going to be the first in a series of posts discussing potential ways of securing bi-directional RESTful based HTTP services. For this series we are going to make the requirements quite simple, namely, “secure” simply means the caller of the service is authorized to invoke it. Lets assume that this solution is being deployed along with a simple IP addresses restriction mechanism. Since IP address’s can easily be spoofed, this solution is the next level of defense to ensure the identity of the caller." />
 <meta property="og:description" content="This is going to be the first in a series of posts discussing potential ways of securing bi-directional RESTful based HTTP services. For this series we are going to make the requirements quite simple, namely, “secure” simply means the caller of the service is authorized to invoke it. Lets assume that this solution is being deployed along with a simple IP addresses restriction mechanism. Since IP address’s can easily be spoofed, this solution is the next level of defense to ensure the identity of the caller." />
-<link rel="canonical" href="http://localhost:4000/2008/11/simple-security-for-http-based-restful-services-part-1/" />
-<meta property="og:url" content="http://localhost:4000/2008/11/simple-security-for-http-based-restful-services-part-1/" />
+<link rel="canonical" href="https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/" />
+<meta property="og:url" content="https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/" />
 <meta property="og:site_name" content="Steven Levine" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2008-11-29T19:58:50-05:00" />
 <script type="application/ld+json">
-{"url":"http://localhost:4000/2008/11/simple-security-for-http-based-restful-services-part-1/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Simple Security for HTTP Based RESTful Services (Part 1)","dateModified":"2008-11-29T19:58:50-05:00","datePublished":"2008-11-29T19:58:50-05:00","description":"This is going to be the first in a series of posts discussing potential ways of securing bi-directional RESTful based HTTP services. For this series we are going to make the requirements quite simple, namely, “secure” simply means the caller of the service is authorized to invoke it. Lets assume that this solution is being deployed along with a simple IP addresses restriction mechanism. Since IP address’s can easily be spoofed, this solution is the next level of defense to ensure the identity of the caller.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2008/11/simple-security-for-http-based-restful-services-part-1/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"url":"https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Simple Security for HTTP Based RESTful Services (Part 1)","dateModified":"2008-11-29T19:58:50-05:00","datePublished":"2008-11-29T19:58:50-05:00","description":"This is going to be the first in a series of posts discussing potential ways of securing bi-directional RESTful based HTTP services. For this series we are going to make the requirements quite simple, namely, “secure” simply means the caller of the service is authorized to invoke it. Lets assume that this solution is being deployed along with a simple IP addresses restriction mechanism. Since IP address’s can easily be spoofed, this solution is the next level of defense to ensure the identity of the caller.","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -275,6 +275,24 @@ problem.</p>
 
         
           
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/';
+        this.page.identifier = 'https://stevenlevine.dev/2008/11/simple-security-for-http-based-restful-services-part-1/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
 
         
 
@@ -319,7 +337,16 @@ problem.</p>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
 
 
   </body>

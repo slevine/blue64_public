@@ -23,14 +23,14 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature." />
 <meta property="og:description" content="In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature." />
-<link rel="canonical" href="http://localhost:4000/2019/11/querying-externally-partitioned-data-with-bq/" />
-<meta property="og:url" content="http://localhost:4000/2019/11/querying-externally-partitioned-data-with-bq/" />
+<link rel="canonical" href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
+<meta property="og:url" content="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" />
 <meta property="og:site_name" content="Steven Levine" />
-<meta property="og:image" content="http://localhost:4000/images/taxi.jpg" />
+<meta property="og:image" content="https://stevenlevine.dev/images/taxi.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2019-11-14T17:03:00-05:00" />
 <script type="application/ld+json">
-{"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"http://localhost:4000/images/taxi.jpg","@type":"imageObject"},"url":"http://localhost:4000/2019/11/querying-externally-partitioned-data-with-bq/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Querying External Data with BigQuery","dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","description":"In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature.","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2019/11/querying-externally-partitioned-data-with-bq/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
+{"image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/taxi.jpg","@type":"imageObject"},"url":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"author":{"@type":"Person","name":"Steven Levine"},"headline":"Querying External Data with BigQuery","dateModified":"2019-11-14T17:03:00-05:00","datePublished":"2019-11-14T17:03:00-05:00","description":"In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature.","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"},"@type":"BlogPosting","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -391,16 +391,35 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
         
           <div class="page-share">
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
-  <a href="https://twitter.com/intent/tweet?text=Querying+External+Data+with+BigQuery%20http%3A%2F%2Flocalhost%3A4000%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
-  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http%3A%2F%2Flocalhost%3A4000%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
-  <a href="https://reddit.com/submit?title=Querying+External+Data+with+BigQuery&amp;url=http%3A%2F%2Flocalhost%3A4000%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Querying+External+Data+with+BigQuery%20https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=Querying+External+Data+with+BigQuery&amp;url=https%3A%2F%2Fstevenlevine.dev%2F2019%2F11%2Fquerying-externally-partitioned-data-with-bq%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
 </div>
 
         
 
         
           
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/';
+        this.page.identifier = 'https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+  </div>
+
 
         
 
@@ -446,7 +465,16 @@ gs://<span class="k">${</span><span class="nv">PROJECT_ID</span><span class="k">
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
 
 
   </body>

@@ -29,7 +29,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2008-06-03T13:52:56+00:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"headline":"Amazon’s EC2 and You","dateModified":"2008-06-03T13:52:56+00:00","description":"The purpose of this post is to give you a “high” level overview of Amazon’s EC2 (Elastic Compute Cloud), and how you can benefit from it.  Amazon defines the EC2 as","datePublished":"2008-06-03T13:52:56+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2008/06/amazons-ec2-and-you/"},"publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2008/06/amazons-ec2-and-you/","@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Steven Levine"},"description":"The purpose of this post is to give you a “high” level overview of Amazon’s EC2 (Elastic Compute Cloud), and how you can benefit from it.  Amazon defines the EC2 as","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"Amazon’s EC2 and You","dateModified":"2008-06-03T13:52:56+00:00","datePublished":"2008-06-03T13:52:56+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2008/06/amazons-ec2-and-you/"},"url":"https://stevenlevine.dev/2008/06/amazons-ec2-and-you/","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -193,6 +193,24 @@ current project.</p>
 
         
           
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2008/06/amazons-ec2-and-you/';
+        this.page.identifier = 'https://stevenlevine.dev/2008/06/amazons-ec2-and-you/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
 
         
 
@@ -237,7 +255,16 @@ current project.</p>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
   <script src="/assets/js/main.min.js"></script>
-  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
 
 
   </body>

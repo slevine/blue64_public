@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.0.0">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2021-06-30T22:28:54+00:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00+00:00</published><updated>2020-12-28T16:15:00+00:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2021-12-29T18:21:06+00:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00+00:00</published><updated>2020-12-28T16:15:00+00:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - I &lt;strong&gt;really&lt;/strong&gt; like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -63,7 +63,7 @@
   &lt;li&gt;&lt;a href=&quot;https://code.visualstudio.com/insiders/#osx&quot;&gt;VS Code Insiders&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;There were also many workarounds I had to work through to get the rest of my tools working.  While I was waiting for the new machine, I did a lot of research on the best ways to get Brew running on the M1.  Brew on ARM64 is not “officially supported” yet, but that wasn’t going to stop me from trying to get it running.  Of course, I took the advice of the Brew committers and installed it in a non-standard location, &lt;code class=&quot;highlighter-rouge&quot;&gt;~/.homebrew&lt;/code&gt; to give it a try.&lt;/p&gt;
+&lt;p&gt;There were also many workarounds I had to work through to get the rest of my tools working.  While I was waiting for the new machine, I did a lot of research on the best ways to get Brew running on the M1.  Brew on ARM64 is not “officially supported” yet, but that wasn’t going to stop me from trying to get it running.  Of course, I took the advice of the Brew committers and installed it in a non-standard location, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.homebrew&lt;/code&gt; to give it a try.&lt;/p&gt;
 
 &lt;p&gt;I was able to get most of my formulas working this way until I ran into the ones that depended on Go or Rust.  I tried going down the “compile everything” route, but there were a lot of issues getting things running.  If someone wanted to get everything running on ARM I am confident they could have, but due to time constraints, I had to give up.  This is when I decided to go down the path of running Brew under Rosetta.  There are two different ways of getting access to a shell running under Rosetta:&lt;/p&gt;
 
@@ -74,39 +74,39 @@
 &lt;p&gt;&lt;img src=&quot;/images/iterm-rosetta.png&quot; style=&quot;width: 65%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;Create a new iTerm profile where the launch command is &lt;code class=&quot;highlighter-rouge&quot;&gt;arch -x86_64 zsh&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Create a new iTerm profile where the launch command is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arch -x86_64 zsh&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/iterm-i386.png&quot; style=&quot;width: 75%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN &lt;code class=&quot;highlighter-rouge&quot;&gt;arm64&lt;/code&gt; session from an &lt;code class=&quot;highlighter-rouge&quot;&gt;i386&lt;/code&gt; one.  Luckily, there is an easy way to fix this which is to add the current &lt;code class=&quot;highlighter-rouge&quot;&gt;$(arch)&lt;/code&gt; to your shell somewhere.&lt;/p&gt;
+&lt;p&gt;I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arm64&lt;/code&gt; session from an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i386&lt;/code&gt; one.  Luckily, there is an easy way to fix this which is to add the current &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$(arch)&lt;/code&gt; to your shell somewhere.&lt;/p&gt;
 
-&lt;p&gt;Since I use &lt;a href=&quot;https://github.com/romkatv/powerlevel10k&quot;&gt;Powerlevel10k&lt;/a&gt;, it seemed like the perfect place to display this was next to the icon which was in my left prompt.  The way I set it up was by adding a new function called &lt;code class=&quot;highlighter-rouge&quot;&gt;prompt_arch&lt;/code&gt; to my config that simply displays the current architecture.  Here is the entire function:&lt;/p&gt;
+&lt;p&gt;Since I use &lt;a href=&quot;https://github.com/romkatv/powerlevel10k&quot;&gt;Powerlevel10k&lt;/a&gt;, it seemed like the perfect place to display this was next to the icon which was in my left prompt.  The way I set it up was by adding a new function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;prompt_arch&lt;/code&gt; to my config that simply displays the current architecture.  Here is the entire function:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;function &lt;/span&gt;prompt_arch&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
     p10k segment &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; 7 &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; 232 &lt;span class=&quot;nt&quot;&gt;-t&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;arch&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;As you can see, it is quite straightforward, and after adding &lt;code class=&quot;highlighter-rouge&quot;&gt;arch&lt;/code&gt; to my left prompt config next to &lt;code class=&quot;highlighter-rouge&quot;&gt;os_icon&lt;/code&gt; I get a shell that clearly shows which architecture it is currently running on.&lt;/p&gt;
+&lt;p&gt;As you can see, it is quite straightforward, and after adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arch&lt;/code&gt; to my left prompt config next to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;os_icon&lt;/code&gt; I get a shell that clearly shows which architecture it is currently running on.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/shell-arm.png&quot; style=&quot;width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt; 
 &lt;img src=&quot;/images/shell-i386.png&quot; style=&quot;width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Running Brew under Rosetta solved most issues, but there were still a few issues remaining.&lt;/p&gt;
 
-&lt;p&gt;The first of which is I couldn’t install new Python versions using pyenv.  &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv install&lt;/code&gt; failed every time I ran it, no matter which Python version, no matter if I was under &lt;code class=&quot;highlighter-rouge&quot;&gt;arm64&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;i386&lt;/code&gt;.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct &lt;code class=&quot;highlighter-rouge&quot;&gt;usr/lib&lt;/code&gt; by adding &lt;code class=&quot;highlighter-rouge&quot;&gt;LDFLAGS&lt;/code&gt; to the environment before running &lt;code class=&quot;highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;.  The full command that worked for me was:&lt;/p&gt;
+&lt;p&gt;The first of which is I couldn’t install new Python versions using pyenv.  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyenv install&lt;/code&gt; failed every time I ran it, no matter which Python version, no matter if I was under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;arm64&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;i386&lt;/code&gt;.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;usr/lib&lt;/code&gt; by adding &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;LDFLAGS&lt;/code&gt; to the environment before running &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyenv&lt;/code&gt;.  The full command that worked for me was:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;LDFLAGS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;-L&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;xcrun &lt;span class=&quot;nt&quot;&gt;--show-sdk-path&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;/usr/lib&quot;&lt;/span&gt; pyenv &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;3.8.6
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The next issue I faced was getting the &lt;a href=&quot;https://formulae.brew.sh/cask/google-cloud-sdk&quot;&gt;google-cloud-sdk&lt;/a&gt; and &lt;a href=&quot;https://formulae.brew.sh/formula/awscli#default&quot;&gt;awscli&lt;/a&gt; installed and working with Brew.  Installing the google-cloud-sdk, I.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;brew install google-cloud-sdk&lt;/code&gt; failed with a cryptic error message: &lt;code class=&quot;highlighter-rouge&quot;&gt;2845 illegal hardware instruction&lt;/code&gt;. The &lt;code class=&quot;highlighter-rouge&quot;&gt;awscli&lt;/code&gt; formula installed, but all &lt;code class=&quot;highlighter-rouge&quot;&gt;aws&lt;/code&gt; commands were failing with nearly the same cryptic error message: &lt;code class=&quot;highlighter-rouge&quot;&gt;2892 illegal hardware instruction&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;The next issue I faced was getting the &lt;a href=&quot;https://formulae.brew.sh/cask/google-cloud-sdk&quot;&gt;google-cloud-sdk&lt;/a&gt; and &lt;a href=&quot;https://formulae.brew.sh/formula/awscli#default&quot;&gt;awscli&lt;/a&gt; installed and working with Brew.  Installing the google-cloud-sdk, I.e., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;brew install google-cloud-sdk&lt;/code&gt; failed with a cryptic error message: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2845 illegal hardware instruction&lt;/code&gt;. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;awscli&lt;/code&gt; formula installed, but all &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aws&lt;/code&gt; commands were failing with nearly the same cryptic error message: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2892 illegal hardware instruction&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;It was puzzling that both of the top two cloud providers SDK’s crashed with a nearly identical error message.  Then, I realized both of them depended on &lt;code class=&quot;highlighter-rouge&quot;&gt;Python@3.9&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;It was puzzling that both of the top two cloud providers SDK’s crashed with a nearly identical error message.  Then, I realized both of them depended on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Python@3.9&lt;/code&gt;&lt;/p&gt;
 
-&lt;p&gt;I was able to get the &lt;code class=&quot;highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt; installed and working properly by running the installer manually, outside the context of Brew.  This made me realize that the issue was not with the &lt;code class=&quot;highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt;, or with Python on ARM, but with the version of Python that was being invoked when installed via Brew.&lt;/p&gt;
+&lt;p&gt;I was able to get the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt; installed and working properly by running the installer manually, outside the context of Brew.  This made me realize that the issue was not with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt;, or with Python on ARM, but with the version of Python that was being invoked when installed via Brew.&lt;/p&gt;
 
-&lt;p&gt;After a bit of digging, I was able to find a &lt;a href=&quot;https://github.com/Homebrew/homebrew-core/issues/67713&quot;&gt;similar issue on Github&lt;/a&gt; where python failed to run with the same error that I was seeing &lt;code class=&quot;highlighter-rouge&quot;&gt;illegal hardware instruction&lt;/code&gt;.  This particular issue was “AVX instructions in Big Sur bottles crash when run in Rosetta 2” and one of the commenter’s mentioned that if you install &lt;code class=&quot;highlighter-rouge&quot;&gt;python3&lt;/code&gt; via Brew with the form source option I.e., &lt;code class=&quot;highlighter-rouge&quot;&gt;brew reinstall -s python3&lt;/code&gt;, the issue goes away, and sure enough it did!  I removed the manual installation of &lt;code class=&quot;highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt; and then re-installed it using Brew and that worked perfectly.  I did the same for &lt;code class=&quot;highlighter-rouge&quot;&gt;awscli&lt;/code&gt; and then tried to run &lt;code class=&quot;highlighter-rouge&quot;&gt;aws s3 ls&lt;/code&gt; and it worked too.  So it ended up being a Python issue, but not with the language or runtime itself, but the version that shipped with Brew.  I am sure by the time of this writing it will be fixed so you won’t have to go through this trouble to get them working.&lt;/p&gt;
+&lt;p&gt;After a bit of digging, I was able to find a &lt;a href=&quot;https://github.com/Homebrew/homebrew-core/issues/67713&quot;&gt;similar issue on Github&lt;/a&gt; where python failed to run with the same error that I was seeing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;illegal hardware instruction&lt;/code&gt;.  This particular issue was “AVX instructions in Big Sur bottles crash when run in Rosetta 2” and one of the commenter’s mentioned that if you install &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;python3&lt;/code&gt; via Brew with the form source option I.e., &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;brew reinstall -s python3&lt;/code&gt;, the issue goes away, and sure enough it did!  I removed the manual installation of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;google-cloud-sdk&lt;/code&gt; and then re-installed it using Brew and that worked perfectly.  I did the same for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;awscli&lt;/code&gt; and then tried to run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;aws s3 ls&lt;/code&gt; and it worked too.  So it ended up being a Python issue, but not with the language or runtime itself, but the version that shipped with Brew.  I am sure by the time of this writing it will be fixed so you won’t have to go through this trouble to get them working.&lt;/p&gt;
 
 &lt;h3 id=&quot;final-thoughts&quot;&gt;Final Thoughts&lt;/h3&gt;
 
@@ -114,13 +114,13 @@
   &lt;p&gt;TLDR - It is now possible to create integer partitioned tables in BigQuery.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;If you weren’t paying close attention to the latest GCP announcements, you may have missed the announcement of  &lt;a href=&quot;https://cloud.google.com/bigquery/docs/creating-integer-range-partitions&quot;&gt;BigQuery Integer Range Partitioning is now in Beta&lt;/a&gt;.  This is a long awaited feature for teams that wish to partition their data by a value other than a &lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt;.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
+&lt;p&gt;If you weren’t paying close attention to the latest GCP announcements, you may have missed the announcement of  &lt;a href=&quot;https://cloud.google.com/bigquery/docs/creating-integer-range-partitions&quot;&gt;BigQuery Integer Range Partitioning is now in Beta&lt;/a&gt;.  This is a long awaited feature for teams that wish to partition their data by a value other than a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;date&lt;/code&gt;.  This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.&lt;/p&gt;
 
 &lt;h3 id=&quot;creating-an-integer-range-partitioned-table&quot;&gt;Creating an Integer Range Partitioned Table&lt;/h3&gt;
 
-&lt;p&gt;For the purposes of this post, I will be using the same NYC Taxi Ride dataset that I used &lt;a href=&quot;https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/&quot;&gt;in my previous post&lt;/a&gt;. Let’s create  an integer range partitioned table based on the &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;.  Creating this table is no different from creating any other table except for the fact that you have to add &lt;code class=&quot;highlighter-rouge&quot;&gt;--range_partitioning&lt;/code&gt; with a partition range when calling &lt;code class=&quot;highlighter-rouge&quot;&gt;bq mk&lt;/code&gt;.  The first parameter represents the lower end of the range, the second the high end, and the last one represents the bucketing interval.  &lt;em&gt;The example command below creates 60 buckets of 5.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;For the purposes of this post, I will be using the same NYC Taxi Ride dataset that I used &lt;a href=&quot;https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/&quot;&gt;in my previous post&lt;/a&gt;. Let’s create  an integer range partitioned table based on the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;.  Creating this table is no different from creating any other table except for the fact that you have to add &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--range_partitioning&lt;/code&gt; with a partition range when calling &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bq mk&lt;/code&gt;.  The first parameter represents the lower end of the range, the second the high end, and the last one represents the bucketing interval.  &lt;em&gt;The example command below creates 60 buckets of 5.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;Using the &lt;code class=&quot;highlighter-rouge&quot;&gt;bq&lt;/code&gt; cli, you can create an Integer Range partitioned table using the following command:&lt;/p&gt;
+&lt;p&gt;Using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bq&lt;/code&gt; cli, you can create an Integer Range partitioned table using the following command:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ bq mk &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;--range_partitioning&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;pickup_location_id,0,300,5 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
@@ -138,7 +138,7 @@
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Table &lt;span class=&quot;s1&quot;&gt;'nyc_taxi.2018_by_pickup_location_id'&lt;/span&gt; successfully created.
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Let’s double check to make sure our table is partitioned as we expect. To do so, we can query the meta data of the table using the &lt;code class=&quot;highlighter-rouge&quot;&gt;bq&lt;/code&gt; command again:&lt;/p&gt;
+&lt;p&gt;Let’s double check to make sure our table is partitioned as we expect. To do so, we can query the meta data of the table using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bq&lt;/code&gt; command again:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ bq show &lt;span class=&quot;nt&quot;&gt;--format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;prettyjson nyc_taxi.2018_by_pickup_location_id | jq .rangePartitioning
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -157,11 +157,11 @@
 &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Great, our table is partitioned by &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
+&lt;p&gt;Great, our table is partitioned by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
 
 &lt;h3 id=&quot;loading-data-in-to-the-table&quot;&gt;Loading Data in to the Table&lt;/h3&gt;
 
-&lt;p&gt;Loading the data in to our newly created table is very straight forward– there are no special requirements when loading data.  The data will automatically be partitioned when using load jobs, queries, as well as streaming inserts.  For simplicity, we can load data in to the table using a simple &lt;code class=&quot;highlighter-rouge&quot;&gt;insert&lt;/code&gt; statement:&lt;/p&gt;
+&lt;p&gt;Loading the data in to our newly created table is very straight forward– there are no special requirements when loading data.  The data will automatically be partitioned when using load jobs, queries, as well as streaming inserts.  For simplicity, we can load data in to the table using a simple &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;insert&lt;/code&gt; statement:&lt;/p&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;insert&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;into&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nyc_taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2018&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_by_pickup_location_id&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nyc_taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2018&lt;/span&gt;
@@ -169,23 +169,23 @@
 
 &lt;h3 id=&quot;query-performance&quot;&gt;Query Performance&lt;/h3&gt;
 
-&lt;p&gt;For the purposes of this post, let’s assume the metric we are trying to calculate is total revenue grouped by &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;, i.e, Upper East Side South, Midtown East, Newark Airport, etc..  With that being said, If we run this query against our original date partitioned table, it is safe to assume the performance would be less than ideal due to the fact that we do not have a way to filter out locations that do not pertain to our aggregation.&lt;/p&gt;
+&lt;p&gt;For the purposes of this post, let’s assume the metric we are trying to calculate is total revenue grouped by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt;, i.e, Upper East Side South, Midtown East, Newark Airport, etc..  With that being said, If we run this query against our original date partitioned table, it is safe to assume the performance would be less than ideal due to the fact that we do not have a way to filter out locations that do not pertain to our aggregation.&lt;/p&gt;
 
-&lt;p&gt;Here is what it looks like when I try to run the aggregation against the &lt;code class=&quot;highlighter-rouge&quot;&gt;date&lt;/code&gt; partitioned version of the table.&lt;/p&gt;
+&lt;p&gt;Here is what it looks like when I try to run the aggregation against the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;date&lt;/code&gt; partitioned version of the table.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-date-partitioned.png&quot; alt=&quot;int-partitioning-query-table-date-partitioned&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;You can see right away that it scanned a lot more data than necessary, as we are only looking for data pertaining to &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; 237.&lt;/p&gt;
+&lt;p&gt;You can see right away that it scanned a lot more data than necessary, as we are only looking for data pertaining to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; 237.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-date-partitioned-execution.png&quot; alt=&quot;int-partitioning-query-table-date-partitioned-execution&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;From the execution details we can see that it did in fact have to parse the entire dataset &lt;em&gt;(112,333,368 records)&lt;/em&gt;.  Clearly this is not the most efficient way to get the aggregation, but before the introduction of Integer based partitioning it was the only way.&lt;/p&gt;
 
-&lt;p&gt;Now, if we run the same query against a table that is partitioned on &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
+&lt;p&gt;Now, if we run the same query against a table that is partitioned on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_location_id&lt;/code&gt; bucketed by 5.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;The results of the query are the same, but as you can see the number of bytes scanned has dropped to only &lt;code class=&quot;highlighter-rouge&quot;&gt;317 MB&lt;/code&gt; vs &lt;code class=&quot;highlighter-rouge&quot;&gt;2.5 GB&lt;/code&gt; which is a huge improvement.&lt;/p&gt;
+&lt;p&gt;The results of the query are the same, but as you can see the number of bytes scanned has dropped to only &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;317 MB&lt;/code&gt; vs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2.5 GB&lt;/code&gt; which is a huge improvement.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-execution.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-execution&quot; /&gt;&lt;/p&gt;
 
@@ -205,7 +205,7 @@
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-bucket-by-1.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-bucket-by-1&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Great, the number of bytes scanned has gone down even further to &lt;code class=&quot;highlighter-rouge&quot;&gt;106 MB&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Great, the number of bytes scanned has gone down even further to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;106 MB&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/images/int-partitioning-query-table-integer-partitioned-bucket-by-1-execution.png&quot; alt=&quot;int-partitioning-query-table-integer-partitioned-bucket-by-1-execution&quot; /&gt;&lt;/p&gt;
 
@@ -214,7 +214,7 @@
 &lt;blockquote&gt;
   &lt;p&gt;Note: if you compare the execution times of the queries for the examples, even though the “less efficient” query scanned the entire dataset, the actual runtime of the query is comparable &lt;strong&gt;which is remarkable&lt;/strong&gt;.  The introduction of Integer based partitioning will mostly help the budget in these situations, I.e., less bytes scanned.&lt;/p&gt;
 
-  &lt;p&gt;This dataset was only 21GB (which is not very large.) As a result the query times seem comparable. However, if we were running these queries against huge data sets, think IOT time series data, it would be a very different result.  In that case, being able to narrow the dataset down to a &lt;code class=&quot;highlighter-rouge&quot;&gt;sensor_id&lt;/code&gt;’s worth of data vs scanning the entire dataset will make a huge difference.&lt;/p&gt;
+  &lt;p&gt;This dataset was only 21GB (which is not very large.) As a result the query times seem comparable. However, if we were running these queries against huge data sets, think IOT time series data, it would be a very different result.  In that case, being able to narrow the dataset down to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sensor_id&lt;/code&gt;’s worth of data vs scanning the entire dataset will make a huge difference.&lt;/p&gt;
 &lt;/blockquote&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/ues.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/ues.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Querying External Data with BigQuery</title><link href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" rel="alternate" type="text/html" title="Querying External Data with BigQuery" /><published>2019-11-14T17:03:00+00:00</published><updated>2019-11-14T17:03:00+00:00</updated><id>https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq</id><content type="html" xml:base="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS.  It is a really cool feature.&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -223,13 +223,13 @@
 
 &lt;p&gt;I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable of querying cloud object stores like Spark, Presto, Hive, Drill, among others.  With that being said, when Google Cloud announced that &lt;a href=&quot;https://cloud.google.com/blog/products/data-analytics/keep-parquet-and-orc-from-the-data-graveyard-with-new-bigquery-features&quot;&gt;BigQuery has beta support for querying Parquet and ORC files in Google Cloud Storage&lt;/a&gt;, it really peaked my curiosity.  Thus, had no choice but to find a large dataset in Parquet format and try to query it with BigQuery.  Sounds easy enough, right?&lt;/p&gt;
 
-&lt;p&gt;To get started, I needed to find a large Hive Partitioned Dataset to use.  After some quick digging and searching, I wasn’t able to find one so the only logical thing to do was to create my own.  One of my favorite features of BigQuery is the fact that it has tons of public datasets available to use for these sort of things.  Being that I spend most of my days working in NYC, I have always found the NYC Taxi Data particularly interesting, so thought why not start there?  For reference, the name of the dataset is &lt;a href=&quot;https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-tlc-trips?filter=solution-type:dataset&amp;amp;q=taxi&amp;amp;id=e4902dee-0577-42a0-ac7c-436c04ea50b6&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;bigquery-public-data:new_york_taxi_trips&lt;/code&gt;&lt;/a&gt;.  This Dataset contains taxi rides partitioned by taxi company and year.  For the purposes of this post, I will be using &lt;code class=&quot;highlighter-rouge&quot;&gt;tlc_yellow_trips_2018&lt;/code&gt; table because it is the most recent and has nearly 18GBs of raw data.&lt;/p&gt;
+&lt;p&gt;To get started, I needed to find a large Hive Partitioned Dataset to use.  After some quick digging and searching, I wasn’t able to find one so the only logical thing to do was to create my own.  One of my favorite features of BigQuery is the fact that it has tons of public datasets available to use for these sort of things.  Being that I spend most of my days working in NYC, I have always found the NYC Taxi Data particularly interesting, so thought why not start there?  For reference, the name of the dataset is &lt;a href=&quot;https://console.cloud.google.com/marketplace/details/city-of-new-york/nyc-tlc-trips?filter=solution-type:dataset&amp;amp;q=taxi&amp;amp;id=e4902dee-0577-42a0-ac7c-436c04ea50b6&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bigquery-public-data:new_york_taxi_trips&lt;/code&gt;&lt;/a&gt;.  This Dataset contains taxi rides partitioned by taxi company and year.  For the purposes of this post, I will be using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tlc_yellow_trips_2018&lt;/code&gt; table because it is the most recent and has nearly 18GBs of raw data.&lt;/p&gt;
 
 &lt;h3 id=&quot;creating-hive-partitioned-data-in-gcs-using-spark-and-bigquery&quot;&gt;Creating Hive Partitioned Data in GCS using Spark and BigQuery&lt;/h3&gt;
 
 &lt;p&gt;With an interesting table in mind, the next step is to create a Hive Partitioned version of it on Google Cloud Storage in the Parquet format.  There are countless ways to handle this, again for the purposes of this post, I decided to use a simple Spark Shell script running on a Cloud DataProc cluster.&lt;/p&gt;
 
-&lt;p&gt;The first step is to spin up a Cloud DataProc cluster using the &lt;code class=&quot;highlighter-rouge&quot;&gt;glcoud&lt;/code&gt; command line:&lt;/p&gt;
+&lt;p&gt;The first step is to spin up a Cloud DataProc cluster using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;glcoud&lt;/code&gt; command line:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcloud dataproc clusters create cluster-taxidata-extractor &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--region&lt;/span&gt; us-central1 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
@@ -244,9 +244,9 @@
     &lt;span class=&quot;nt&quot;&gt;--project&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROJET_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The above command will spin up 3 node cluster each having 4 vCPUs and 15GBs of memory providing YARN with 8 cores and 24GBs of memory. This seems like more than enough horsepower for the task.  Once the cluster is operational, &lt;code class=&quot;highlighter-rouge&quot;&gt;ssh&lt;/code&gt; in with the following command:&lt;/p&gt;
+&lt;p&gt;The above command will spin up 3 node cluster each having 4 vCPUs and 15GBs of memory providing YARN with 8 cores and 24GBs of memory. This seems like more than enough horsepower for the task.  Once the cluster is operational, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ssh&lt;/code&gt; in with the following command:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcloud compute ssh ${HOSTNAME} --project=${PROJECT_ID} --zone=${ZONE} 
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;gcloud compute ssh ${HOSTNAME} --project=${PROJECT_ID} --zone=${ZONE} 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;Once in, need to spin up Spark Shell, but with one caveat, namely adding the &lt;a href=&quot;https://github.com/GoogleCloudPlatform/spark-bigquery-connector&quot;&gt;spark-bigquery-connector&lt;/a&gt; to its environment.  This is necessary in order to leverage the latest and greatest Big Query Storage APIs.  The final command is:&lt;/p&gt;
@@ -254,7 +254,7 @@
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;spark-shell &lt;span class=&quot;nt&quot;&gt;--jars&lt;/span&gt; gs://spark-lib/bigquery/spark-bigquery-latest.jar 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Once in, it is easy to start exploring the data to figure out the best way to partition data.  After a bit of review, I decided the most logical way to partition it is by ride date.  There are two fields that can be used to achieve this, either &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_datetime&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;dropoff_datetime&lt;/code&gt;. I decided to use &lt;code class=&quot;highlighter-rouge&quot;&gt;pickup_datetime&lt;/code&gt; taking into account that some rides may start one day and end another day, I.e, 11.45p to 12.30a, these rides will be counted on the day they originated.  There is one wrinkle in this decision, namely, the spark-bigquery-connector doesn’t have a native type to cast BigQuery’s &lt;code class=&quot;highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; into so it simply casts it in to a &lt;code class=&quot;highlighter-rouge&quot;&gt;STRING&lt;/code&gt;, which is not very useful as a partition key.  Thus, custom code is needed to perform the cast from a &lt;code class=&quot;highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; in to a &lt;code class=&quot;highlighter-rouge&quot;&gt;DATE&lt;/code&gt;.  The final code looks something like:&lt;/p&gt;
+&lt;p&gt;Once in, it is easy to start exploring the data to figure out the best way to partition data.  After a bit of review, I decided the most logical way to partition it is by ride date.  There are two fields that can be used to achieve this, either &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_datetime&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dropoff_datetime&lt;/code&gt;. I decided to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pickup_datetime&lt;/code&gt; taking into account that some rides may start one day and end another day, I.e, 11.45p to 12.30a, these rides will be counted on the day they originated.  There is one wrinkle in this decision, namely, the spark-bigquery-connector doesn’t have a native type to cast BigQuery’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; into so it simply casts it in to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;STRING&lt;/code&gt;, which is not very useful as a partition key.  Thus, custom code is needed to perform the cast from a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; in to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DATE&lt;/code&gt;.  The final code looks something like:&lt;/p&gt;
 
 &lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;spark&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;format&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;bigquery&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
     &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;option&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;bigquery-public-data:new_york_taxi_trips.tlc_yellow_trips_2018&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
@@ -265,7 +265,7 @@
     &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;gs://${PROJET_ID}/new-york-taxi-trips/yellow/2018&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;The above code is pretty self explanatory. With that being said, let’s quickly walk through it.  First, we load the table from BigQuery in to a DataFrame, next is the cast mentioned above, followed by partitioning information and file format, finally saving it.  After hitting return, I went to grab a coffee. By the time I got back to my desk, I had 18GB of Taxi ride data partitioned by &lt;code class=&quot;highlighter-rouge&quot;&gt;trip_date&lt;/code&gt; in my GCS bucket already. That was easy :smile:&lt;/p&gt;
+&lt;p&gt;The above code is pretty self explanatory. With that being said, let’s quickly walk through it.  First, we load the table from BigQuery in to a DataFrame, next is the cast mentioned above, followed by partitioning information and file format, finally saving it.  After hitting return, I went to grab a coffee. By the time I got back to my desk, I had 18GB of Taxi ride data partitioned by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;trip_date&lt;/code&gt; in my GCS bucket already. That was easy :smile:&lt;/p&gt;
 
 &lt;p&gt;For reference the files should look something like:&lt;/p&gt;
 
@@ -294,7 +294,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
     gs://new-york-taxi-trips/yellow/2018/&lt;span class=&quot;k&quot;&gt;*&lt;/span&gt;.parquet &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; taxi-table-def
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;taxi-table-def&lt;/code&gt; should look something like:&lt;/p&gt;
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taxi-table-def&lt;/code&gt; should look something like:&lt;/p&gt;
 
 &lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
   &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;hivePartitioningOptions&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
@@ -313,9 +313,9 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;bq mk &lt;span class=&quot;nt&quot;&gt;--external_table_definition&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;taxi-table-def &lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROJET_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;:nyc_taxi.2018_external
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;&lt;em&gt;Note: This assumes you already have a Dataset named &lt;code class=&quot;highlighter-rouge&quot;&gt;nyc_taxi&lt;/code&gt;, if you don’t, now would be a great time to create it, or change the above command to match the name of the Dataset you want to add the external table reference to.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;Note: This assumes you already have a Dataset named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;nyc_taxi&lt;/code&gt;, if you don’t, now would be a great time to create it, or change the above command to match the name of the Dataset you want to add the external table reference to.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;After running the above, you should get a message saying &lt;code class=&quot;highlighter-rouge&quot;&gt;Table '${PROJECT_ID}:nyc_taxi.2018_external' successfully created.&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;After running the above, you should get a message saying &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Table '${PROJECT_ID}:nyc_taxi.2018_external' successfully created.&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;If the table was successfully created, it should also appear in the BigQuery UI as an external table available to query.&lt;/p&gt;
 
@@ -349,15 +349,15 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;p&gt;&lt;img src=&quot;/images/querying-externally-partitioned-data-with-bq_1.png&quot; alt=&quot;BigQuery Execution Details&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;we can see that the query started with the full &lt;code class=&quot;highlighter-rouge&quot;&gt;8,760,090&lt;/code&gt; rows, and narrowed down to &lt;code class=&quot;highlighter-rouge&quot;&gt;217&lt;/code&gt;. This number is not random, it maps directly to the number of files that exist in GCS.  Lets verify:&lt;/p&gt;
+&lt;p&gt;we can see that the query started with the full &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;8,760,090&lt;/code&gt; rows, and narrowed down to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;217&lt;/code&gt;. This number is not random, it maps directly to the number of files that exist in GCS.  Lets verify:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;❯ gsutil &lt;span class=&quot;nb&quot;&gt;ls &lt;/span&gt;gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;PROJET_ID&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;/new-york-taxi-trips/yellow/2018/trip_date&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;2018-01&lt;span class=&quot;se&quot;&gt;\*&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;grep &lt;/span&gt;parquet | &lt;span class=&quot;nb&quot;&gt;wc
      &lt;/span&gt;217     217   27342
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Perfect, the number of Parquet files under January &lt;code class=&quot;highlighter-rouge&quot;&gt;2018-01-*&lt;/code&gt; is &lt;code class=&quot;highlighter-rouge&quot;&gt;217&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Perfect, the number of Parquet files under January &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2018-01-*&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;217&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;One final thing to verify is if the number of bytes decrease based upon columns specified in the &lt;code class=&quot;highlighter-rouge&quot;&gt;select&lt;/code&gt;, which would prove that BigQuery is not only taking advantage of the Hive Based Partitions, but also the columnar Parquet format.&lt;/p&gt;
+&lt;p&gt;One final thing to verify is if the number of bytes decrease based upon columns specified in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;select&lt;/code&gt;, which would prove that BigQuery is not only taking advantage of the Hive Based Partitions, but also the columnar Parquet format.&lt;/p&gt;
 
 &lt;div class=&quot;language-sql highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;SELECT&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pickup_datetime&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;FROM&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nyc_taxi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2018&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;_external&lt;/span&gt;
 &lt;span class=&quot;c1&quot;&gt;-- Query complete (16.0 sec elapsed, 2.2 GB processed)&lt;/span&gt;
@@ -383,7 +383,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
   &lt;span class=&quot;n&quot;&gt;total_trips&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;DESC&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This query aggregates the number of pickups by &lt;code class=&quot;highlighter-rouge&quot;&gt;zone_id&lt;/code&gt; and then joins the id with the public Dataset table &lt;code class=&quot;highlighter-rouge&quot;&gt;taxi_zone_geom&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;This query aggregates the number of pickups by &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;zone_id&lt;/code&gt; and then joins the id with the public Dataset table &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;taxi_zone_geom&lt;/code&gt;.&lt;/p&gt;
 
 &lt;table&gt;
   &lt;thead&gt;
@@ -442,11 +442,11 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;h3 id=&quot;first-attempt&quot;&gt;First Attempt&lt;/h3&gt;
 
-&lt;p&gt;The first place where I tried to answer this simple question was to use the &lt;a href=&quot;https://github.com/search?q=pom.xml&amp;amp;type=Code&amp;amp;utf8=%E2%9C%93&quot;&gt;Github search box&lt;/a&gt;.  After trying different combinations and even within the advanced search, found it really difficult to get the results because of too much noise.  The main problem was that when searching for &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; the place it showed up most often was in &lt;code class=&quot;highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; which was not really relevant to my question.  This itself seemed a bit strange to me, as why would projects not want to version control their build artifacts?  Is the  &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; being generated as part of the build itself?  Will leave these interesting questions for another afternoon.&lt;/p&gt;
+&lt;p&gt;The first place where I tried to answer this simple question was to use the &lt;a href=&quot;https://github.com/search?q=pom.xml&amp;amp;type=Code&amp;amp;utf8=%E2%9C%93&quot;&gt;Github search box&lt;/a&gt;.  After trying different combinations and even within the advanced search, found it really difficult to get the results because of too much noise.  The main problem was that when searching for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; the place it showed up most often was in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;.gitignore&lt;/code&gt; which was not really relevant to my question.  This itself seemed a bit strange to me, as why would projects not want to version control their build artifacts?  Is the  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; being generated as part of the build itself?  Will leave these interesting questions for another afternoon.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
 
-&lt;p&gt;Soon after this, I remembered that &lt;a href=&quot;https://cloud.google.com/bigquery/&quot;&gt;Big Query&lt;/a&gt; has &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/&quot;&gt;public datasets&lt;/a&gt; available for all to use &lt;em&gt;(for free)&lt;/em&gt;, and decided to take a quick peek to see if the &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/github&quot;&gt;GitHub dataset&lt;/a&gt; was there, and sure enough, it was. Great.  After some exploring around the &lt;code class=&quot;highlighter-rouge&quot;&gt;github_repos&lt;/code&gt; dataset, was able to find a table called &lt;code class=&quot;highlighter-rouge&quot;&gt;files&lt;/code&gt; which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located within a project and then do a simple count.  After a quick browse around the tables, was able to find the &lt;em&gt;files&lt;/em&gt; table and it had the following shape:&lt;/p&gt;
+&lt;p&gt;Soon after this, I remembered that &lt;a href=&quot;https://cloud.google.com/bigquery/&quot;&gt;Big Query&lt;/a&gt; has &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/&quot;&gt;public datasets&lt;/a&gt; available for all to use &lt;em&gt;(for free)&lt;/em&gt;, and decided to take a quick peek to see if the &lt;a href=&quot;https://cloud.google.com/bigquery/public-data/github&quot;&gt;GitHub dataset&lt;/a&gt; was there, and sure enough, it was. Great.  After some exploring around the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;github_repos&lt;/code&gt; dataset, was able to find a table called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;files&lt;/code&gt; which looked very promising because it should have one row per file in GitHub right?  This should allow me to write a query that looked for the specific build files located within a project and then do a simple count.  After a quick browse around the tables, was able to find the &lt;em&gt;files&lt;/em&gt; table and it had the following shape:&lt;/p&gt;
 
 &lt;table&gt;
   &lt;tbody&gt;
@@ -526,7 +526,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;p&gt;Clearly this looks like the right table to use to answer my question about counting the different build tool usages.&lt;/p&gt;
 
-&lt;p&gt;The next step was to come up with a query that can count the instances of each build artifact, meaning, count the number of  &lt;code class=&quot;highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;build.sbt&lt;/code&gt;, and &lt;code class=&quot;highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; across the Github dataset.  The results should give a good indication of how many projects use each build tool.&lt;/p&gt;
+&lt;p&gt;The next step was to come up with a query that can count the instances of each build artifact, meaning, count the number of  &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.gradle&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build.sbt&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pom.xml&lt;/code&gt; across the Github dataset.  The results should give a good indication of how many projects use each build tool.&lt;/p&gt;
 
 &lt;p&gt;Here is that query:&lt;/p&gt;
 
@@ -618,17 +618,17 @@ of the features mentioned here.&lt;/p&gt;
 &lt;ul&gt;
   &lt;li&gt;Argument list, a return type, and a body
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;(Object o) -&amp;gt; o.toString&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Object o) -&amp;gt; o.toString&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;Can refer to enclosing values
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;(Person p) -&amp;gt; p.getName().equals(name)&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;(Person p) -&amp;gt; p.getName().equals(name)&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;Method references to an existing method
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Object::toString()&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Object::toString()&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;Allows you to treat code as data&lt;/li&gt;
@@ -734,9 +734,9 @@ of the features mentioned here.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Functional Interfaces&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Predicate&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Consumer&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;Supplier&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Predicate&amp;lt;String&amp;gt; isEmpty = s -&amp;gt; s.isEmpty()&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Runnable r = () -&amp;gt; {println(&quot;hello&quot;);&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Predicate&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Consumer&amp;lt;T&amp;gt;&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Supplier&amp;lt;T&amp;gt;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Predicate&amp;lt;String&amp;gt; isEmpty = s -&amp;gt; s.isEmpty()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Runnable r = () -&amp;gt; {println(&quot;hello&quot;);&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;&lt;strong&gt;We could have added function types, but it was obvious and WRONG&lt;/strong&gt;&lt;/p&gt;
@@ -772,7 +772,7 @@ of the features mentioned here.&lt;/p&gt;
   &lt;li&gt;Source incompatible change, but binary will continue to work&lt;/li&gt;
   &lt;li&gt;Libraries will start looking old&lt;/li&gt;
   &lt;li&gt;Need a way to evolve them or replace them&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Collections.sort()&lt;/code&gt; &lt;em&gt;“bags nailed to side, don’t want to continue this”&lt;/em&gt; –BG&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Collections.sort()&lt;/code&gt; &lt;em&gt;“bags nailed to side, don’t want to continue this”&lt;/em&gt; –BG&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Interface with Default Method&lt;/p&gt;
@@ -790,7 +790,7 @@ of the features mentioned here.&lt;/p&gt;
 &lt;/ul&gt;
 
 &lt;blockquote&gt;
-  &lt;p&gt;A question was posed asking why is the &lt;code class=&quot;highlighter-rouge&quot;&gt;default&lt;/code&gt; keyword necessary?  Can’t the
+  &lt;p&gt;A question was posed asking why is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;default&lt;/code&gt; keyword necessary?  Can’t the
 compiler infer if there is an implementation in the IF, it is the default?
 “Of course it can figure it out… but we wanted extra clarity, deal with it. :) “ –BG&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -910,7 +910,7 @@ compiler infer if there is an implementation in the IF, it is the default?
 
 &lt;ul&gt;
   &lt;li&gt;Lets say we want to massage the results of the above collection&lt;/li&gt;
-  &lt;li&gt;Another new feature added to Collections is &lt;code class=&quot;highlighter-rouge&quot;&gt;Streams&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Another new feature added to Collections is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Streams&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Manipulate all elements of a Collection after applying a Filter&lt;/p&gt;
@@ -946,7 +946,7 @@ compiler infer if there is an implementation in the IF, it is the default?
         &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;ul&gt;
-  &lt;li&gt;Believe it (or not), these examples are not any more expensive (perhaps cheaper) than a typical &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; loop&lt;/li&gt;
+  &lt;li&gt;Believe it (or not), these examples are not any more expensive (perhaps cheaper) than a typical &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;for&lt;/code&gt; loop&lt;/li&gt;
   &lt;li&gt;This is possible because it does a single pass on data
     &lt;ul&gt;
       &lt;li&gt;Creates a pipeline with Filter, then Map, and then Sum invokes them&lt;/li&gt;
@@ -995,14 +995,14 @@ compiler infer if there is an implementation in the IF, it is the default?
       &lt;li&gt;Useful for static data&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Functional" /><category term="Java" /><category term="Scala" /><summary type="html">Notes from Brian Goetz's talk on Evolving Java.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/running.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/running.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">On Deciding Between PUT and POST When Creating a RESTful Resource</title><link href="https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" rel="alternate" type="text/html" title="On Deciding Between PUT and POST When Creating a RESTful Resource" /><published>2013-10-29T21:15:00+00:00</published><updated>2013-10-29T21:15:00+00:00</updated><id>https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource</id><content type="html" xml:base="https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/">&lt;p&gt;The goal of this post is to try to help you figure out which HTTP verb: &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; is more appropriate to use when adding and updating resources.&lt;/p&gt;
+&lt;/ul&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Functional" /><category term="Java" /><category term="Scala" /><summary type="html">Notes from Brian Goetz's talk on Evolving Java.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/running.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/running.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">On Deciding Between PUT and POST When Creating a RESTful Resource</title><link href="https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/" rel="alternate" type="text/html" title="On Deciding Between PUT and POST When Creating a RESTful Resource" /><published>2013-10-29T21:15:00+00:00</published><updated>2013-10-29T21:15:00+00:00</updated><id>https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource</id><content type="html" xml:base="https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/">&lt;p&gt;The goal of this post is to try to help you figure out which HTTP verb: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt; is more appropriate to use when adding and updating resources.&lt;/p&gt;
 
 &lt;p&gt;Before we can get in to the details of which HTTP verb to use when, we first need to understand the type of “back end” or “server” or “service” we are trying to add the RESTful API to.  For the purposes of this post, we will refer to the service providing the API as the &lt;em&gt;“Resource Archetype”&lt;/em&gt;.&lt;/p&gt;
 
 &lt;p&gt;To start, we need to distinguish the differences between the two basic types of resource archetypes, namely, a &lt;em&gt;collection&lt;/em&gt; and a &lt;em&gt;datastore&lt;/em&gt; or “store” for short.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A &lt;strong&gt;collection&lt;/strong&gt; is a &lt;strong&gt;server-managed&lt;/strong&gt; directory of resources.  This means that clients may &lt;strong&gt;propose&lt;/strong&gt; the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; that is associated with the newly created resource.&lt;/li&gt;
+  &lt;li&gt;A &lt;strong&gt;collection&lt;/strong&gt; is a &lt;strong&gt;server-managed&lt;/strong&gt; directory of resources.  This means that clients may &lt;strong&gt;propose&lt;/strong&gt; the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt; that is associated with the newly created resource.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;blockquote&gt;
@@ -1010,7 +1010,7 @@ compiler infer if there is an implementation in the IF, it is the default?
 &lt;/blockquote&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A &lt;strong&gt;store&lt;/strong&gt; is a &lt;strong&gt;client-managed&lt;/strong&gt; resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the &lt;strong&gt;client&lt;/strong&gt;  is responsible for assigning an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the resource and managing the workflow around that task.&lt;/li&gt;
+  &lt;li&gt;A &lt;strong&gt;store&lt;/strong&gt; is a &lt;strong&gt;client-managed&lt;/strong&gt; resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the &lt;strong&gt;client&lt;/strong&gt;  is responsible for assigning an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the resource and managing the workflow around that task.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;These terms feel too abstract, lets walk through two concrete examples to fully illustrate the two concepts.&lt;/p&gt;
@@ -1023,37 +1023,37 @@ compiler infer if there is an implementation in the IF, it is the default?
 
 &lt;p&gt;Now lets set up our example store, which ends up being a lot simpler than the collection, mainly because there is no middleware between the physical datastore and the client.  So following the example of the collection, the store would simply be a &lt;a href=&quot;http://basho.com/riak/&quot;&gt;Riak&lt;/a&gt; instance.&lt;/p&gt;
 
-&lt;p&gt;Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; vs a &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; when creating or updating a resource.&lt;/p&gt;
+&lt;p&gt;Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; vs a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt; when creating or updating a resource.&lt;/p&gt;
 
 &lt;p&gt;When interacting with a &lt;strong&gt;store&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to add a new resource, with the ID specified by the &lt;strong&gt;client&lt;/strong&gt;.&lt;/li&gt;
-  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must also be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to add a new resource, with the ID specified by the &lt;strong&gt;client&lt;/strong&gt;.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must also be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The reason you &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. &lt;em&gt;This is another way of saying the request is idempotent.&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;The reason you &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. &lt;em&gt;This is another way of saying the request is idempotent.&lt;/em&gt;&lt;/p&gt;
 
 &lt;p&gt;When interacting with a &lt;strong&gt;collection&lt;/strong&gt;:&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; must be used to create a new resource, and the collection provides the ID to the client.&lt;/li&gt;
-  &lt;li&gt;A &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt; must be used to create a new resource, and the collection provides the ID to the client.&lt;/li&gt;
+  &lt;li&gt;A &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt; must be used to &lt;strong&gt;update&lt;/strong&gt; or replace an already stored resource.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt; (request) the creation of the new resource, and not get back an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt;, meaning the request failed.  Another thing to take notice of is the fact that no &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; gets passed from the client, because it is assumed that the server is handling this logic.&lt;/p&gt;
+&lt;p&gt;The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt; (request) the creation of the new resource, and not get back an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt;, meaning the request failed.  Another thing to take notice of is the fact that no &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt; gets passed from the client, because it is assumed that the server is handling this logic.&lt;/p&gt;
 
 &lt;p&gt;If you take a step back to think about our above collection example, it is possible that Spray has many different clients, besides the RESTful one.  That is why it needs to manage the notion of identity.  Whereas, in the store example, if Riak is exposed to the client directly without a middleware, chances are, that Riak database is meant only for the RESTful client.&lt;/p&gt;
 
-&lt;p&gt;Here is a additional example taken directly from the &lt;a href=&quot;http://docs.basho.com/riak/latest/dev/references/http/store-object/&quot;&gt;Riak documentation&lt;/a&gt; that also illustrates the point that when a client is providing an &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt;, the request should be a &lt;code class=&quot;highlighter-rouge&quot;&gt;PUT&lt;/code&gt;, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the &lt;code class=&quot;highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the client, and of course this request is a &lt;code class=&quot;highlighter-rouge&quot;&gt;POST&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here is a additional example taken directly from the &lt;a href=&quot;http://docs.basho.com/riak/latest/dev/references/http/store-object/&quot;&gt;Riak documentation&lt;/a&gt; that also illustrates the point that when a client is providing an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt;, the request should be a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PUT&lt;/code&gt;, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ID&lt;/code&gt; to the client, and of course this request is a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;POST&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PUT /buckets/bucket/keys/key    # User-defined key
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;PUT /buckets/bucket/keys/key    # User-defined key
 POST /buckets/bucket/keys       # Riak-defined key
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;As always, please feel free to comment on this post or email me with any comments, questions, or concerns.&lt;/p&gt;
 
-&lt;p&gt;Thanks for reading.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="REST" /><summary type="html">On Deciding Between PUT and POST When Creating a RESTful Resource</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/running.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/running.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">WebView(Javascript) -&amp;gt; Native Android API</title><link href="https://stevenlevine.dev/2012/03/webview-javascript-native-android/" rel="alternate" type="text/html" title="WebView(Javascript) -&gt; Native Android API" /><published>2012-03-03T15:35:00+00:00</published><updated>2012-03-03T15:35:00+00:00</updated><id>https://stevenlevine.dev/2012/03/webview-javascript-native-android</id><content type="html" xml:base="https://stevenlevine.dev/2012/03/webview-javascript-native-android/">&lt;p&gt;For a few weeks towards the end of last year I was developing an Android application.  During that time I discovered a few new (to me) things about the Android platform. One in particular that caught my attention was having Javascript code running locally on the device call a native Android function.&lt;/p&gt;
+&lt;p&gt;Thanks for reading.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="posts" /><category term="Development" /><category term="REST" /><summary type="html">On Deciding Between PUT and POST When Creating a RESTful Resource</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/running.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/running.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">WebView(Javascript) -&amp;gt; Native Android API</title><link href="https://stevenlevine.dev/2012/03/webview-javascript-native-android/" rel="alternate" type="text/html" title="WebView(Javascript) -&amp;gt; Native Android API" /><published>2012-03-03T15:35:00+00:00</published><updated>2012-03-03T15:35:00+00:00</updated><id>https://stevenlevine.dev/2012/03/webview-javascript-native-android</id><content type="html" xml:base="https://stevenlevine.dev/2012/03/webview-javascript-native-android/">&lt;p&gt;For a few weeks towards the end of last year I was developing an Android application.  During that time I discovered a few new (to me) things about the Android platform. One in particular that caught my attention was having Javascript code running locally on the device call a native Android function.&lt;/p&gt;
 
 &lt;p&gt;Before getting into the technical details, let me first talk about a situation where this piece of functionality would be useful.  Lets say (for arguments sake), that you have to write an Android application that requires advanced and very polished charts.  What are you options?  You can try to find a native Android implementation that meets the requirement, but I must admit, I have been there and done that, and couldn’t find any particularly good libraries.  Yes there are some out there, but they didn’t have the polish I was looking for (please comment if you know of good ones).&lt;/p&gt;
 
@@ -1071,17 +1071,17 @@ POST /buckets/bucket/keys       # Riak-defined key
 
 &lt;p&gt;MainActivity.scala - setting up basic view&lt;/p&gt;
 
-&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Step 1: Create WebView
-&lt;/span&gt;  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WebView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Step 1: Create WebView&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;WebView&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 
-  &lt;span class=&quot;c1&quot;&gt;// Step 2: Load page from assets
-&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loadUrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:///android_asset/index.html&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Step 2: Load page from assets&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;loadUrl&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file:///android_asset/index.html&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 
-  &lt;span class=&quot;c1&quot;&gt;// Step 3: Enable Javascript
-&lt;/span&gt;  &lt;span class=&quot;nv&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;getSettings&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// Step 3: Enable Javascript&lt;/span&gt;
+  &lt;span class=&quot;nv&quot;&gt;webView&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;getSettings&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setJavaScriptEnabled&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;So far, so easy.  Next, we need to create a simple Scala function in our &lt;code class=&quot;highlighter-rouge&quot;&gt;MainActivity&lt;/code&gt; to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called &lt;code class=&quot;highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;So far, so easy.  Next, we need to create a simple Scala function in our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MainActivity&lt;/code&gt; to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt;&lt;/p&gt;
 
 &lt;p&gt;MainActivity.scala - function to expose SDK version&lt;/p&gt;
 
@@ -1094,17 +1094,17 @@ POST /buckets/bucket/keys       # Riak-defined key
 
 &lt;p&gt;MainActivity.scala - Adding a function to the DOM&lt;/p&gt;
 
-&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Add the above function to the DOM as &quot;Android&quot;
-&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// The function can now be invoked from Javascript with the following: Android.sdkVersion()
-&lt;/span&gt;  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addJavascriptInterface&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsFun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Android&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  &lt;span class=&quot;c1&quot;&gt;// Add the above function to the DOM as &quot;Android&quot;&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// The function can now be invoked from Javascript with the following: Android.sdkVersion()&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;addJavascriptInterface&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;jsFun&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Android&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;p&gt;&lt;em&gt;Optional step:&lt;/em&gt; When developing Javascript applications it is sometimes helpfull to be able to debug something to the browser console.  Believe it or not, it is quite easy to implement the browser’s console implementation with an Android one, and instead of logging the message to the browser console, it will send them to the Android Logcat system.&lt;/p&gt;
 
 &lt;p&gt;MainActivity.scala - Implement Javascript console.log&lt;/p&gt;
 
-&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;c1&quot;&gt;// provide the WebView with a console.log implementation
-&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setWebChromeClient&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebChromeClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
+&lt;div class=&quot;language-scala highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;   &lt;span class=&quot;c1&quot;&gt;// provide the WebView with a console.log implementation&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;webView&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setWebChromeClient&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;WebChromeClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
       &lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onConsoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;ConsoleMessage&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;Boolean&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
         &lt;span class=&quot;k&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;msg&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;StringBuilder&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;consoleMessage&lt;/span&gt;
           &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;messageLevel&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;py&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sc&quot;&gt;'\t'&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
@@ -1122,7 +1122,7 @@ POST /buckets/bucket/keys       # Riak-defined key
 
 &lt;p&gt;Finally we need to create our html/javascript view.&lt;/p&gt;
 
-&lt;p&gt;Lets create a file called &lt;code class=&quot;highlighter-rouge&quot;&gt;index.html&lt;/code&gt; and place it under &lt;code class=&quot;highlighter-rouge&quot;&gt;src/main/assets&lt;/code&gt; and add at least the following code to it:&lt;/p&gt;
+&lt;p&gt;Lets create a file called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;index.html&lt;/code&gt; and place it under &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;src/main/assets&lt;/code&gt; and add at least the following code to it:&lt;/p&gt;
 
 &lt;p&gt;index.html - default page that calls our Android.sdkVersion() function via Javascript&lt;/p&gt;
 
@@ -1138,7 +1138,7 @@ POST /buckets/bucket/keys       # Riak-defined key
     &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;As you can see here, we are invoking the Android (Scala) method called &lt;code class=&quot;highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt; and appending the results of the call to a div using JQuery.&lt;/p&gt;
+&lt;p&gt;As you can see here, we are invoking the Android (Scala) method called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sdkVersion()&lt;/code&gt; and appending the results of the call to a div using JQuery.&lt;/p&gt;
 
 &lt;p&gt;Thats all there is to it, now you know how to invoke an Android function from Javascript running in an Android WebView.&lt;/p&gt;</content><author><name></name></author><category term="Android" /><category term="Scala" /><category term="Javascript" /><category term="Development" /><summary type="html">Calling Javascript from an Android Webview</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/running.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/running.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Mission Accomplished, Migration From Wordpress to Octopress Complete!</title><link href="https://stevenlevine.dev/2011/09/migration-from-wordpress-to-octopress-complete/" rel="alternate" type="text/html" title="Mission Accomplished, Migration From Wordpress to Octopress Complete!" /><published>2011-09-28T14:26:00+00:00</published><updated>2011-09-28T14:26:00+00:00</updated><id>https://stevenlevine.dev/2011/09/migration-from-wordpress-to-octopress-complete</id><content type="html" xml:base="https://stevenlevine.dev/2011/09/migration-from-wordpress-to-octopress-complete/">&lt;p&gt;Someone told me about the &lt;a href=&quot;http://octopress.org/&quot;&gt;Octopress&lt;/a&gt; blog engine last week, which is a blog engine based on &lt;a href=&quot;https://github.com/mojombo/jekyll/wiki&quot;&gt;Jekyll&lt;/a&gt;, the engine that powers sites such as &lt;a href=&quot;http://pages.github.com/&quot;&gt;GitHub Pages&lt;/a&gt;.  The main difference between Octopress and plain vanilla Jekyll is with Jekyll, you have to write your own Templates, Styles, and Javacscript code, but with Octopress, it has been abstracted away.  All you need to do is clone the Octopress repository and start writing posts (or migrating posts in my case).  With that being said, I have spend the past week migrating my blog from Wordpress to Octopress.&lt;/p&gt;
 
@@ -1172,13 +1172,13 @@ POST /buckets/bucket/keys       # Riak-defined key
     &lt;p&gt;Since Octopress is a template engine, not a blog engine, you have your entire blog including all your posts in a single project.  This works out great because you can open the project in RubyMine and see your posts as Markdown, your design as Sass and CSS, and your site layout as Liquid Templates.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;The writing process is very Agile, as you can preview the site as many times as you want without having to copy/push/deploy code anywhere.  All that you need to do is &lt;code class=&quot;highlighter-rouge&quot;&gt;cd&lt;/code&gt; in to your blog’s project directory and type &lt;code class=&quot;highlighter-rouge&quot;&gt;rake preview&lt;/code&gt; and browse to &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;&lt;/p&gt;
+    &lt;p&gt;The writing process is very Agile, as you can preview the site as many times as you want without having to copy/push/deploy code anywhere.  All that you need to do is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cd&lt;/code&gt; in to your blog’s project directory and type &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rake preview&lt;/code&gt; and browse to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;localhost:4000&lt;/code&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;You can write posts in Markdown, which happens to be my favorite way of generating web content (thanks to GitHub and Stackoverflow).&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;There are a variety of great ways to embed code within a post.  The first great option is to use the neat GitHub notation by surrounding your code with three tick marks.  The second is to use the Liquid Template notation, which is equally nice.  Lets not forget that you can include a GitHub gist VERY easily, just &lt;code class=&quot;highlighter-rouge&quot;&gt;{ gist gistIdNumber }&lt;/code&gt;. Can’t get much easier than that!  Last but defiantly, not least is you can include a source file from the filesystem.&lt;/p&gt;
+    &lt;p&gt;There are a variety of great ways to embed code within a post.  The first great option is to use the neat GitHub notation by surrounding your code with three tick marks.  The second is to use the Liquid Template notation, which is equally nice.  Lets not forget that you can include a GitHub gist VERY easily, just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;{ gist gistIdNumber }&lt;/code&gt;. Can’t get much easier than that!  Last but defiantly, not least is you can include a source file from the filesystem.&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Code samples look fantastic when they are rendered in the Solarized themed code viewer! Hers’s a sample:&lt;/p&gt;
@@ -1193,7 +1193,7 @@ POST /buckets/bucket/keys       # Riak-defined key
   &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;It has been about a week and my blog is completely migrated over to Octopress now.  It has been a rather enlightening experience for me because Octopress and Wordpress are so different.  Bottom line is Octopress was written by and targeted at hackers, and that fact inspires me at a level that Wordpress never was able to do.  I am hoping to leverage that hacker inspiration to get my self writing posts on a more regular basis starting today.&lt;/p&gt;</content><author><name></name></author><category term="Meta" /><category term="Development" /><summary type="html">My thoughts and experiences with migrating my blog from Wordpress to Octopress</summary></entry><entry><title type="html">In case you haven’t heard - Apple is not showing Java any more love…</title><link href="https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/" rel="alternate" type="text/html" title="In case you haven't heard - Apple is not showing Java any more love..." /><published>2010-10-21T16:29:24+00:00</published><updated>2010-10-21T16:29:24+00:00</updated><id>https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love</id><content type="html" xml:base="https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/">&lt;p&gt;&lt;a href=&quot;http://goo.gl/mDkf&quot;&gt;Official release notes&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;It has been about a week and my blog is completely migrated over to Octopress now.  It has been a rather enlightening experience for me because Octopress and Wordpress are so different.  Bottom line is Octopress was written by and targeted at hackers, and that fact inspires me at a level that Wordpress never was able to do.  I am hoping to leverage that hacker inspiration to get my self writing posts on a more regular basis starting today.&lt;/p&gt;</content><author><name></name></author><category term="Meta" /><category term="Development" /><summary type="html">My thoughts and experiences with migrating my blog from Wordpress to Octopress</summary></entry><entry><title type="html">In case you haven’t heard - Apple is not showing Java any more love…</title><link href="https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/" rel="alternate" type="text/html" title="In case you haven’t heard - Apple is not showing Java any more love…" /><published>2010-10-21T16:29:24+00:00</published><updated>2010-10-21T16:29:24+00:00</updated><id>https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love</id><content type="html" xml:base="https://stevenlevine.dev/2010/10/in-case-you-havent-heard-apple-is-not-showing-java-any-more-love/">&lt;p&gt;&lt;a href=&quot;http://goo.gl/mDkf&quot;&gt;Official release notes&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;If you think about it it makes perfect sense for them. To them Java is no different than Flash, just a GUI platform. How many killer Java applications are there out there (besides Java IDE’s) ? Add to the fact that SunOracle is probably twisting their arm for more licensing money.&lt;/p&gt;
 

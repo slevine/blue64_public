@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>RubyMine 2 Debugging Issue Resolved | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="RubyMine 2 Debugging Issue Resolved" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
@@ -28,8 +28,10 @@
 <meta property="og:site_name" content="Steven Levine" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2010-01-23T15:27:19+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="RubyMine 2 Debugging Issue Resolved" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"description":"If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the ruby-debug-ide19 gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"RubyMine 2 Debugging Issue Resolved","dateModified":"2010-01-23T15:27:19+00:00","datePublished":"2010-01-23T15:27:19+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2010/01/rubymine-2-debugging-issue-resolved/"},"url":"https://stevenlevine.dev/2010/01/rubymine-2-debugging-issue-resolved/","@context":"https://schema.org"}</script>
+{"description":"If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the ruby-debug-ide19 gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.","@type":"BlogPosting","headline":"RubyMine 2 Debugging Issue Resolved","dateModified":"2010-01-23T15:27:19+00:00","datePublished":"2010-01-23T15:27:19+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2010/01/rubymine-2-debugging-issue-resolved/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2010/01/rubymine-2-debugging-issue-resolved/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -141,13 +143,13 @@
 
       <div class="page-content">
         <div class="e-content">
-          <p>If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the <code class="highlighter-rouge">ruby-debug-ide19</code> gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.</p>
+          <p>If you are trying to debug Ruby code in RubyMine 2 IDE, but are having difficulties such as, the IDE freezes after you try to step in, step over, or step next and are wondering if your configuration is wrong? It is not, if you happen to have installed the <code class="language-plaintext highlighter-rouge">ruby-debug-ide19</code> gem from the command line (not from IDE), you need to patch the actual gem code to get things working nicely.</p>
 
 <ul>
-  <li>Open the following file with your favorite text editor (part of <code class="highlighter-rouge">ruby ruby-debug-ide19</code> gem)</li>
+  <li>Open the following file with your favorite text editor (part of <code class="language-plaintext highlighter-rouge">ruby ruby-debug-ide19</code> gem)</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$GEM_HOME/ruby-debug-ide19-0.4.12/lib/ruby-debug/command.rb
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$GEM_HOME/ruby-debug-ide19-0.4.12/lib/ruby-debug/command.rb
 </code></pre></div></div>
 
 <ul>

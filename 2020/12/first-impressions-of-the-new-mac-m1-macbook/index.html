@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>First Impressions of the M1 MacBook Pro | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="First Impressions of the M1 MacBook Pro" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
@@ -29,8 +29,11 @@
 <meta property="og:image" content="https://stevenlevine.dev/images/mac-new.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-12-28T16:15:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://stevenlevine.dev/images/mac-new.jpg" />
+<meta property="twitter:title" content="First Impressions of the M1 MacBook Pro" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"description":"I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"First Impressions of the M1 MacBook Pro","dateModified":"2020-12-28T16:15:00+00:00","datePublished":"2020-12-28T16:15:00+00:00","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/mac-new.jpg","@type":"imageObject"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"},"url":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/","@context":"https://schema.org"}</script>
+{"description":"I will walk you through my thoughts on owning the new M1 MacBook Pro and what it took for me to get my development environment up and running on it.","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/mac-new.jpg","@type":"imageObject"},"@type":"BlogPosting","headline":"First Impressions of the M1 MacBook Pro","dateModified":"2020-12-28T16:15:00+00:00","datePublished":"2020-12-28T16:15:00+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -214,7 +217,7 @@
   <li><a href="https://code.visualstudio.com/insiders/#osx">VS Code Insiders</a></li>
 </ul>
 
-<p>There were also many workarounds I had to work through to get the rest of my tools working.  While I was waiting for the new machine, I did a lot of research on the best ways to get Brew running on the M1.  Brew on ARM64 is not “officially supported” yet, but that wasn’t going to stop me from trying to get it running.  Of course, I took the advice of the Brew committers and installed it in a non-standard location, <code class="highlighter-rouge">~/.homebrew</code> to give it a try.</p>
+<p>There were also many workarounds I had to work through to get the rest of my tools working.  While I was waiting for the new machine, I did a lot of research on the best ways to get Brew running on the M1.  Brew on ARM64 is not “officially supported” yet, but that wasn’t going to stop me from trying to get it running.  Of course, I took the advice of the Brew committers and installed it in a non-standard location, <code class="language-plaintext highlighter-rouge">~/.homebrew</code> to give it a try.</p>
 
 <p>I was able to get most of my formulas working this way until I ran into the ones that depended on Go or Rust.  I tried going down the “compile everything” route, but there were a lot of issues getting things running.  If someone wanted to get everything running on ARM I am confident they could have, but due to time constraints, I had to give up.  This is when I decided to go down the path of running Brew under Rosetta.  There are two different ways of getting access to a shell running under Rosetta:</p>
 
@@ -225,39 +228,39 @@
 <p><img src="/images/iterm-rosetta.png" style="width: 65%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
 <ul>
-  <li>Create a new iTerm profile where the launch command is <code class="highlighter-rouge">arch -x86_64 zsh</code></li>
+  <li>Create a new iTerm profile where the launch command is <code class="language-plaintext highlighter-rouge">arch -x86_64 zsh</code></li>
 </ul>
 
 <p><img src="/images/iterm-i386.png" style="width: 75%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
-<p>I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN <code class="highlighter-rouge">arm64</code> session from an <code class="highlighter-rouge">i386</code> one.  Luckily, there is an easy way to fix this which is to add the current <code class="highlighter-rouge">$(arch)</code> to your shell somewhere.</p>
+<p>I chose the second option because it is lighter weight, I.e., running a single instance of iTerm vs having two different instances running at the same time.  There is one downside to this setup, as it can be a bit confusing when trying to disambiguate AN <code class="language-plaintext highlighter-rouge">arm64</code> session from an <code class="language-plaintext highlighter-rouge">i386</code> one.  Luckily, there is an easy way to fix this which is to add the current <code class="language-plaintext highlighter-rouge">$(arch)</code> to your shell somewhere.</p>
 
-<p>Since I use <a href="https://github.com/romkatv/powerlevel10k">Powerlevel10k</a>, it seemed like the perfect place to display this was next to the icon which was in my left prompt.  The way I set it up was by adding a new function called <code class="highlighter-rouge">prompt_arch</code> to my config that simply displays the current architecture.  Here is the entire function:</p>
+<p>Since I use <a href="https://github.com/romkatv/powerlevel10k">Powerlevel10k</a>, it seemed like the perfect place to display this was next to the icon which was in my left prompt.  The way I set it up was by adding a new function called <code class="language-plaintext highlighter-rouge">prompt_arch</code> to my config that simply displays the current architecture.  Here is the entire function:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">function </span>prompt_arch<span class="o">()</span> <span class="o">{</span>
     p10k segment <span class="nt">-b</span> 7 <span class="nt">-f</span> 232 <span class="nt">-t</span> <span class="si">$(</span><span class="nb">arch</span><span class="si">)</span>
 <span class="o">}</span>
 </code></pre></div></div>
 
-<p>As you can see, it is quite straightforward, and after adding <code class="highlighter-rouge">arch</code> to my left prompt config next to <code class="highlighter-rouge">os_icon</code> I get a shell that clearly shows which architecture it is currently running on.</p>
+<p>As you can see, it is quite straightforward, and after adding <code class="language-plaintext highlighter-rouge">arch</code> to my left prompt config next to <code class="language-plaintext highlighter-rouge">os_icon</code> I get a shell that clearly shows which architecture it is currently running on.</p>
 
 <p><img src="/images/shell-arm.png" style="width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /> 
 <img src="/images/shell-i386.png" style="width: 85%; margin: auto; display: block; padding-top: 25px; padding-bottom: 25px;" /></p>
 
 <p>Running Brew under Rosetta solved most issues, but there were still a few issues remaining.</p>
 
-<p>The first of which is I couldn’t install new Python versions using pyenv.  <code class="highlighter-rouge">pyenv install</code> failed every time I ran it, no matter which Python version, no matter if I was under <code class="highlighter-rouge">arm64</code> or <code class="highlighter-rouge">i386</code>.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct <code class="highlighter-rouge">usr/lib</code> by adding <code class="highlighter-rouge">LDFLAGS</code> to the environment before running <code class="highlighter-rouge">pyenv</code>.  The full command that worked for me was:</p>
+<p>The first of which is I couldn’t install new Python versions using pyenv.  <code class="language-plaintext highlighter-rouge">pyenv install</code> failed every time I ran it, no matter which Python version, no matter if I was under <code class="language-plaintext highlighter-rouge">arm64</code> or <code class="language-plaintext highlighter-rouge">i386</code>.  Fortunately, I was able to find a workaround which was to ensure it was pulling in the correct <code class="language-plaintext highlighter-rouge">usr/lib</code> by adding <code class="language-plaintext highlighter-rouge">LDFLAGS</code> to the environment before running <code class="language-plaintext highlighter-rouge">pyenv</code>.  The full command that worked for me was:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">LDFLAGS</span><span class="o">=</span><span class="s2">"-L</span><span class="si">$(</span>xcrun <span class="nt">--show-sdk-path</span><span class="si">)</span><span class="s2">/usr/lib"</span> pyenv <span class="nb">install </span>3.8.6
 </code></pre></div></div>
 
-<p>The next issue I faced was getting the <a href="https://formulae.brew.sh/cask/google-cloud-sdk">google-cloud-sdk</a> and <a href="https://formulae.brew.sh/formula/awscli#default">awscli</a> installed and working with Brew.  Installing the google-cloud-sdk, I.e., <code class="highlighter-rouge">brew install google-cloud-sdk</code> failed with a cryptic error message: <code class="highlighter-rouge">2845 illegal hardware instruction</code>. The <code class="highlighter-rouge">awscli</code> formula installed, but all <code class="highlighter-rouge">aws</code> commands were failing with nearly the same cryptic error message: <code class="highlighter-rouge">2892 illegal hardware instruction</code>.</p>
+<p>The next issue I faced was getting the <a href="https://formulae.brew.sh/cask/google-cloud-sdk">google-cloud-sdk</a> and <a href="https://formulae.brew.sh/formula/awscli#default">awscli</a> installed and working with Brew.  Installing the google-cloud-sdk, I.e., <code class="language-plaintext highlighter-rouge">brew install google-cloud-sdk</code> failed with a cryptic error message: <code class="language-plaintext highlighter-rouge">2845 illegal hardware instruction</code>. The <code class="language-plaintext highlighter-rouge">awscli</code> formula installed, but all <code class="language-plaintext highlighter-rouge">aws</code> commands were failing with nearly the same cryptic error message: <code class="language-plaintext highlighter-rouge">2892 illegal hardware instruction</code>.</p>
 
-<p>It was puzzling that both of the top two cloud providers SDK’s crashed with a nearly identical error message.  Then, I realized both of them depended on <code class="highlighter-rouge">Python@3.9</code></p>
+<p>It was puzzling that both of the top two cloud providers SDK’s crashed with a nearly identical error message.  Then, I realized both of them depended on <code class="language-plaintext highlighter-rouge">Python@3.9</code></p>
 
-<p>I was able to get the <code class="highlighter-rouge">google-cloud-sdk</code> installed and working properly by running the installer manually, outside the context of Brew.  This made me realize that the issue was not with the <code class="highlighter-rouge">google-cloud-sdk</code>, or with Python on ARM, but with the version of Python that was being invoked when installed via Brew.</p>
+<p>I was able to get the <code class="language-plaintext highlighter-rouge">google-cloud-sdk</code> installed and working properly by running the installer manually, outside the context of Brew.  This made me realize that the issue was not with the <code class="language-plaintext highlighter-rouge">google-cloud-sdk</code>, or with Python on ARM, but with the version of Python that was being invoked when installed via Brew.</p>
 
-<p>After a bit of digging, I was able to find a <a href="https://github.com/Homebrew/homebrew-core/issues/67713">similar issue on Github</a> where python failed to run with the same error that I was seeing <code class="highlighter-rouge">illegal hardware instruction</code>.  This particular issue was “AVX instructions in Big Sur bottles crash when run in Rosetta 2” and one of the commenter’s mentioned that if you install <code class="highlighter-rouge">python3</code> via Brew with the form source option I.e., <code class="highlighter-rouge">brew reinstall -s python3</code>, the issue goes away, and sure enough it did!  I removed the manual installation of <code class="highlighter-rouge">google-cloud-sdk</code> and then re-installed it using Brew and that worked perfectly.  I did the same for <code class="highlighter-rouge">awscli</code> and then tried to run <code class="highlighter-rouge">aws s3 ls</code> and it worked too.  So it ended up being a Python issue, but not with the language or runtime itself, but the version that shipped with Brew.  I am sure by the time of this writing it will be fixed so you won’t have to go through this trouble to get them working.</p>
+<p>After a bit of digging, I was able to find a <a href="https://github.com/Homebrew/homebrew-core/issues/67713">similar issue on Github</a> where python failed to run with the same error that I was seeing <code class="language-plaintext highlighter-rouge">illegal hardware instruction</code>.  This particular issue was “AVX instructions in Big Sur bottles crash when run in Rosetta 2” and one of the commenter’s mentioned that if you install <code class="language-plaintext highlighter-rouge">python3</code> via Brew with the form source option I.e., <code class="language-plaintext highlighter-rouge">brew reinstall -s python3</code>, the issue goes away, and sure enough it did!  I removed the manual installation of <code class="language-plaintext highlighter-rouge">google-cloud-sdk</code> and then re-installed it using Brew and that worked perfectly.  I did the same for <code class="language-plaintext highlighter-rouge">awscli</code> and then tried to run <code class="language-plaintext highlighter-rouge">aws s3 ls</code> and it worked too.  So it ended up being a Python issue, but not with the language or runtime itself, but the version that shipped with Brew.  I am sure by the time of this writing it will be fixed so you won’t have to go through this trouble to get them working.</p>
 
 <h3 id="final-thoughts">Final Thoughts</h3>
 

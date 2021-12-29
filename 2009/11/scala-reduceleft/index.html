@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>Scala reduceLeft | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="Scala reduceLeft" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
@@ -28,8 +28,10 @@
 <meta property="og:site_name" content="Steven Levine" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2009-11-19T17:52:02+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="Scala reduceLeft" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"description":"This post was updated on November 19, 2009.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"Scala reduceLeft","dateModified":"2009-11-19T17:52:02+00:00","datePublished":"2009-11-19T17:52:02+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2009/11/scala-reduceleft/"},"url":"https://stevenlevine.dev/2009/11/scala-reduceleft/","@context":"https://schema.org"}</script>
+{"description":"This post was updated on November 19, 2009.","@type":"BlogPosting","headline":"Scala reduceLeft","dateModified":"2009-11-19T17:52:02+00:00","datePublished":"2009-11-19T17:52:02+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2009/11/scala-reduceleft/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2009/11/scala-reduceleft/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -184,7 +186,7 @@
         <span class="o">(</span><span class="n">s1</span><span class="o">,</span> <span class="n">s2</span><span class="o">)</span> <span class="k">=&gt;</span> <span class="nf">if</span> <span class="o">(</span><span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span><span class="o">)</span> <span class="n">s1</span> <span class="k">else</span> <span class="n">s2</span>
     <span class="o">)</span>
   <span class="o">)</span>
-  <span class="o">//</span> <span class="n">goog</span> <span class="n">has</span> <span class="n">eps</span> <span class="n">of</span><span class="k">:</span> <span class="err">13</span><span class="kt">.</span><span class="err">31</span>
+  <span class="c1">// goog has eps of: 13.31</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <p><em>Download Source: <a href="http://github.com/slevine/scala-training/blob/master/src/main/scala/net/slevine/scalatraining/stocks/model/stocks.scala">Stock.scala</a>, <a href="http://github.com/slevine/scala-training/blob/master/src/main/scripts/stocks/reduceLeft.scala">reduceLeft.scala</a></em></p>
@@ -204,9 +206,9 @@
 <figure class="highlight"><pre><code class="language-scala" data-lang="scala"><table class="rouge-table"><tbody><tr><td class="gutter gl"><pre class="lineno">1
 2
 3
-</pre></td><td class="code"><pre><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="c1">//operator
-</span><span class="mf">1.</span><span class="o">+</span><span class="mi">2</span> <span class="c1">//not operator (but returns wrong type)
-</span><span class="o">(</span><span class="mi">1</span><span class="o">).+(</span><span class="mi">2</span><span class="o">)</span> <span class="o">//</span> <span class="nc">Correct</span> <span class="k">return</span> <span class="n">type</span>
+</pre></td><td class="code"><pre><span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span> <span class="c1">//operator</span>
+<span class="mf">1.</span><span class="o">+</span><span class="mi">2</span> <span class="c1">//not operator (but returns wrong type)</span>
+<span class="o">(</span><span class="mi">1</span><span class="o">).+(</span><span class="mi">2</span><span class="o">)</span> <span class="c1">// Correct return type</span>
 </pre></td></tr></tbody></table></code></pre></figure>
 
 <ul>

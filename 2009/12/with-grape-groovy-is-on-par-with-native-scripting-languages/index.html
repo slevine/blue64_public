@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>With Grape, Groovy Is On Par with Native Scripting Languages | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="With Grape, Groovy Is On Par with Native Scripting Languages" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
@@ -28,8 +28,10 @@
 <meta property="og:site_name" content="Steven Levine" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2009-12-24T14:31:36+00:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="With Grape, Groovy Is On Par with Native Scripting Languages" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"description":"If you haven’t heard, the latest version of Groovy was released this week and included with it, among many other great features, was Grape (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"With Grape, Groovy Is On Par with Native Scripting Languages","dateModified":"2009-12-24T14:31:36+00:00","datePublished":"2009-12-24T14:31:36+00:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/"},"url":"https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/","@context":"https://schema.org"}</script>
+{"description":"If you haven’t heard, the latest version of Groovy was released this week and included with it, among many other great features, was Grape (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.","@type":"BlogPosting","headline":"With Grape, Groovy Is On Par with Native Scripting Languages","dateModified":"2009-12-24T14:31:36+00:00","datePublished":"2009-12-24T14:31:36+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2009/12/with-grape-groovy-is-on-par-with-native-scripting-languages/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -143,7 +145,7 @@
         <div class="e-content">
           <p>If you haven’t heard, the latest version of Groovy was <a href="http://docs.codehaus.org/display/GROOVY/Groovy+1.7+release+notes">released</a> this week and included with it, among many other great features, was <a href="http://groovy.codehaus.org/Grape">Grape</a> (Groovy Advanced Packaging Engine). Grape is an annotation based dependency management system that provides functionality similar to that of Maven and Ivy with one clear advantage, namely, no build file.</p>
 
-<p>If Grape doesn’t use a build file, how does it know what dependencies are necessary to run the code? Does it figure it out for you on the fly? Unfortunately, it is not that smart (yet), perhaps the next release. If it doesn’t figure it out for you, then how do you specify your dependencies? You configure your dependencies by using the<code class="highlighter-rouge">@Grapes</code> or <code class="highlighter-rouge">@Grab</code> annotations.</p>
+<p>If Grape doesn’t use a build file, how does it know what dependencies are necessary to run the code? Does it figure it out for you on the fly? Unfortunately, it is not that smart (yet), perhaps the next release. If it doesn’t figure it out for you, then how do you specify your dependencies? You configure your dependencies by using the<code class="language-plaintext highlighter-rouge">@Grapes</code> or <code class="language-plaintext highlighter-rouge">@Grab</code> annotations.</p>
 
 <p>What is so good about being able to configure your dependencies via annotations?</p>
 
@@ -184,8 +186,8 @@ Please feel free to download and use it. Feedback is welcome as well.</p>
 <p>The most interesting things to pay attention to are:</p>
 
 <ul>
-  <li>The <code class="highlighter-rouge">@Grapes</code> block after all of the imports, you can see this groovy class depends on javax.activation and javax.mail jars.</li>
-  <li>Thanks to Grapes, you can compile this class simply by invoking <code class="highlighter-rouge">groovyc Mailer.groovy</code> as opposed to having to configure either Maven, Gant, Ant, or some other build tool to manage the dependencies and classpath for you.</li>
+  <li>The <code class="language-plaintext highlighter-rouge">@Grapes</code> block after all of the imports, you can see this groovy class depends on javax.activation and javax.mail jars.</li>
+  <li>Thanks to Grapes, you can compile this class simply by invoking <code class="language-plaintext highlighter-rouge">groovyc Mailer.groovy</code> as opposed to having to configure either Maven, Gant, Ant, or some other build tool to manage the dependencies and classpath for you.</li>
   <li>What’s the big deal? Read more to find out!</li>
 </ul>
 
@@ -197,17 +199,17 @@ Please feel free to download and use it. Feedback is welcome as well.</p>
 <p>The most interesting thing to pay attention to in this script is:</p>
 
 <ul>
-  <li>The <code class="highlighter-rouge"><span class="err">#</span><span class="o">!</span><span class="s">/usr/</span><span class="n">bin</span><span class="o">/</span><span class="n">env</span> <span class="n">groovy</span></code> on the first line on the script.</li>
-  <li>This line enables the script to be called directly from the command line like: <code class="highlighter-rouge">./whatsMyIp.groovy</code> instead of <code class="highlighter-rouge">groovy whatsMyIp.groovy</code></li>
+  <li>The <code class="language-plaintext highlighter-rouge">#!/usr/bin/env groovy</code> on the first line on the script.</li>
+  <li>This line enables the script to be called directly from the command line like: <code class="language-plaintext highlighter-rouge">./whatsMyIp.groovy</code> instead of <code class="language-plaintext highlighter-rouge">groovy whatsMyIp.groovy</code></li>
 </ul>
 
 <p><strong>The Big Deal!</strong></p>
 
-<p>If Grape didn’t exist the only way to invoke this script would be to invoke it with a build tool such as Maven, GAnt, or some other. If a build tool didn’t suit you then you would have to invoke <code class="highlighter-rouge">groovy -classpath=/path/activation.jar...</code> and manage the dependencies there. Both of these solutions work fine, but are clunky.</p>
+<p>If Grape didn’t exist the only way to invoke this script would be to invoke it with a build tool such as Maven, GAnt, or some other. If a build tool didn’t suit you then you would have to invoke <code class="language-plaintext highlighter-rouge">groovy -classpath=/path/activation.jar...</code> and manage the dependencies there. Both of these solutions work fine, but are clunky.</p>
 
-<p>If you were to solve this problem using a language such as Ruby, you would not have to worry about dependency management since Ruby is so closely integrated with the OS. You would simply run <code class="highlighter-rouge">gem install some gem</code>, and this would install the dependencies at the OS level. Thus allowing you to focus on your script and letting the Ruby runtime focus on the dependencies. Invoking <code class="highlighter-rouge">./someScript.rb</code> is common in Ruby.</p>
+<p>If you were to solve this problem using a language such as Ruby, you would not have to worry about dependency management since Ruby is so closely integrated with the OS. You would simply run <code class="language-plaintext highlighter-rouge">gem install some gem</code>, and this would install the dependencies at the OS level. Thus allowing you to focus on your script and letting the Ruby runtime focus on the dependencies. Invoking <code class="language-plaintext highlighter-rouge">./someScript.rb</code> is common in Ruby.</p>
 
-<p>Grape gives Groovy scripts the same clean dependency abstraction. It is possible to invoke <code class="highlighter-rouge">./whatsMyIp.groovy</code> without having to worry about any dependency management. Once the groovy runtime comes across the Grape annotations, it loads the dependencies on demand freeing the Groovy script from having to be wrapped with a dependency management layer.</p>
+<p>Grape gives Groovy scripts the same clean dependency abstraction. It is possible to invoke <code class="language-plaintext highlighter-rouge">./whatsMyIp.groovy</code> without having to worry about any dependency management. Once the groovy runtime comes across the Grape annotations, it loads the dependencies on demand freeing the Groovy script from having to be wrapped with a dependency management layer.</p>
 
 <p>This is a huge deal because now simple Groovy scripts can leverage the entire Java ecosystem from the command line without having to wrap the invocation with a build tool. Groovy Scripts are now clean, simple, and easy. I hope this inspires you to go out and convert some Ruby or Perl script to Groovy.</p>
 

@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>On Deciding Between PUT and POST When Creating a RESTful Resource | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="On Deciding Between PUT and POST When Creating a RESTful Resource" />
 <meta name="author" content="Steven Levine" />
 <meta property="og:locale" content="en_US" />
@@ -29,8 +29,11 @@
 <meta property="og:image" content="https://stevenlevine.dev/images/running.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2013-10-29T21:15:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://stevenlevine.dev/images/running.jpg" />
+<meta property="twitter:title" content="On Deciding Between PUT and POST When Creating a RESTful Resource" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Steven Levine"},"description":"On Deciding Between PUT and POST When Creating a RESTful Resource","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"headline":"On Deciding Between PUT and POST When Creating a RESTful Resource","dateModified":"2013-10-29T21:15:00+00:00","datePublished":"2013-10-29T21:15:00+00:00","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/running.jpg","@type":"imageObject"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/"},"url":"https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/","@context":"https://schema.org"}</script>
+{"description":"On Deciding Between PUT and POST When Creating a RESTful Resource","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/running.jpg","@type":"imageObject"},"@type":"BlogPosting","headline":"On Deciding Between PUT and POST When Creating a RESTful Resource","dateModified":"2013-10-29T21:15:00+00:00","datePublished":"2013-10-29T21:15:00+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2013/10/on-deciding-between-put-and-post-when-creating-a-restful-resource/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -153,14 +156,14 @@
 
       <div class="page-content">
         <div class="e-content">
-          <p>The goal of this post is to try to help you figure out which HTTP verb: <code class="highlighter-rouge">PUT</code> or <code class="highlighter-rouge">POST</code> is more appropriate to use when adding and updating resources.</p>
+          <p>The goal of this post is to try to help you figure out which HTTP verb: <code class="language-plaintext highlighter-rouge">PUT</code> or <code class="language-plaintext highlighter-rouge">POST</code> is more appropriate to use when adding and updating resources.</p>
 
 <p>Before we can get in to the details of which HTTP verb to use when, we first need to understand the type of “back end” or “server” or “service” we are trying to add the RESTful API to.  For the purposes of this post, we will refer to the service providing the API as the <em>“Resource Archetype”</em>.</p>
 
 <p>To start, we need to distinguish the differences between the two basic types of resource archetypes, namely, a <em>collection</em> and a <em>datastore</em> or “store” for short.</p>
 
 <ul>
-  <li>A <strong>collection</strong> is a <strong>server-managed</strong> directory of resources.  This means that clients may <strong>propose</strong> the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an <code class="highlighter-rouge">ID</code> that is associated with the newly created resource.</li>
+  <li>A <strong>collection</strong> is a <strong>server-managed</strong> directory of resources.  This means that clients may <strong>propose</strong> the addition of a new resource, but it is up to the discretion of the server whether or not to add or update the requested resource.  If the server decides to add the resource, it will reply to the client with an <code class="language-plaintext highlighter-rouge">ID</code> that is associated with the newly created resource.</li>
 </ul>
 
 <blockquote>
@@ -168,7 +171,7 @@
 </blockquote>
 
 <ul>
-  <li>A <strong>store</strong> is a <strong>client-managed</strong> resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the <strong>client</strong>  is responsible for assigning an <code class="highlighter-rouge">ID</code> to the resource and managing the workflow around that task.</li>
+  <li>A <strong>store</strong> is a <strong>client-managed</strong> resource repository. This means the client can Create Read Update and Delete resources on its own terms without any interference from the server.  When interacting with a store, the <strong>client</strong>  is responsible for assigning an <code class="language-plaintext highlighter-rouge">ID</code> to the resource and managing the workflow around that task.</li>
 </ul>
 
 <p>These terms feel too abstract, lets walk through two concrete examples to fully illustrate the two concepts.</p>
@@ -181,31 +184,31 @@
 
 <p>Now lets set up our example store, which ends up being a lot simpler than the collection, mainly because there is no middleware between the physical datastore and the client.  So following the example of the collection, the store would simply be a <a href="http://basho.com/riak/">Riak</a> instance.</p>
 
-<p>Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a <code class="highlighter-rouge">PUT</code> vs a <code class="highlighter-rouge">POST</code> when creating or updating a resource.</p>
+<p>Now that we have a clear understanding of the difference between a collection and store, we can now discuss the details of when to use a <code class="language-plaintext highlighter-rouge">PUT</code> vs a <code class="language-plaintext highlighter-rouge">POST</code> when creating or updating a resource.</p>
 
 <p>When interacting with a <strong>store</strong>:</p>
 
 <ul>
-  <li>A <code class="highlighter-rouge">PUT</code> must be used to add a new resource, with the ID specified by the <strong>client</strong>.</li>
-  <li>A <code class="highlighter-rouge">PUT</code> must also be used to <strong>update</strong> or replace an already stored resource.</li>
+  <li>A <code class="language-plaintext highlighter-rouge">PUT</code> must be used to add a new resource, with the ID specified by the <strong>client</strong>.</li>
+  <li>A <code class="language-plaintext highlighter-rouge">PUT</code> must also be used to <strong>update</strong> or replace an already stored resource.</li>
 </ul>
 
-<p>The reason you <code class="highlighter-rouge">PUT</code> to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. <em>This is another way of saying the request is idempotent.</em></p>
+<p>The reason you <code class="language-plaintext highlighter-rouge">PUT</code> to add a new resource to a store is because the client has full control over the details of the resource.  The store is acting on behalf of the client.  On its own, the store has no notion of what the data means.  Thus it makes sense that the client has the ability to put things in the store, and then to update them, the client simply puts the resource again. <em>This is another way of saying the request is idempotent.</em></p>
 
 <p>When interacting with a <strong>collection</strong>:</p>
 
 <ul>
-  <li>A <code class="highlighter-rouge">POST</code> must be used to create a new resource, and the collection provides the ID to the client.</li>
-  <li>A <code class="highlighter-rouge">PUT</code> must be used to <strong>update</strong> or replace an already stored resource.</li>
+  <li>A <code class="language-plaintext highlighter-rouge">POST</code> must be used to create a new resource, and the collection provides the ID to the client.</li>
+  <li>A <code class="language-plaintext highlighter-rouge">PUT</code> must be used to <strong>update</strong> or replace an already stored resource.</li>
 </ul>
 
-<p>The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can <code class="highlighter-rouge">POST</code> (request) the creation of the new resource, and not get back an <code class="highlighter-rouge">ID</code>, meaning the request failed.  Another thing to take notice of is the fact that no <code class="highlighter-rouge">ID</code> gets passed from the client, because it is assumed that the server is handling this logic.</p>
+<p>The main difference here is that since the collection potentially has a middleware layer, and some sort of business logic, the server has the ability to determine if the request is valid or not, and therefore, it is possible that the client can <code class="language-plaintext highlighter-rouge">POST</code> (request) the creation of the new resource, and not get back an <code class="language-plaintext highlighter-rouge">ID</code>, meaning the request failed.  Another thing to take notice of is the fact that no <code class="language-plaintext highlighter-rouge">ID</code> gets passed from the client, because it is assumed that the server is handling this logic.</p>
 
 <p>If you take a step back to think about our above collection example, it is possible that Spray has many different clients, besides the RESTful one.  That is why it needs to manage the notion of identity.  Whereas, in the store example, if Riak is exposed to the client directly without a middleware, chances are, that Riak database is meant only for the RESTful client.</p>
 
-<p>Here is a additional example taken directly from the <a href="http://docs.basho.com/riak/latest/dev/references/http/store-object/">Riak documentation</a> that also illustrates the point that when a client is providing an <code class="highlighter-rouge">ID</code>, the request should be a <code class="highlighter-rouge">PUT</code>, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the <code class="highlighter-rouge">ID</code> to the client, and of course this request is a <code class="highlighter-rouge">POST</code>.</p>
+<p>Here is a additional example taken directly from the <a href="http://docs.basho.com/riak/latest/dev/references/http/store-object/">Riak documentation</a> that also illustrates the point that when a client is providing an <code class="language-plaintext highlighter-rouge">ID</code>, the request should be a <code class="language-plaintext highlighter-rouge">PUT</code>, because the client is literally putting the resource in the store.  Riak also has the capabilities, to act as a middleware, and provide the <code class="language-plaintext highlighter-rouge">ID</code> to the client, and of course this request is a <code class="language-plaintext highlighter-rouge">POST</code>.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT /buckets/bucket/keys/key    # User-defined key
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PUT /buckets/bucket/keys/key    # User-defined key
 POST /buckets/bucket/keys       # Riak-defined key
 </code></pre></div></div>
 

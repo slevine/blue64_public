@@ -15,9 +15,9 @@
 
   
     
-    <!-- Begin Jekyll SEO tag v2.6.1 -->
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
 <title>WebView(Javascript) -&gt; Native Android API | Steven Levine</title>
-<meta name="generator" content="Jekyll v4.0.0" />
+<meta name="generator" content="Jekyll v4.2.1" />
 <meta property="og:title" content="WebView(Javascript) -&gt; Native Android API" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Calling Javascript from an Android Webview" />
@@ -28,8 +28,11 @@
 <meta property="og:image" content="https://stevenlevine.dev/images/running.jpg" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2012-03-03T15:35:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://stevenlevine.dev/images/running.jpg" />
+<meta property="twitter:title" content="WebView(Javascript) -&gt; Native Android API" />
 <script type="application/ld+json">
-{"description":"Calling Javascript from an Android Webview","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"}},"headline":"WebView(Javascript) -&gt; Native Android API","dateModified":"2012-03-03T15:35:00+00:00","datePublished":"2012-03-03T15:35:00+00:00","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/running.jpg","@type":"imageObject"},"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2012/03/webview-javascript-native-android/"},"url":"https://stevenlevine.dev/2012/03/webview-javascript-native-android/","@context":"https://schema.org"}</script>
+{"description":"Calling Javascript from an Android Webview","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/running.jpg","@type":"imageObject"},"@type":"BlogPosting","headline":"WebView(Javascript) -&gt; Native Android API","dateModified":"2012-03-03T15:35:00+00:00","datePublished":"2012-03-03T15:35:00+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"}},"url":"https://stevenlevine.dev/2012/03/webview-javascript-native-android/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2012/03/webview-javascript-native-android/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 
@@ -154,17 +157,17 @@
 
 <p>MainActivity.scala - setting up basic view</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Step 1: Create WebView
-</span>  <span class="k">val</span> <span class="nv">webView</span><span class="k">:</span> <span class="kt">WebView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WebView</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Step 1: Create WebView</span>
+  <span class="k">val</span> <span class="nv">webView</span><span class="k">:</span> <span class="kt">WebView</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">WebView</span><span class="o">(</span><span class="k">this</span><span class="o">)</span>
 
-  <span class="c1">// Step 2: Load page from assets
-</span>  <span class="n">webView</span> <span class="nf">loadUrl</span> <span class="o">(</span><span class="s">"file:///android_asset/index.html"</span><span class="o">)</span>
+  <span class="c1">// Step 2: Load page from assets</span>
+  <span class="n">webView</span> <span class="nf">loadUrl</span> <span class="o">(</span><span class="s">"file:///android_asset/index.html"</span><span class="o">)</span>
 
-  <span class="c1">// Step 3: Enable Javascript
-</span>  <span class="nv">webView</span><span class="o">.</span><span class="py">getSettings</span> <span class="nf">setJavaScriptEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
+  <span class="c1">// Step 3: Enable Javascript</span>
+  <span class="nv">webView</span><span class="o">.</span><span class="py">getSettings</span> <span class="nf">setJavaScriptEnabled</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
 </code></pre></div></div>
 
-<p>So far, so easy.  Next, we need to create a simple Scala function in our <code class="highlighter-rouge">MainActivity</code> to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called <code class="highlighter-rouge">sdkVersion()</code></p>
+<p>So far, so easy.  Next, we need to create a simple Scala function in our <code class="language-plaintext highlighter-rouge">MainActivity</code> to expose for Javascript to call.  We said we wanted our view to expose the underlying Android sdk version, so lets create a function called <code class="language-plaintext highlighter-rouge">sdkVersion()</code></p>
 
 <p>MainActivity.scala - function to expose SDK version</p>
 
@@ -177,17 +180,17 @@
 
 <p>MainActivity.scala - Adding a function to the DOM</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Add the above function to the DOM as "Android"
-</span>  <span class="c1">// The function can now be invoked from Javascript with the following: Android.sdkVersion()
-</span>  <span class="n">webView</span> <span class="nf">addJavascriptInterface</span><span class="o">(</span><span class="n">jsFun</span><span class="o">,</span> <span class="s">"Android"</span><span class="o">)</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  <span class="c1">// Add the above function to the DOM as "Android"</span>
+  <span class="c1">// The function can now be invoked from Javascript with the following: Android.sdkVersion()</span>
+  <span class="n">webView</span> <span class="nf">addJavascriptInterface</span><span class="o">(</span><span class="n">jsFun</span><span class="o">,</span> <span class="s">"Android"</span><span class="o">)</span>
 </code></pre></div></div>
 
 <p><em>Optional step:</em> When developing Javascript applications it is sometimes helpfull to be able to debug something to the browser console.  Believe it or not, it is quite easy to implement the browser’s console implementation with an Android one, and instead of logging the message to the browser console, it will send them to the Android Logcat system.</p>
 
 <p>MainActivity.scala - Implement Javascript console.log</p>
 
-<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// provide the WebView with a console.log implementation
-</span>   <span class="n">webView</span> <span class="n">setWebChromeClient</span> <span class="k">new</span> <span class="nc">WebChromeClient</span> <span class="o">{</span>
+<div class="language-scala highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   <span class="c1">// provide the WebView with a console.log implementation</span>
+   <span class="n">webView</span> <span class="n">setWebChromeClient</span> <span class="k">new</span> <span class="nc">WebChromeClient</span> <span class="o">{</span>
       <span class="k">override</span> <span class="k">def</span> <span class="nf">onConsoleMessage</span><span class="o">(</span><span class="n">consoleMessage</span><span class="k">:</span> <span class="kt">ConsoleMessage</span><span class="o">)</span><span class="k">:</span> <span class="kt">Boolean</span> <span class="o">=</span> <span class="o">{</span>
         <span class="k">val</span> <span class="nv">msg</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">StringBuilder</span><span class="o">(</span><span class="n">consoleMessage</span>
           <span class="o">.</span><span class="py">messageLevel</span><span class="o">.</span><span class="py">name</span><span class="o">).</span><span class="py">append</span><span class="o">(</span><span class="sc">'\t'</span><span class="o">)</span>
@@ -205,7 +208,7 @@
 
 <p>Finally we need to create our html/javascript view.</p>
 
-<p>Lets create a file called <code class="highlighter-rouge">index.html</code> and place it under <code class="highlighter-rouge">src/main/assets</code> and add at least the following code to it:</p>
+<p>Lets create a file called <code class="language-plaintext highlighter-rouge">index.html</code> and place it under <code class="language-plaintext highlighter-rouge">src/main/assets</code> and add at least the following code to it:</p>
 
 <p>index.html - default page that calls our Android.sdkVersion() function via Javascript</p>
 
@@ -221,7 +224,7 @@
     <span class="p">});</span>
 <span class="nt">&lt;/script&gt;</span>
 </code></pre></div></div>
-<p>As you can see here, we are invoking the Android (Scala) method called <code class="highlighter-rouge">sdkVersion()</code> and appending the results of the call to a div using JQuery.</p>
+<p>As you can see here, we are invoking the Android (Scala) method called <code class="language-plaintext highlighter-rouge">sdkVersion()</code> and appending the results of the call to a div using JQuery.</p>
 
 <p>Thats all there is to it, now you know how to invoke an Android function from Javascript running in an Android WebView.</p>
 

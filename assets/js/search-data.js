@@ -221,21 +221,26 @@ var store = [{
       },{
         "title": "The Power of Big Query with Public Data",
         "excerpt":"TLDR - If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for. Background Late one Sunday afternoon, I found myself browsing around a few high...","categories": [],
-        "tags": ["GCP","BigQuery","BigData"],
+        "tags": ["Development","GCP","BigQuery","BigData"],
         "url": "https://stevenlevine.dev/2018/02/the-power-of-bq/"
       },{
         "title": "Querying External Data with BigQuery",
         "excerpt":"TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature. Some Background I have a huge interest in Data Lakes, especially when it comes to the query engines that are capable...","categories": [],
-        "tags": ["GCP","BigQuery","Spark","BigData"],
+        "tags": ["Development","GCP","BigQuery","Spark","BigData"],
         "url": "https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/"
       },{
         "title": "BigQuery Integer Partitioning is in Beta",
         "excerpt":"TLDR - It is now possible to create integer partitioned tables in BigQuery. This post will talk about what that means, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it. If you weren’t paying close attention to the latest GCP announcements, you may...","categories": [],
-        "tags": ["GCP","BigQuery","BigData"],
+        "tags": ["Development","GCP","BigQuery","BigData"],
         "url": "https://stevenlevine.dev/2019/12/bq-integer-range-partitioning-is-now-beta/"
       },{
         "title": "First Impressions of the M1 MacBook Pro",
         "excerpt":"TLDR - I really like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time. When I read about Apple’s announcement of the new M1 MacBook Pro featuring the Apple M1 Chip, I must admit, it made me a bit excited about Macs...","categories": [],
         "tags": ["Development","Mac"],
         "url": "https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/"
+      },{
+        "title": "Dataframe Performance Comparison - Pandas on Spark vs Pandas",
+        "excerpt":"TLDR - When comparing Pandas API on Spark vs Pandas I found that as the data size grew, the performance difference grew as well with Spark being the clear winner I found this post about the new Pandas API on Spark very intriguing, specifically the performance improvements and the fact...","categories": [],
+        "tags": ["Development","BigData","Spark","Python"],
+        "url": "https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/"
       }]

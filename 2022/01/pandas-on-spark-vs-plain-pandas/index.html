@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!--
+    So Simple Jekyll Theme 3.2.0
+    Copyright 2013-2019 Michael Rose - mademistakes.com | @mmistakes
+    Free for personal and commercial use under the MIT license
+    https://github.com/mmistakes/so-simple-theme/blob/master/LICENSE
+-->
+<html lang="en-US" class="no-js">
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  
+
+  
+    
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+<title>Dataframe Performance Comparison - Pandas on Spark vs Pandas | Steven Levine</title>
+<meta name="generator" content="Jekyll v4.2.1" />
+<meta property="og:title" content="Dataframe Performance Comparison - Pandas on Spark vs Pandas" />
+<meta name="author" content="Steven Levine" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="I found this post about the new Pandas API on Spark very intriguing, specifically the performance improvements so I wrote a few simple tests to highlight them." />
+<meta property="og:description" content="I found this post about the new Pandas API on Spark very intriguing, specifically the performance improvements so I wrote a few simple tests to highlight them." />
+<link rel="canonical" href="https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/" />
+<meta property="og:url" content="https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/" />
+<meta property="og:site_name" content="Steven Levine" />
+<meta property="og:image" content="https://stevenlevine.dev/images/panda2.png" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2022-01-08T10:15:00+00:00" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="twitter:image" content="https://stevenlevine.dev/images/panda2.png" />
+<meta property="twitter:title" content="Dataframe Performance Comparison - Pandas on Spark vs Pandas" />
+<script type="application/ld+json">
+{"description":"I found this post about the new Pandas API on Spark very intriguing, specifically the performance improvements so I wrote a few simple tests to highlight them.","image":{"caption":"[MingMing](https://500px.com/dawnxiaofu)","url":"https://stevenlevine.dev/images/panda2.png","@type":"imageObject"},"@type":"BlogPosting","headline":"Dataframe Performance Comparison - Pandas on Spark vs Pandas","dateModified":"2022-01-08T10:15:00+00:00","datePublished":"2022-01-08T10:15:00+00:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"https://stevenlevine.dev/images/site-logo.png"},"name":"Steven Levine"},"url":"https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/","mainEntityOfPage":{"@type":"WebPage","@id":"https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/"},"author":{"@type":"Person","name":"Steven Levine"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+
+  
+
+  <script>
+    /* Cut the mustard */
+    if ( 'querySelector' in document && 'addEventListener' in window ) {
+      document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + 'js';
+    }
+  </script>
+
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/skins/default.css">
+  
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700,700i|Roboto:400,400i,700,700i">
+  <link rel="alternate" type="application/atom+xml" title="Steven Levine" href="/feed.xml">
+<!-- start custom head snippets -->
+
+<!-- insert favicons. use http://realfavicongenerator.net/ -->
+
+<!-- end custom head snippets -->
+
+</head>
+
+
+  <body class="layout--post  dataframe-performance-comparison-pandas-on-spark-vs-pandas">
+    <nav class="skip-links">
+  <h2 class="screen-reader-text">Skip links</h2>
+  <ul>
+    <li><a href="#primary-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+  <div class="navigation-wrapper">
+    <a href="#menu-toggle" id="menu-toggle">Menu</a>
+    <nav id="primary-nav" class="site-nav animated drop">
+      <ul><li><a href="/about/">About</a></li><li><a href="/archives/">Archives</a></li><li><a href="/tags/">Tags</a></li><li><a href="/search/">Search</a></li></ul>
+    </nav>
+  </div><!-- /.navigation-wrapper -->
+
+
+    <header class="masthead">
+  <div class="wrap">
+    
+      <a href="/" class="site-logo" rel="home" title="Steven Levine">
+        <img src="/images/site-logo.png" class="site-logo-img animated fadeInDown" alt="Steven Levine">
+      </a>
+    
+    
+    
+  </div>
+</header><!-- /.masthead -->
+
+
+    <main id="main" class="main-content" aria-label="Content">
+  <article class="h-entry">
+    
+  
+  
+  
+
+  <div class="page-image">
+    <img src="/images/panda2.png" class="entry-feature-image u-photo" alt="Dataframe Performance Comparison - Pandas on Spark vs Pandas" >
+    
+      <div class="page-image-caption"><p><a href="https://500px.com/dawnxiaofu">MingMing</a></p>
+</div>
+    
+  </div>
+
+
+    <div class="page-wrapper">
+      <header class="page-header">
+        
+        
+          <h1 id="page-title" class="page-title p-name">Dataframe Performance Comparison - Pandas on Spark vs Pandas
+</h1>
+        
+      </header>
+
+      <div class="page-sidebar">
+        <div class="page-author h-card p-author"><img src="/images/author.jpg" class="author-avatar u-photo" alt="Steven Levine"><div class="author-info"><div class="author-name">
+        <span class="p-name">Steven Levine</span>
+      </div><ul class="author-links"><li class="author-link">
+            <a class="u-url" rel="me" href="https://github.com/slevine"><i class="fab fa-github-square fa-lg" title="GitHub"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://twitter.com/_stevenlevine"><i class="fab fa-twitter-square fa-lg" title="Twitter"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://www.linkedin.com/in/levinesteve/"><i class="fab fa-linkedin fa-lg" title="LinkedIn"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://stackoverflow.com/users/63013/steven-levine"><i class="fab fa-stack-overflow fa-lg" title="StackOverflow"></i></a>
+          </li><li class="author-link">
+            <a class="u-url" rel="me" href="https://medium.com/@_stevenlevine"><i class="fab fa-medium fa-lg" title="Medium"></i></a>
+          </li></ul>
+
+<span class="read-time">3 min read</span>
+
+    <time class="page-date dt-published" datetime="2022-01-08T10:15:00+00:00"><a class="u-url" href="">January 8, 2022</a>
+</time>
+
+  </div>
+</div>
+
+        
+
+        
+  <h3 class="page-taxonomies-title">Tags</h3>
+  <ul class="page-taxonomies"><li class="page-taxonomy"><a href="/tags/#development" title="Pages tagged Development" rel="tag">Development</a></li><li class="page-taxonomy"><a href="/tags/#bigdata" title="Pages tagged BigData" rel="tag">BigData</a></li><li class="page-taxonomy"><a href="/tags/#spark" title="Pages tagged Spark" rel="tag">Spark</a></li><li class="page-taxonomy"><a href="/tags/#python" title="Pages tagged Python" rel="tag">Python</a></li>
+  </ul>
+
+
+      </div>
+
+      <div class="page-content">
+        <div class="e-content">
+          <blockquote>
+  <p>TLDR - When comparing <a href="https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html">Pandas API on Spark</a> vs <a href="https://pandas.pydata.org/pandas-docs/stable/index.html">Pandas</a> I found that as the data size grew, the performance difference grew as well with <a href="https://spark.apache.org/docs/latest/api/python/index.html">Spark</a> being the clear winner</p>
+</blockquote>
+
+<p>I found <a href="https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html">this post</a> about the new Pandas API on Spark very intriguing, specifically the performance improvements and the fact that <em>“Pandas users will be able scale their workloads with one simple line change”</em>. Additionally, <em>“The pandas API on Spark often outperforms pandas even on a single machine thanks to the optimizations in the Spark engine.”</em></p>
+
+<p>Being that these are bold statements, and the fact that I am super curious, I decided to write a few simple load tests to run on my laptop to see if I could reproduce the performance improvements locally.</p>
+
+<p>Since most of my posts on data use the open <a href="https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page">NYC Taxi Dataset</a> I figured why not use it again?  Next, I needed to come up with a simple problem to use for the performance comparison that would exercise the Dataframe properly.  The problem I decided to go with was to try to figure out the top 10 drop off locations that yielded the highest total taxi fare for the year.  This would require a scanning of the entire dataset (since it is not partitioned), a grouping, a summing, and finally a filtering.  Seems like a fair problem, finally, in order to ensure it processed as much data as possible, I went with CSV files instead of Parquet being that reading CSVs requires reading the entire file, not just the specific columns used for the calculation.</p>
+
+<p>The code that I wrote for this post can be found in this <a href="https://github.com/slevine/pyspark-pandas-vs-pandas">Github Repo</a>.  To reiterate, the goal of the code was:</p>
+<ul>
+  <li>Highlight the fact that only an <code class="language-plaintext highlighter-rouge">import</code> needed to change in order to use the Pandas API on Spark instead of plain Pandas.</li>
+  <li>“Verify” there was a difference in performance</li>
+</ul>
+
+<p><em>On a side note, since the frameworks do not handle reading in multiple files (wildcards) the same exact way, a few changes were required beyond the <code class="language-plaintext highlighter-rouge">import</code> in order to achieve the same results. Will highlight them below.</em></p>
+
+<h3 id="the-code">The Code</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">pyspark.pandas</span> <span class="kn">import</span> <span class="n">read_csv</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="n">pdf</span> <span class="o">=</span> <span class="n">read_csv</span><span class="p">(</span><span class="s">"./data/yellow_tripdata_2019-*.csv"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">pdf</span><span class="p">.</span><span class="n">count</span><span class="p">())</span>
+
+<span class="n">res</span> <span class="o">=</span> <span class="n">pdf</span><span class="p">.</span><span class="n">groupby</span><span class="p">(</span><span class="s">"DOLocationID"</span><span class="p">)[</span><span class="s">"fare_amount"</span><span class="p">]</span>
+  <span class="p">.</span><span class="nb">sum</span><span class="p">()</span>
+  <span class="p">.</span><span class="n">sort_values</span><span class="p">(</span><span class="n">ascending</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+  <span class="p">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="sa">f</span><span class="s">"Runtime: </span><span class="si">{</span><span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="si">}</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+<p><em>Download Source: <a href="https://github.com/slevine/pyspark-pandas-vs-pandas/blob/master/tests/pyspark_pandas_test.py">pyspark_pandas_test</a></em></p>
+
+<ul>
+  <li>This code pulls in taxi trip data from 12 CSV’s (one per month) and calculates which drop off location <code class="language-plaintext highlighter-rouge">DOLocationID</code> has the highest number of trips in terms of <code class="language-plaintext highlighter-rouge">fare_amount</code></li>
+</ul>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">concat</span>
+<span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">read_csv</span>
+
+<span class="n">start</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="n">now</span><span class="p">()</span>
+
+<span class="n">df</span> <span class="o">=</span> <span class="n">concat</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">read_csv</span><span class="p">,</span> <span class="n">glob</span><span class="p">(</span><span class="s">'./data/yellow_tripdata_2019-*.csv'</span><span class="p">)))</span>
+
+<span class="c1"># Everything below identical
+</span></code></pre></div></div>
+<p><em>Download Source: <a href="https://github.com/slevine/pyspark-pandas-vs-pandas/blob/master/tests/pandas_test.py">pandas_test.py</a></em></p>
+
+<p>Here are the only two differences between the two tests:</p>
+<ul>
+  <li>The imports are <code class="language-plaintext highlighter-rouge">from pandas</code> vs <code class="language-plaintext highlighter-rouge">from pyspark.pandas</code></li>
+  <li>Building a Dataframe using plain Pandas containing data from all 12 of the files requires <code class="language-plaintext highlighter-rouge">concat()</code> as well as creating a <code class="language-plaintext highlighter-rouge">glob()</code></li>
+</ul>
+
+<h3 id="results">Results</h3>
+
+<p>Note: The benchmarks were conducted on the latest Macbook Pro (M1 Max 10 Core 32GB)</p>
+
+<h4 id="first-run">First Run</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>First Run</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>File type</td>
+      <td>CSV</td>
+    </tr>
+    <tr>
+      <td>Number of files</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>Avg size of file</td>
+      <td>383,161 MB</td>
+    </tr>
+    <tr>
+      <td>Total size of files</td>
+      <td>2.2 GB</td>
+    </tr>
+    <tr>
+      <td>Total Record Count</td>
+      <td>23,838,931</td>
+    </tr>
+    <tr>
+      <td>Pyspark Runtime</td>
+      <td>0:00:21.042511</td>
+    </tr>
+    <tr>
+      <td>Pandas Runtime</td>
+      <td>0:00:27.491613</td>
+    </tr>
+    <tr>
+      <td>Difference</td>
+      <td>6.449102</td>
+    </tr>
+    <tr>
+      <td>Difference %</td>
+      <td><strong>23%</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="second-run">Second Run</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>Second Run</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>File type</td>
+      <td>CSV</td>
+    </tr>
+    <tr>
+      <td>Number of files</td>
+      <td>12</td>
+    </tr>
+    <tr>
+      <td>Avg size of file</td>
+      <td>1,282,542 MB</td>
+    </tr>
+    <tr>
+      <td>Total size of files</td>
+      <td>7.3 GB</td>
+    </tr>
+    <tr>
+      <td>Total Record Count</td>
+      <td>84,152,418</td>
+    </tr>
+    <tr>
+      <td>Pyspark Runtime</td>
+      <td>0:00:51.244250</td>
+    </tr>
+    <tr>
+      <td>Pandas Runtime</td>
+      <td>0:01:40.545144</td>
+    </tr>
+    <tr>
+      <td>Difference</td>
+      <td>49.3008939</td>
+    </tr>
+    <tr>
+      <td>Difference %</td>
+      <td><strong>49%</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><em>Disclaimer: This was run on a single machine and is not meant to be used as an authoritative performance comparison.</em></p>
+
+<h3 id="conclusion">Conclusion</h3>
+
+<p>As the data size grew, the performance difference grew as well with <code class="language-plaintext highlighter-rouge">pyspark</code> being the clear winner. Even though this test was run on a single machine with 10 cores, my assumption (based on the data in this <a href="https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html">Databricks post</a>), is if you were to run this on a larger cluster of machines the performance difference would grow as well.</p>
+
+<p>With the performance of Pandas on Spark improving so much, it begs the question of when should you use Plain Pandas vs Pandas on Spark vs Spark Dataframes?</p>
+
+<p>My suggestion is as follows:</p>
+
+<ul>
+  <li>If you already know Pandas and are new to PySpark, use the Pandas on Spark API to get started, or you can leverage existing code.</li>
+  <li>If you are new to both Pandas and PySpark, use the native PySpark (Dataframe) API since it offers the most complete functionality (streaming, batch, and ML) Spark has to offer.</li>
+</ul>
+
+
+        </div>
+
+        
+          <div class="page-share">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fstevenlevine.dev%2F2022%2F01%2Fpandas-on-spark-vs-plain-pandas%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--facebook btn--small"><i class="fab fa-fw fa-facebook" aria-hidden="true"></i> <span>Share</span></a>
+  <a href="https://twitter.com/intent/tweet?text=Dataframe+Performance+Comparison+-+Pandas+on+Spark+vs+Pandas%20https%3A%2F%2Fstevenlevine.dev%2F2022%2F01%2Fpandas-on-spark-vs-plain-pandas%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--twitter btn--small"><i class="fab fa-fw fa-twitter" aria-hidden="true"></i> <span>Tweet</span></a>
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https%3A%2F%2Fstevenlevine.dev%2F2022%2F01%2Fpandas-on-spark-vs-plain-pandas%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--linkedin btn--small"><i class="fab fa-fw fa-linkedin" aria-hidden="true"></i> <span>LinkedIn</span></a>
+  <a href="https://reddit.com/submit?title=Dataframe+Performance+Comparison+-+Pandas+on+Spark+vs+Pandas&url=https%3A%2F%2Fstevenlevine.dev%2F2022%2F01%2Fpandas-on-spark-vs-plain-pandas%2F" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" class="btn btn--reddit btn--small"><i class="fab fa-fw fa-reddit" aria-hidden="true"></i> <span>Reddit</span></a>
+</div>
+
+        
+
+        
+          
+  <div class="page-comments">
+    <div id="disqus_thread"></div>
+    <script>
+      var disqus_config = function () {
+        this.page.url = 'https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/';
+        this.page.identifier = 'https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+        s.src = 'https://levine.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+  </div>
+
+
+        
+
+        <nav class="page-pagination" role="navigation">
+  
+    <a class="page-previous" href="/2020/12/first-impressions-of-the-new-mac-m1-macbook/">
+      <h4 class="page-pagination-label">Previous</h4>
+      <span class="page-pagination-title">
+        <i class="fas fa-arrow-left"></i> First Impressions of the M1 MacBook Pro
+
+      </span>
+    </a>
+  
+
+  
+</nav>
+
+      </div>
+    </div>
+  </article>
+</main>
+
+
+    <footer id="footer" class="site-footer">
+  <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+<div class="social-icons"><a class="social-icon" href="/feed.xml"><i class="fas fa-rss-square fa-2x" title="Feed"></i></a></div><div class="copyright">
+    
+      <p>&copy; 2022 Steven Levine. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/mmistakes/so-simple-theme" rel="nofollow">So Simple</a>.</p>
+    
+  </div>
+</footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script src="/assets/js/main.min.js"></script>
+  <script src="https://use.fontawesome.com/releases/v5.0.12/js/all.js"></script><script>
+  if(!(window.doNotTrack === "1" || navigator.doNotTrack === "1" || navigator.doNotTrack === "yes" || navigator.msDoNotTrack === "1")) {
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    ga('create', 'UA-113658491-1', 'auto');
+    ga('send', 'pageview');
+  }
+  </script>
+
+
+  </body>
+
+</html>

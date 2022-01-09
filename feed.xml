@@ -1,4 +1,183 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2021-12-29T18:21:06+00:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00+00:00</published><updated>2020-12-28T16:15:00+00:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="4.2.1">Jekyll</generator><link href="https://stevenlevine.dev/feed.xml" rel="self" type="application/atom+xml" /><link href="https://stevenlevine.dev/" rel="alternate" type="text/html" /><updated>2022-01-09T00:09:27+00:00</updated><id>https://stevenlevine.dev/feed.xml</id><title type="html">Steven Levine</title><subtitle>Working at Google Cloud, Hacker, Programmer, Cycling Geek, Scala Enthusiast,  who is fascinated with all things Data, Cloud, and Internet Scale.</subtitle><entry><title type="html">Dataframe Performance Comparison - Pandas on Spark vs Pandas</title><link href="https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/" rel="alternate" type="text/html" title="Dataframe Performance Comparison - Pandas on Spark vs Pandas" /><published>2022-01-08T10:15:00+00:00</published><updated>2022-01-08T10:15:00+00:00</updated><id>https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas</id><content type="html" xml:base="https://stevenlevine.dev/2022/01/pandas-on-spark-vs-plain-pandas/">&lt;blockquote&gt;
+  &lt;p&gt;TLDR - When comparing &lt;a href=&quot;https://spark.apache.org/docs/latest/api/python/getting_started/quickstart_ps.html&quot;&gt;Pandas API on Spark&lt;/a&gt; vs &lt;a href=&quot;https://pandas.pydata.org/pandas-docs/stable/index.html&quot;&gt;Pandas&lt;/a&gt; I found that as the data size grew, the performance difference grew as well with &lt;a href=&quot;https://spark.apache.org/docs/latest/api/python/index.html&quot;&gt;Spark&lt;/a&gt; being the clear winner&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;I found &lt;a href=&quot;https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html&quot;&gt;this post&lt;/a&gt; about the new Pandas API on Spark very intriguing, specifically the performance improvements and the fact that &lt;em&gt;“Pandas users will be able scale their workloads with one simple line change”&lt;/em&gt;. Additionally, &lt;em&gt;“The pandas API on Spark often outperforms pandas even on a single machine thanks to the optimizations in the Spark engine.”&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Being that these are bold statements, and the fact that I am super curious, I decided to write a few simple load tests to run on my laptop to see if I could reproduce the performance improvements locally.&lt;/p&gt;
+
+&lt;p&gt;Since most of my posts on data use the open &lt;a href=&quot;https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page&quot;&gt;NYC Taxi Dataset&lt;/a&gt; I figured why not use it again?  Next, I needed to come up with a simple problem to use for the performance comparison that would exercise the Dataframe properly.  The problem I decided to go with was to try to figure out the top 10 drop off locations that yielded the highest total taxi fare for the year.  This would require a scanning of the entire dataset (since it is not partitioned), a grouping, a summing, and finally a filtering.  Seems like a fair problem, finally, in order to ensure it processed as much data as possible, I went with CSV files instead of Parquet being that reading CSVs requires reading the entire file, not just the specific columns used for the calculation.&lt;/p&gt;
+
+&lt;p&gt;The code that I wrote for this post can be found in this &lt;a href=&quot;https://github.com/slevine/pyspark-pandas-vs-pandas&quot;&gt;Github Repo&lt;/a&gt;.  To reiterate, the goal of the code was:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Highlight the fact that only an &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import&lt;/code&gt; needed to change in order to use the Pandas API on Spark instead of plain Pandas.&lt;/li&gt;
+  &lt;li&gt;“Verify” there was a difference in performance&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;em&gt;On a side note, since the frameworks do not handle reading in multiple files (wildcards) the same exact way, a few changes were required beyond the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import&lt;/code&gt; in order to achieve the same results. Will highlight them below.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;the-code&quot;&gt;The Code&lt;/h3&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pyspark.pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;pdf&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;./data/yellow_tripdata_2019-*.csv&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;count&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;groupby&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;DOLocationID&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;fare_amount&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sort_values&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ascending&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;False&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;head&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;res&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Runtime: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Download Source: &lt;a href=&quot;https://github.com/slevine/pyspark-pandas-vs-pandas/blob/master/tests/pyspark_pandas_test.py&quot;&gt;pyspark_pandas_test&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;This code pulls in taxi trip data from 12 CSV’s (one per month) and calculates which drop off location &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DOLocationID&lt;/code&gt; has the highest number of trips in terms of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;fare_amount&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;glob&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;
+
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concat&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pandas&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;start&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;df&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;concat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read_csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;glob&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'./data/yellow_tripdata_2019-*.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)))&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;# Everything below identical
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;&lt;em&gt;Download Source: &lt;a href=&quot;https://github.com/slevine/pyspark-pandas-vs-pandas/blob/master/tests/pandas_test.py&quot;&gt;pandas_test.py&lt;/a&gt;&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Here are the only two differences between the two tests:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;The imports are &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;from pandas&lt;/code&gt; vs &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;from pyspark.pandas&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Building a Dataframe using plain Pandas containing data from all 12 of the files requires &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;concat()&lt;/code&gt; as well as creating a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;glob()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&quot;results&quot;&gt;Results&lt;/h3&gt;
+
+&lt;p&gt;Note: The benchmarks were conducted on the latest Macbook Pro (M1 Max 10 Core 32GB)&lt;/p&gt;
+
+&lt;h4 id=&quot;first-run&quot;&gt;First Run&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;First Run&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;File type&lt;/td&gt;
+      &lt;td&gt;CSV&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Number of files&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Avg size of file&lt;/td&gt;
+      &lt;td&gt;383,161 MB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Total size of files&lt;/td&gt;
+      &lt;td&gt;2.2 GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Total Record Count&lt;/td&gt;
+      &lt;td&gt;23,838,931&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Pyspark Runtime&lt;/td&gt;
+      &lt;td&gt;0:00:21.042511&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Pandas Runtime&lt;/td&gt;
+      &lt;td&gt;0:00:27.491613&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Difference&lt;/td&gt;
+      &lt;td&gt;6.449102&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Difference %&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;23%&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h4 id=&quot;second-run&quot;&gt;Second Run&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Second Run&lt;/th&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;File type&lt;/td&gt;
+      &lt;td&gt;CSV&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Number of files&lt;/td&gt;
+      &lt;td&gt;12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Avg size of file&lt;/td&gt;
+      &lt;td&gt;1,282,542 MB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Total size of files&lt;/td&gt;
+      &lt;td&gt;7.3 GB&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Total Record Count&lt;/td&gt;
+      &lt;td&gt;84,152,418&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Pyspark Runtime&lt;/td&gt;
+      &lt;td&gt;0:00:51.244250&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Pandas Runtime&lt;/td&gt;
+      &lt;td&gt;0:01:40.545144&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Difference&lt;/td&gt;
+      &lt;td&gt;49.3008939&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Difference %&lt;/td&gt;
+      &lt;td&gt;&lt;strong&gt;49%&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;em&gt;Disclaimer: This was run on a single machine and is not meant to be used as an authoritative performance comparison.&lt;/em&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h3&gt;
+
+&lt;p&gt;As the data size grew, the performance difference grew as well with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyspark&lt;/code&gt; being the clear winner. Even though this test was run on a single machine with 10 cores, my assumption (based on the data in this &lt;a href=&quot;https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html&quot;&gt;Databricks post&lt;/a&gt;), is if you were to run this on a larger cluster of machines the performance difference would grow as well.&lt;/p&gt;
+
+&lt;p&gt;With the performance of Pandas on Spark improving so much, it begs the question of when should you use Plain Pandas vs Pandas on Spark vs Spark Dataframes?&lt;/p&gt;
+
+&lt;p&gt;My suggestion is as follows:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;If you already know Pandas and are new to PySpark, use the Pandas on Spark API to get started, or you can leverage existing code.&lt;/li&gt;
+  &lt;li&gt;If you are new to both Pandas and PySpark, use the native PySpark (Dataframe) API since it offers the most complete functionality (streaming, batch, and ML) Spark has to offer.&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="BigData" /><category term="Spark" /><category term="Python" /><summary type="html">I found [this post](https://databricks.com/blog/2021/10/04/pandas-api-on-upcoming-apache-spark-3-2.html) about the new Pandas API on Spark very intriguing, specifically the performance improvements so I wrote a few simple tests to highlight them.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/panda2.png" /><media:content medium="image" url="https://stevenlevine.dev/images/panda2.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">First Impressions of the M1 MacBook Pro</title><link href="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/" rel="alternate" type="text/html" title="First Impressions of the M1 MacBook Pro" /><published>2020-12-28T16:15:00+00:00</published><updated>2020-12-28T16:15:00+00:00</updated><id>https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook</id><content type="html" xml:base="https://stevenlevine.dev/2020/12/first-impressions-of-the-new-mac-m1-macbook/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - I &lt;strong&gt;really&lt;/strong&gt; like this machine, it is portable, fast, quiet, and comfortable to work on for hours at a time.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -215,7 +394,7 @@
   &lt;p&gt;Note: if you compare the execution times of the queries for the examples, even though the “less efficient” query scanned the entire dataset, the actual runtime of the query is comparable &lt;strong&gt;which is remarkable&lt;/strong&gt;.  The introduction of Integer based partitioning will mostly help the budget in these situations, I.e., less bytes scanned.&lt;/p&gt;
 
   &lt;p&gt;This dataset was only 21GB (which is not very large.) As a result the query times seem comparable. However, if we were running these queries against huge data sets, think IOT time series data, it would be a very different result.  In that case, being able to narrow the dataset down to a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;sensor_id&lt;/code&gt;’s worth of data vs scanning the entire dataset will make a huge difference.&lt;/p&gt;
-&lt;/blockquote&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/ues.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/ues.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Querying External Data with BigQuery</title><link href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" rel="alternate" type="text/html" title="Querying External Data with BigQuery" /><published>2019-11-14T17:03:00+00:00</published><updated>2019-11-14T17:03:00+00:00</updated><id>https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq</id><content type="html" xml:base="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">&lt;blockquote&gt;
+&lt;/blockquote&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">This post will talk about what integer range partitioning is, how to leverage it, and finally walk through a few scenarios demonstrating the benefits of it.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/ues.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/ues.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Querying External Data with BigQuery</title><link href="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/" rel="alternate" type="text/html" title="Querying External Data with BigQuery" /><published>2019-11-14T17:03:00+00:00</published><updated>2019-11-14T17:03:00+00:00</updated><id>https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq</id><content type="html" xml:base="https://stevenlevine.dev/2019/11/querying-externally-partitioned-data-with-bq/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - In this post I will walk through how to use BigQuery’s new capability of querying Hive Partitioned Parquet files in GCS.  It is a really cool feature.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -432,7 +611,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;h3 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h3&gt;
 
-&lt;p&gt;Querying Hive Partitioned Parquet files directly from BigQuery is a very exciting and impressive new feature.  The thing that I especially like about it is the fact that you can transparently query across external and regular tables without fuss.  The number of use cases that come to mind are tremendous. I can’t wait to see how folks use it in their day to day data operations.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="Spark" /><category term="BigData" /><summary type="html">In this post I will walk through how to use BigQuery's new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/taxi.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/taxi.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">The Power of Big Query with Public Data</title><link href="https://stevenlevine.dev/2018/02/the-power-of-bq/" rel="alternate" type="text/html" title="The Power of Big Query with Public Data" /><published>2018-02-04T17:03:00+00:00</published><updated>2018-02-04T17:03:00+00:00</updated><id>https://stevenlevine.dev/2018/02/the-power-of-bq</id><content type="html" xml:base="https://stevenlevine.dev/2018/02/the-power-of-bq/">&lt;blockquote&gt;
+&lt;p&gt;Querying Hive Partitioned Parquet files directly from BigQuery is a very exciting and impressive new feature.  The thing that I especially like about it is the fact that you can transparently query across external and regular tables without fuss.  The number of use cases that come to mind are tremendous. I can’t wait to see how folks use it in their day to day data operations.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="GCP" /><category term="BigQuery" /><category term="Spark" /><category term="BigData" /><summary type="html">In this post I will walk through how to use BigQuery's new capability of querying Hive Partitioned Parquet files in GCS. It is a really cool feature.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/taxi.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/taxi.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">The Power of Big Query with Public Data</title><link href="https://stevenlevine.dev/2018/02/the-power-of-bq/" rel="alternate" type="text/html" title="The Power of Big Query with Public Data" /><published>2018-02-04T17:03:00+00:00</published><updated>2018-02-04T17:03:00+00:00</updated><id>https://stevenlevine.dev/2018/02/the-power-of-bq</id><content type="html" xml:base="https://stevenlevine.dev/2018/02/the-power-of-bq/">&lt;blockquote&gt;
   &lt;p&gt;TLDR - If you are looking for an easy way to query a public dataset, you should definitely check out Big Query’s publicly available datasets, and chances are you will find the dataset you are looking for.&lt;/p&gt;
 &lt;/blockquote&gt;
 
@@ -574,7 +753,7 @@ gs://&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot
 
 &lt;p&gt;&lt;a name=&quot;dataFootnote1&quot;&gt;1&lt;/a&gt;&lt;em&gt;: According to the meta data on the files table, it hasn’t been touched since Nov 2, 2017 so this data is a bit old.  Also keep in mind, that was is a very un-scientific way of figuring out build tool usage, thus take these numbers for what they are, a fun weekend experiment.&lt;/em&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;a name=&quot;dataFootnote2&quot;&gt;2&lt;/a&gt;&lt;em&gt;: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.&lt;/em&gt;&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">If you are looking for an easy way to query a public dataset you should definitely check out Big Query's publicly available datasets.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/github.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/github.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Notes from a Talk on Evolving Java</title><link href="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/" rel="alternate" type="text/html" title="Notes from a Talk on Evolving Java" /><published>2013-12-02T22:03:00+00:00</published><updated>2013-12-02T22:03:00+00:00</updated><id>https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java</id><content type="html" xml:base="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/">&lt;p&gt;Recently I attended a talk given by &lt;a href=&quot;https://twitter.com/@briangoetz&quot;&gt;Brian Goetz&lt;/a&gt;, about evolving Java.  It was refreshing to hear that Java is moving forward again from the Java Language architect himself.  Like others, I have mixed feeling about how some of the features were added to the language, but overall, after hearing Brian’s talk, Java is getting the attention it needs to “keep up”.&lt;/p&gt;
+&lt;p&gt;&lt;a name=&quot;dataFootnote2&quot;&gt;2&lt;/a&gt;&lt;em&gt;: Signing up for a Free GCP account is required to gain access to the Big Query Console, although a Credit Card is not required to run queries.  However, there is a relatively low quota in place if you do not provide a credit card.&lt;/em&gt;&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="GCP" /><category term="BigQuery" /><category term="BigData" /><summary type="html">If you are looking for an easy way to query a public dataset you should definitely check out Big Query's publicly available datasets.</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="https://stevenlevine.dev/images/github.jpg" /><media:content medium="image" url="https://stevenlevine.dev/images/github.jpg" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Notes from a Talk on Evolving Java</title><link href="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/" rel="alternate" type="text/html" title="Notes from a Talk on Evolving Java" /><published>2013-12-02T22:03:00+00:00</published><updated>2013-12-02T22:03:00+00:00</updated><id>https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java</id><content type="html" xml:base="https://stevenlevine.dev/2013/12/notes-from-a-talk-on-evolving-java/">&lt;p&gt;Recently I attended a talk given by &lt;a href=&quot;https://twitter.com/@briangoetz&quot;&gt;Brian Goetz&lt;/a&gt;, about evolving Java.  It was refreshing to hear that Java is moving forward again from the Java Language architect himself.  Like others, I have mixed feeling about how some of the features were added to the language, but overall, after hearing Brian’s talk, Java is getting the attention it needs to “keep up”.&lt;/p&gt;
 
 &lt;p&gt;Below you can read some of the main points from the talk.  Brian’s deck can be found &lt;a href=&quot;https://dl.dropboxusercontent.com/u/1550608/evolving-java.pdf&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
@@ -1205,14 +1384,4 @@ POST /buckets/bucket/keys       # Riak-defined key
 
 &lt;p&gt;Bottom line, if you are a Java developer you do not have to start migrating away from OS X, everything will be fine – just give it a bit of time.&lt;/p&gt;
 
-&lt;p&gt;Just my thoughts.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Java" /><category term="Mac" /><summary type="html">Official release notes.</summary></entry><entry><title type="html">First Thoughts On My New Eee Pc (1005PE)</title><link href="https://stevenlevine.dev/2010/03/first-thoughts-on-my-new-eee-pc-1005pe/" rel="alternate" type="text/html" title="First Thoughts On My New Eee Pc (1005PE)" /><published>2010-03-23T18:30:30+00:00</published><updated>2010-03-23T18:30:30+00:00</updated><id>https://stevenlevine.dev/2010/03/first-thoughts-on-my-new-eee-pc-1005pe</id><content type="html" xml:base="https://stevenlevine.dev/2010/03/first-thoughts-on-my-new-eee-pc-1005pe/">&lt;p&gt;So far, so good with my new Eee PC (1005PE) Netbook. The machine came pre-installed with Win 7 Starter edition, so the first task for me to do was to get rid of Windows 7 and install &lt;a href=&quot;http://www.ubuntu.com/GetUbuntu/download-netbook&quot;&gt;Ubuntu Netbook&lt;/a&gt; on it. So I downloaded the Ubuntu Netbook 10.04 &lt;a href=&quot;http://cdimage.ubuntu.com/ubuntu-netbook/daily-live/current/&quot;&gt;daily build&lt;/a&gt; image (yes, I am daring), and was on my way.&lt;/p&gt;
-
-&lt;p&gt;At first, this task seemed easier said than done because I was running in to the most fundamental problem possible, namely, I could not get the Eee PC to boot from the ‘bootable’ usb stick I created on my Mac Pro desktop. I checked every single bios settings, made sure that USB was chosen as priority boot drive, Still nothing. Kept getting the Windows 7 startup sound which was starting to get a bit tedious.&lt;/p&gt;
-
-&lt;p&gt;The next thing I thought was maybe the Cruser U3 software was causing the trouble so I went out and found a U3 uninstaller, and ran it. Still didn’t boot from the USB Stick. I then found out that in order to get the boot menu on the Eee PC, you need to hold down the Escape key while its booting. I tried that, it had the USB as a target bootable device, I selected it, but still went in to Windows 7.&lt;/p&gt;
-
-&lt;p&gt;At this point I was quickly running out of ideas, the only other thing I can think of was perhaps the USB stick was some how not bootable? Maybe the USB stick was not created correctly even though I followed the Ubuntu Mac instructions step by step. I downloaded the Ubuntu 10.04 &lt;a href=&quot;http://cdimage.ubuntu.com/ubuntu-netbook/daily-live/current/&quot;&gt;daily build&lt;/a&gt; on to my Eee PC while booted in to Windows 7, and then downloaded this program called &lt;a href=&quot;http://unetbootin.sourceforge.net/&quot;&gt;UNetbootin&lt;/a&gt;. This time I used that program to create my bootable USB stick, and then I tried to reboot again.&lt;/p&gt;
-
-&lt;p&gt;This time it booted in to the Live CD version of Ubuntu, yes, I was saved! I couldn’t believe that it was a bad image on my USB Stick. Why can’t a Mac create a bootable USB Stick? The strange thing is that the Eee couldn’t even read the files on the USB Stick when connected in Windows 7, but when the Stick was plugged in to my Mac Pro, I was able to see the files fine. And vise versa, once I created the USB Stick in Windows, I coulsn’t see the files on Mac. What is the deal here? I thought ISO images were platform independent?&lt;/p&gt;
-
-&lt;p&gt;With that being said the USB Stick problem is well in the past for me. Look for my next post where I will give my impressions of Ubuntu Netbook 10.04.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Howto" /><category term="Linux" /><category term="Ubuntu" /><summary type="html">So far, so good with my new Eee PC (1005PE) Netbook. The machine came pre-installed with Win 7 Starter edition, so the first task for me to do was to get rid of Windows 7 and install Ubuntu Netbook on it. So I downloaded the Ubuntu Netbook 10.04 daily build image (yes, I am daring), and was on my way.</summary></entry></feed>
+&lt;p&gt;Just my thoughts.&lt;/p&gt;</content><author><name>Steven Levine</name><email>steve@blue64</email></author><category term="Development" /><category term="Java" /><category term="Mac" /><summary type="html">Official release notes.</summary></entry></feed>
